@@ -1,5 +1,6 @@
 package com.soebes.emulators;
 
+import com.soebes.emulators.memory.Ram;
 import com.soebes.emulators.register.Register16Bit;
 import com.soebes.emulators.register.Register8Bit;
 
@@ -30,6 +31,7 @@ public class CPU6502 {
   }
 
   public CPU6502 step() {
+
 //    instruction = readNextInstruction();
 //    registerPC.incrementBy(instuction.size());
 

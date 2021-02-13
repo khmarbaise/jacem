@@ -2,7 +2,7 @@ package com.soebes.emulators;
 
 public enum AddressingMode {
   absolute("absolute"),
-  absoluteX("absolutateX"),
+  absoluteX("absoluteX"),
   absoluteY("absoluteY"),
   accumulator("accumulator"),
   immediate("immediate"),
