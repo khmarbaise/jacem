@@ -121,6 +121,60 @@ class AddressBusTest {
     }
 
   }
+
+  @Nested
+  class ExtremeSegments {
+
+    private AddressBus addressBus;
+
+    @BeforeEach
+    void beforeEach() {
+      addressBus = new AddressBus();
+      for (int i = 0; i < 64 * 1024; i++) {
+        Ram ram = new Ram(0x0001);
+        addressBus.attach(ram, 0x0000 + i);
+      }
+    }
+
+    @Test
+    void write_read_in_three_different_segements() {
+      for (int i = 0; i < 64 * 1024; i++) {
+        addressBus.write(0x0000 + i, (byte) i);
+      }
+
+      for (int i = 0; i < 64 * 1024; i++) {
+        byte read = addressBus.read(0x0000 + i);
+        assertThat(read).isEqualTo((byte) i);
+      }
+    }
+  }
+  @Nested
+  class ExtremeSegmentsXX {
+
+    private AddressBus addressBus;
+
+    @BeforeEach
+    void beforeEach() {
+      addressBus = new AddressBus();
+      for (int i = 0; i < 32 * 1024; i++) {
+        Ram ram = new Ram(0x0002);
+        addressBus.attach(ram, 0x0000 + i * 2);
+      }
+    }
+
+    @Test
+    void write_read_in_three_different_segements() {
+      for (int i = 0; i < 32 * 1024; i++) {
+        addressBus.write(0x0001 + i * 2, (byte) i);
+      }
+
+      for (int i = 0; i < 32 * 1024; i++) {
+        byte read = addressBus.read(0x0001 + i * 2);
+        assertThat(read).isEqualTo((byte) i);
+      }
+    }
+  }
+
   @Nested
   class MassOfSegements {
 
@@ -129,19 +183,19 @@ class AddressBusTest {
     @BeforeEach
     void beforeEach() {
       addressBus = new AddressBus();
-      for (int i = 0; i < 32*1024; i++) {
+      for (int i = 0; i < 10000; i++) {
         Ram ram = new Ram(0x0002);
-        addressBus.attach(ram, 0x0000 + i*2);
+        addressBus.attach(ram, 0x0000 + i * 2);
       }
     }
 
     @Test
     void write_read_in_three_different_segements() {
-      for (int i = 0; i < 32*1024; i++) {
-        addressBus.write(0x0001 + i*2, (byte)i);
+      for (int i = 0; i < 10000; i++) {
+        addressBus.write(0x0001 + i * 2, (byte) i);
       }
 
-      for (int i = 0; i < 32*1024; i++) {
+      for (int i = 0; i < 10000; i++) {
         byte read = addressBus.read(0x0001 + i * 2);
         assertThat(read).isEqualTo((byte) i);
       }
