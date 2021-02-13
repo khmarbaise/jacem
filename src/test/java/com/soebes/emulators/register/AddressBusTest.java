@@ -2,7 +2,6 @@ package com.soebes.emulators.register;
 
 import com.soebes.emulators.memory.Ram;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -135,18 +134,18 @@ class AddressBusTest {
       addressBus = new AddressBus();
       for (int i = 0; i < 64 * 1024; i++) {
         Ram ram = new Ram(0x0001);
-        addressBus.attach(ram, 0x0000 + i);
+        addressBus.attach(ram, i);
       }
     }
 
     @Test
     void write_read_in_all_different_segements() {
       for (int i = 0; i < 64 * 1024; i++) {
-        addressBus.write(0x0000 + i, (byte) i);
+        addressBus.write(i, (byte) i);
       }
 
       for (int i = 0; i < 64 * 1024; i++) {
-        byte read = addressBus.read(0x0000 + i);
+        byte read = addressBus.read(i);
         assertThat(read).isEqualTo((byte) i);
       }
     }
@@ -163,7 +162,7 @@ class AddressBusTest {
       addressBus = new AddressBus();
       for (int i = 0; i < 32 * 1024; i++) {
         Ram ram = new Ram(0x0002);
-        addressBus.attach(ram, 0x0000 + i * 2);
+        addressBus.attach(ram, i * 2);
       }
     }
 
@@ -191,7 +190,7 @@ class AddressBusTest {
       addressBus = new AddressBus();
       for (int i = 0; i < 10000; i++) {
         Ram ram = new Ram(0x0002);
-        addressBus.attach(ram, 0x0000 + i * 2);
+        addressBus.attach(ram, i * 2);
       }
     }
 
