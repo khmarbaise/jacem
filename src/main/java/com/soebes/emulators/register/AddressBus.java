@@ -3,7 +3,6 @@ package com.soebes.emulators.register;
 import com.soebes.emulators.memory.Memory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class AddressBus {
