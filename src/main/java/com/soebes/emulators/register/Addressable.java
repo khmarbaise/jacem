@@ -4,9 +4,9 @@ import com.soebes.emulators.memory.Memory;
 
 public class Addressable {
 
-  private Memory memory;
-  private int start;
-  private int end;
+  private final Memory memory;
+  private final int start;
+  private final int end;
 
   public Addressable(Memory memory, int start) {
     this.memory = memory;

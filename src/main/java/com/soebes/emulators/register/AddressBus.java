@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AddressBus {
 
-  private List<Addressable> addressables;
+  private final List<Addressable> addressables;
 
   public AddressBus() {
     this.addressables = new ArrayList<>();
