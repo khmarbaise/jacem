@@ -2,6 +2,8 @@ package com.soebes.emulators.register;
 
 import com.soebes.emulators.memory.Ram;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -123,7 +125,8 @@ class AddressBusTest {
   }
 
   @Nested
-  class ExtremeSegments {
+  @DisplayName("Creating 64 K segments each 1 byte size.")
+  class ExtremeSegments64K {
 
     private AddressBus addressBus;
 
@@ -137,7 +140,7 @@ class AddressBusTest {
     }
 
     @Test
-    void write_read_in_three_different_segements() {
+    void write_read_in_all_different_segements() {
       for (int i = 0; i < 64 * 1024; i++) {
         addressBus.write(0x0000 + i, (byte) i);
       }
@@ -148,8 +151,10 @@ class AddressBusTest {
       }
     }
   }
+
   @Nested
-  class ExtremeSegmentsXX {
+  @DisplayName("Creating 32 K segments each 2 byte size.")
+  class ExtremeSegments32K {
 
     private AddressBus addressBus;
 
@@ -176,7 +181,8 @@ class AddressBusTest {
   }
 
   @Nested
-  class MassOfSegements {
+  @DisplayName("Creating 10000 segments each 2 byte size.")
+  class MassOfSegements10000 {
 
     private AddressBus addressBus;
 
