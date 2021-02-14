@@ -73,7 +73,6 @@ public class CPU6502 {
         return instruction.getAddress() + regY.value();
 
       default:
-
         throw new IllegalStateException("Unknown adressing mode.");
     }
   }
@@ -91,7 +90,7 @@ public class CPU6502 {
     Byte opcode = bus.read(PC.value());
 
     if (!InstructionSet.opcExists(Byte.toUnsignedInt(opcode))) {
-      throw new IllegalStateException(String.format("Unknown operation code %02x", opcode));
+      throw new IllegalStateException(String.format("Unknown operation code %04x: %02x ", PC.value(), opcode));
     }
 
     OperationCode opc = InstructionSet.getOpc(Byte.toUnsignedInt(opcode));
