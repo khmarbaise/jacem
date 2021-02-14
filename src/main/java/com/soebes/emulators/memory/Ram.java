@@ -37,7 +37,6 @@ public class Ram implements Memory {
 
   public void write(int address, int[] ints) {
     for (int i = 0; i < ints.length; i++) {
-      System.out.printf("i = %d = '%02x'\n", i, ints[i]);
       this.memory[address+i] = (byte)ints[i];
     }
   }

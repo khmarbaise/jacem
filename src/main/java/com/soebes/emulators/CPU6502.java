@@ -1,5 +1,6 @@
 package com.soebes.emulators;
 
+import com.soebes.emulators.register.Accumulator;
 import com.soebes.emulators.register.AddressBus;
 import com.soebes.emulators.register.Register16Bit;
 import com.soebes.emulators.register.Register8Bit;
@@ -21,11 +22,11 @@ public class CPU6502 {
   /**
    * The accumulator.
    */
-  private Register8Bit registerA;
+  private Accumulator registerA;
 
   public CPU6502(AddressBus addressBus) {
     this.addressBus = addressBus;
-    this.registerA = new Register8Bit((byte) 0);
+    this.registerA = new Accumulator((byte) 0);
     this.registerX = new Register8Bit((byte) 0);
     this.registerY = new Register8Bit((byte) 0);
     this.registerPC = new Register16Bit(0);
@@ -40,9 +41,10 @@ public class CPU6502 {
 
   private void execute(Instruction instruction) {
     switch (instruction.getOpc().getOpCode()) {
+      case NOP:
+        break;
       case LDA:
-        byte value = resolveOperand(instruction);
-        registerA.setValue(value);
+        registerA.setValue(resolveOperand(instruction));
         break;
       default:
     }

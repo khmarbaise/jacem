@@ -322,7 +322,6 @@ public class InstructionSet {
   }
 
   public static boolean opcExists(int opcode) {
-    byte b = Integer.valueOf(opcode).byteValue();
     return opcodes.containsKey(opcode);
   }
 
