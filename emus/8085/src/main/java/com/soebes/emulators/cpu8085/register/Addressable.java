@@ -19,7 +19,7 @@ package com.soebes.emulators.cpu8085.register;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.Memory;
+import com.soebes.emulators.cpu8085.memory.Memory;
 
 /**
  * @author Karl Heinz Marbaise
