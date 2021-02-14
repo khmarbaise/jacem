@@ -24,8 +24,6 @@ package com.soebes.emulators.memory;
  */
 public class Ram implements Memory {
 
-  public static final int RAM_64K = 64 * 1024;
-
   private Byte[] memory;
 
   public Ram(int sizeOfMemory) {
