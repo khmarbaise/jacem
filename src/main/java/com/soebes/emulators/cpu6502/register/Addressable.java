@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,18 +19,32 @@ package com.soebes.emulators;
  * under the License.
  */
 
-import com.soebes.emulators.memory.Ram;
-import org.junit.jupiter.api.Test;
+import com.soebes.emulators.cpu6502.memory.Memory;
 
 /**
  * @author Karl Heinz Marbaise
  */
-class RamTest {
+public class Addressable {
 
-  @Test
-  void first() {
-    Ram ram = new Ram(1024);
+  private final Memory memoryAccess;
+  private final int start;
+  private final int end;
 
-//    ram.write();
+  public Addressable(Memory memoryAccess, int start) {
+    this.memoryAccess = memoryAccess;
+    this.start = start;
+    this.end = start + memoryAccess.Size() - 1;
+  }
+
+  public Memory getMemory() {
+    return memoryAccess;
+  }
+
+  public int getStart() {
+    return start;
+  }
+
+  public int getEnd() {
+    return end;
   }
 }

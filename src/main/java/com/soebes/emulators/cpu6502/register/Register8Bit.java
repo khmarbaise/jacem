@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,28 +22,25 @@ package com.soebes.emulators;
 /**
  * @author Karl Heinz Marbaise
  */
-public enum AddressingMode {
-  absolute("absolute"),
-  absoluteX("absoluteX"),
-  absoluteY("absoluteY"),
-  accumulator("accumulator"),
-  immediate("immediate"),
-  implied("immediate"),
-  indirect("(indirect)"),
-  indirectX("(indirect,X)"),
-  indirectY("(indirect,Y)"),
-  relative("relative"),
-  zeropage("zeropage"),
-  zeropageX("zeropageX"),
-  zeropageY("zeropageY");
+public class Register8Bit {
 
-  private String info;
 
-  AddressingMode(String info) {
-    this.info = info;
+  private byte value;
+
+  public Register8Bit(byte value) {
+    this.value = value;
   }
 
-  public String getInfo() {
-    return info;
+  public byte value() {
+    return this.value;
+  }
+
+  public void setValue(byte value) {
+    this.value = value;
+  }
+  public void incr() {
+    Integer integer = Integer.valueOf(this.value);
+    Integer result = integer + 1;
+    this.value = result.byteValue();
   }
 }

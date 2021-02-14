@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,6 +19,9 @@ package com.soebes.emulators;
  * under the License.
  */
 
+import com.soebes.emulators.cpu6502.InstructionSet;
+import com.soebes.emulators.cpu6502.OpCode;
+import com.soebes.emulators.cpu6502.OperationCode;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

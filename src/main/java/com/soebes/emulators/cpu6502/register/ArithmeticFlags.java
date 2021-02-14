@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,7 +23,7 @@ package com.soebes.emulators.register;
 /**
  * @author Karl Heinz Marbaise
  */
-public class ArithmethicFlags {
+public class ArithmeticFlags {
 
   private boolean carryFlag;
   private boolean zeroFlag;
@@ -33,7 +33,7 @@ public class ArithmethicFlags {
   private boolean overflowFlag;
   private boolean negativeFlag;
 
-  public ArithmethicFlags() {
+  public ArithmeticFlags() {
   }
 
   public boolean isCarryFlag() {

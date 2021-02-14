@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,30 +19,22 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
-
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * @author Karl Heinz Marbaise
  */
-class ArithmeticFlagsTest {
+public class Register16Bit {
 
-  @Test
-  void positive_value() {
-    ArithmethicFlags arithmethicFlags = new ArithmethicFlags();
-    arithmethicFlags.setValue(Integer.valueOf(0x7f).byteValue());
-    assertThat(arithmethicFlags.isZeroFlag()).isFalse();
-    assertThat(arithmethicFlags.isNegativeFlag()).isFalse();
+  private int value;
+
+  public Register16Bit(int value) {
+    this.value = value;
   }
 
-  @Test
-  void negative_value() {
-    ArithmethicFlags arithmethicFlags = new ArithmethicFlags();
-    arithmethicFlags.setValue(0x80);
-    assertThat(arithmethicFlags.isZeroFlag()).isFalse();
-    assertThat(arithmethicFlags.isNegativeFlag()).isTrue();
-    assertThat(arithmethicFlags.isCarryFlag()).isFalse();
+  public void incrementBy(int value) {
+    this.value += value;
+  }
+
+  public int value() {
+    return this.value;
   }
 }

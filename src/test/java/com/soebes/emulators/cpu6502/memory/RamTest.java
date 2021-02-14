@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,28 +19,17 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
+import org.junit.jupiter.api.Test;
+
 /**
  * @author Karl Heinz Marbaise
  */
-public class Register8Bit {
+class RamTest {
 
+  @Test
+  void first() {
+    Ram ram = new Ram(1024);
 
-  private byte value;
-
-  public Register8Bit(byte value) {
-    this.value = value;
-  }
-
-  public byte value() {
-    return this.value;
-  }
-
-  public void setValue(byte value) {
-    this.value = value;
-  }
-  public void incr() {
-    Integer integer = Integer.valueOf(this.value);
-    Integer result = integer + 1;
-    this.value = result.byteValue();
+//    ram.write();
   }
 }

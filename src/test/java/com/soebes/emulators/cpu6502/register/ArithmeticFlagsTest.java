@@ -1,4 +1,4 @@
-package com.soebes.emulators.memory;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,22 +19,30 @@ package com.soebes.emulators.memory;
  * under the License.
  */
 
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Karl Heinz Marbaise
  */
-public interface MemoryAccess {
+class ArithmeticFlagsTest {
 
-  int Size();
-  /**
-   * @param address The address within the memory.
-   * @return a single byte read from the given memory location.
-   */
-  Byte readByte(int address);
+  @Test
+  void positive_value() {
+    ArithmeticFlags arithmeticFlags = new ArithmeticFlags();
+    arithmeticFlags.setValue(Integer.valueOf(0x7f).byteValue());
+    assertThat(arithmeticFlags.isZeroFlag()).isFalse();
+    assertThat(arithmeticFlags.isNegativeFlag()).isFalse();
+  }
 
-  /**
-   * @param address The address within the memory.
-   * @param value write a single byte at the given location in memory.
-   */
-  void writeByte(int address, Byte value);
-
+  @Test
+  void negative_value() {
+    ArithmeticFlags arithmeticFlags = new ArithmeticFlags();
+    arithmeticFlags.setValue(0x80);
+    assertThat(arithmeticFlags.isZeroFlag()).isFalse();
+    assertThat(arithmeticFlags.isNegativeFlag()).isTrue();
+    assertThat(arithmeticFlags.isCarryFlag()).isFalse();
+  }
 }

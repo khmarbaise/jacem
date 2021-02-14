@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,15 +19,15 @@ package com.soebes.emulators;
  * under the License.
  */
 
-import com.soebes.emulators.register.AddressBus;
-import com.soebes.emulators.register.ArithmethicFlags;
-import com.soebes.emulators.register.Register16Bit;
-import com.soebes.emulators.register.Register8Bit;
+import com.soebes.emulators.cpu6502.register.AddressBus;
+import com.soebes.emulators.cpu6502.register.ArithmeticFlags;
+import com.soebes.emulators.cpu6502.register.Register16Bit;
+import com.soebes.emulators.cpu6502.register.Register8Bit;
 
 /**
  * @author Karl Heinz Marbaise
  */
-public class CPU6502 {
+public class C6502 {
 
 
   /**
@@ -46,22 +46,22 @@ public class CPU6502 {
   /**
    * Process Status Flags
    */
-  private ArithmethicFlags psf;
+  private ArithmeticFlags psf;
 
   private final Register8Bit regX;
 
   private final Register8Bit regY;
 
-  public CPU6502(AddressBus bus) {
+  public C6502(AddressBus bus) {
     this.bus = bus;
     this.registerA = new Register8Bit((byte) 0);
     this.regX = new Register8Bit((byte) 0);
     this.regY = new Register8Bit((byte) 0);
     this.PC = new Register16Bit(0);
-    this.psf = new ArithmethicFlags();
+    this.psf = new ArithmeticFlags();
   }
 
-  public CPU6502 step() {
+  public C6502 step() {
     Instruction instruction = readNextInstruction();
     PC.incrementBy(instruction.getOpc().getInstructionSize());
     execute(instruction);
@@ -146,7 +146,7 @@ public class CPU6502 {
     return registerA;
   }
 
-  public ArithmethicFlags getPsf() {
+  public ArithmeticFlags getPsf() {
     return psf;
   }
 }

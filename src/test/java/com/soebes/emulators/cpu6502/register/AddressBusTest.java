@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,7 +19,7 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
-import com.soebes.emulators.memory.Ram;
+import com.soebes.emulators.cpu6502.memory.Ram;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

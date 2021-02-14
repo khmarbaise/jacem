@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -1,4 +1,4 @@
-package com.soebes.emulators.memory;
+package com.soebes.emulators.cpu6502.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,7 +22,7 @@ package com.soebes.emulators.memory;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Ram implements MemoryAccess {
+public class Ram implements Memory {
 
   private Byte[] memory;
 

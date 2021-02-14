@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,32 +19,37 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
-import com.soebes.emulators.memory.MemoryAccess;
-
 /**
  * @author Karl Heinz Marbaise
  */
-public class Addressable {
+public class Instruction {
 
-  private final MemoryAccess memoryAccess;
-  private final int start;
-  private final int end;
+  private OperationCode opc;
 
-  public Addressable(MemoryAccess memoryAccess, int start) {
-    this.memoryAccess = memoryAccess;
-    this.start = start;
-    this.end = start + memoryAccess.Size() - 1;
+  private byte Op8;
+  private int Op16;
+  private int Address;
+
+  public Instruction(OperationCode opc, byte op8, int op16, int address) {
+    this.opc = opc;
+    Op8 = op8;
+    Op16 = op16;
+    Address = address;
   }
 
-  public MemoryAccess getMemory() {
-    return memoryAccess;
+  public OperationCode getOpc() {
+    return opc;
   }
 
-  public int getStart() {
-    return start;
+  public byte getOp8() {
+    return Op8;
   }
 
-  public int getEnd() {
-    return end;
+  public int getOp16() {
+    return Op16;
+  }
+
+  public int getAddress() {
+    return Address;
   }
 }

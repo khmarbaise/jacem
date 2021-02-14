@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,7 +19,7 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
-import com.soebes.emulators.memory.MemoryAccess;
+import com.soebes.emulators.cpu6502.memory.Memory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class AddressBus {
   /**
    * @param memoryAccess The memory which should be attached.
    */
-  public void attach(MemoryAccess memoryAccess, int start) {
+  public void attach(Memory memoryAccess, int start) {
     this.addressables.add(new Addressable(memoryAccess, start));
   }
 

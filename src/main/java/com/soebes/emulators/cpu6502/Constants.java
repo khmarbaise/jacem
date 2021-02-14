@@ -1,4 +1,4 @@
-package com.soebes.emulators.register;
+package com.soebes.emulators.cpu6502;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,19 +22,8 @@ package com.soebes.emulators.register;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Register16Bit {
+public final class Constants {
 
-  private int value;
+  public static final int ResetVector = 0xFFFC; // 0xFFFC-FFFD
 
-  public Register16Bit(int value) {
-    this.value = value;
-  }
-
-  public void incrementBy(int value) {
-    this.value += value;
-  }
-
-  public int value() {
-    return this.value;
-  }
 }

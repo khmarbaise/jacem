@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,34 +22,28 @@ package com.soebes.emulators;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Instruction {
+public enum AddressingMode {
+  absolute("absolute"),
+  absoluteX("absoluteX"),
+  absoluteY("absoluteY"),
+  accumulator("accumulator"),
+  immediate("immediate"),
+  implied("immediate"),
+  indirect("(indirect)"),
+  indirectX("(indirect,X)"),
+  indirectY("(indirect,Y)"),
+  relative("relative"),
+  zeropage("zeropage"),
+  zeropageX("zeropageX"),
+  zeropageY("zeropageY");
 
-  private OperationCode opc;
+  private String info;
 
-  private byte Op8;
-  private int Op16;
-  private int Address;
-
-  public Instruction(OperationCode opc, byte op8, int op16, int address) {
-    this.opc = opc;
-    Op8 = op8;
-    Op16 = op16;
-    Address = address;
+  AddressingMode(String info) {
+    this.info = info;
   }
 
-  public OperationCode getOpc() {
-    return opc;
-  }
-
-  public byte getOp8() {
-    return Op8;
-  }
-
-  public int getOp16() {
-    return Op16;
-  }
-
-  public int getAddress() {
-    return Address;
+  public String getInfo() {
+    return info;
   }
 }

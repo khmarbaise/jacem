@@ -1,4 +1,4 @@
-package com.soebes.emulators;
+package com.soebes.emulators.cpu6502.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,61 +22,19 @@ package com.soebes.emulators;
 /**
  * @author Karl Heinz Marbaise
  */
-public enum OpCode {
-  ADC,
-  AND,
-  ASL,
-  BCC,
-  BCS,
-  BEQ,
-  BIT,
-  BMI,
-  BNE,
-  BPL,
-  BRK,
-  BVC,
-  BVS,
-  CLC,
-  CLD,
-  CLI,
-  CLV,
-  CMP,
-  CPX,
-  CPY,
-  DEC,
-  DEX,
-  DEY,
-  EOR,
-  INC,
-  INX,
-  INY,
-  JMP,
-  JSR,
-  LDA,
-  LDX,
-  LDY,
-  LSR,
-  NOP,
-  ORA,
-  PHA,
-  PHP,
-  PLA,
-  PLP,
-  ROL,
-  ROR,
-  RTI,
-  RTS,
-  SBC,
-  SEC,
-  SED,
-  SEI,
-  STA,
-  STX,
-  STY,
-  TAX,
-  TAY,
-  TSX,
-  TXA,
-  TXS,
-  TYA,
+public interface Memory {
+
+  int Size();
+  /**
+   * @param address The address within the memory.
+   * @return a single byte read from the given memory location.
+   */
+  Byte readByte(int address);
+
+  /**
+   * @param address The address within the memory.
+   * @param value write a single byte at the given location in memory.
+   */
+  void writeByte(int address, Byte value);
+
 }
