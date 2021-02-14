@@ -8,6 +8,9 @@ public class Ram implements Memory {
 
   public Ram(int sizeOfMemory) {
     this.memory = new Byte[sizeOfMemory];
+    for (int i = 0; i < memory.length; i++) {
+      this.memory[i] = Byte.valueOf((byte) 0);
+    }
   }
 
   public byte[] readWord(int address) {

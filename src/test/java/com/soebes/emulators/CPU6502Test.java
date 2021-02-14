@@ -3,7 +3,6 @@ package com.soebes.emulators;
 import com.soebes.emulators.memory.Ram;
 import com.soebes.emulators.register.AddressBus;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +26,7 @@ class CPU6502Test {
   @Test
   @DisplayName("NOP")
   void nop() {
-    // LDA #$33
+    // NOP
     ram.write(0x0000, new int[]{0xEA});
 
     cpu6502.step();
@@ -38,6 +37,7 @@ class CPU6502Test {
     assertThat(cpu6502.getRegisterPC().value()).isEqualTo(0x0001);
 
   }
+
   @Test
   @DisplayName("LDA #$33")
   void lda_immediate() {
