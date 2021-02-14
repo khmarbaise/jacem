@@ -4,10 +4,10 @@ public class Rom implements Memory {
 
   public static final int RAM_64K = 64 * 1024;
 
-  private byte[] memory;
+  private Byte[] memory;
 
   public Rom(int sizeOfMemory) {
-    this.memory = new byte[sizeOfMemory];
+    this.memory = new Byte[sizeOfMemory];
   }
 
   public byte[] readWord(int address) {
@@ -15,11 +15,11 @@ public class Rom implements Memory {
   }
 
   @Override
-  public void writeByte(int address, byte value) {
+  public void writeByte(int address, Byte value) {
     this.memory[address] = value;
   }
 
-  public void writeWord(int address, byte value, byte value1) {
+  public void writeWord(int address, Byte value, Byte value1) {
     this.memory[address] = value;
     this.memory[address + 1] = value1;
   }
@@ -30,7 +30,7 @@ public class Rom implements Memory {
   }
 
   @Override
-  public byte readByte(int address) {
+  public Byte readByte(int address) {
     return this.memory[address];
   }
 

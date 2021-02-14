@@ -7,12 +7,12 @@ public interface Memory {
    * @param address The address within the memory.
    * @return a single byte read from the given memory location.
    */
-  byte readByte(int address);
+  Byte readByte(int address);
 
   /**
    * @param address The address within the memory.
    * @param value write a single byte at the given location in memory.
    */
-  void writeByte(int address, byte value);
+  void writeByte(int address, Byte value);
 
 }

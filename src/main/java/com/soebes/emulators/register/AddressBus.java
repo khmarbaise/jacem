@@ -29,12 +29,19 @@ public class AddressBus {
     addressableStream.getMemory().writeByte(segmentAddress, (byte)value);
   }
 
-  public byte read(int address) {
+  public Byte read(int address) {
     Addressable addressableStream = this.addressables
         .stream()
         .filter(s -> address >= s.getStart() && address <= s.getEnd()).findAny()
         .orElseThrow(() -> new IllegalStateException("Unknown address given"));
     int segmentAddress = address - addressableStream.getStart();
     return addressableStream.getMemory().readByte(segmentAddress);
+  }
+
+  public int read16(int address) {
+    Byte lo = read(address);
+    Byte hi = read(address + 1);
+
+    return (hi << 8) | lo;
   }
 }

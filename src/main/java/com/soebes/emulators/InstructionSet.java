@@ -317,5 +317,13 @@ public class InstructionSet {
       entry(0x40, of(RTI, implied, 1, 6)));
   //@formatter:on
 
+  public static OperationCode getOpc(int opcode) {
+    return opcodes.get(opcode);
+  }
+
+  public static boolean opcExists(int opcode) {
+    byte b = Integer.valueOf(opcode).byteValue();
+    return opcodes.containsKey(opcode);
+  }
 
 }

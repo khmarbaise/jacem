@@ -4,10 +4,10 @@ public class Ram implements Memory {
 
   public static final int RAM_64K = 64 * 1024;
 
-  private byte[] memory;
+  private Byte[] memory;
 
   public Ram(int sizeOfMemory) {
-    this.memory = new byte[sizeOfMemory];
+    this.memory = new Byte[sizeOfMemory];
   }
 
   public byte[] readWord(int address) {
@@ -16,7 +16,7 @@ public class Ram implements Memory {
 
 
   @Override
-  public void writeByte(int address, byte value) {
+  public void writeByte(int address, Byte value) {
     this.memory[address] = value;
   }
 
@@ -31,13 +31,14 @@ public class Ram implements Memory {
   }
 
   @Override
-  public byte readByte(int address) {
-    return this.memory[address];
+  public Byte readByte(int address) {
+    return Byte.valueOf(this.memory[address]);
   }
 
   public void write(int address, int[] ints) {
     for (int i = 0; i < ints.length; i++) {
-      this.memory[address] = (byte)ints[i];
+      System.out.printf("i = %d = '%02x'\n", i, ints[i]);
+      this.memory[address+i] = (byte)ints[i];
     }
   }
 }

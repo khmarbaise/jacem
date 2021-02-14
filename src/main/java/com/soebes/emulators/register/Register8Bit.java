@@ -7,4 +7,12 @@ public class Register8Bit {
   public Register8Bit(byte value) {
     this.value = value;
   }
+
+  public byte value() {
+    return this.value;
+  }
+
+  public void setValue(byte value) {
+    this.value = value;
+  }
 }

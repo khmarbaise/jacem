@@ -17,4 +17,20 @@ public class OperationCode {
   public static final OperationCode of(OpCode opCode, AddressingMode addressingMode, int instructionSize, int cycles) {
     return new OperationCode(opCode, addressingMode, instructionSize, cycles);
   }
+
+  public OpCode getOpCode() {
+    return opCode;
+  }
+
+  public AddressingMode getAddressingMode() {
+    return addressingMode;
+  }
+
+  public int getInstructionSize() {
+    return instructionSize;
+  }
+
+  public int getCycles() {
+    return cycles;
+  }
 }
