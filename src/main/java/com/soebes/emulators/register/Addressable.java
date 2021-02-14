@@ -19,25 +19,25 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
-import com.soebes.emulators.memory.Memory;
+import com.soebes.emulators.memory.MemoryAccess;
 
 /**
  * @author Karl Heinz Marbaise
  */
 public class Addressable {
 
-  private final Memory memory;
+  private final MemoryAccess memoryAccess;
   private final int start;
   private final int end;
 
-  public Addressable(Memory memory, int start) {
-    this.memory = memory;
+  public Addressable(MemoryAccess memoryAccess, int start) {
+    this.memoryAccess = memoryAccess;
     this.start = start;
-    this.end = start + memory.Size() - 1;
+    this.end = start + memoryAccess.Size() - 1;
   }
 
-  public Memory getMemory() {
-    return memory;
+  public MemoryAccess getMemory() {
+    return memoryAccess;
   }
 
   public int getStart() {

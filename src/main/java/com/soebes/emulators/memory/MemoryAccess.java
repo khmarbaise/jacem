@@ -22,7 +22,7 @@ package com.soebes.emulators.memory;
 /**
  * @author Karl Heinz Marbaise
  */
-public interface Memory {
+public interface MemoryAccess {
 
   int Size();
   /**

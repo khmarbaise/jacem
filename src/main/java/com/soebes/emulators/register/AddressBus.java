@@ -19,7 +19,7 @@ package com.soebes.emulators.register;
  * under the License.
  */
 
-import com.soebes.emulators.memory.Memory;
+import com.soebes.emulators.memory.MemoryAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,10 @@ public class AddressBus {
   }
 
   /**
-   * @param memory The memory which should be attached.
+   * @param memoryAccess The memory which should be attached.
    */
-  public void attach(Memory memory, int start) {
-    this.addressables.add(new Addressable(memory, start));
+  public void attach(MemoryAccess memoryAccess, int start) {
+    this.addressables.add(new Addressable(memoryAccess, start));
   }
 
   public void write(int address, int value) {

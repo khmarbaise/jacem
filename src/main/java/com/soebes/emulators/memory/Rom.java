@@ -22,7 +22,7 @@ package com.soebes.emulators.memory;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Rom implements Memory {
+public class Rom implements MemoryAccess {
 
   public static final int RAM_64K = 64 * 1024;
 

@@ -22,7 +22,7 @@ package com.soebes.emulators.memory;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Ram implements Memory {
+public class Ram implements MemoryAccess {
 
   private Byte[] memory;
 
