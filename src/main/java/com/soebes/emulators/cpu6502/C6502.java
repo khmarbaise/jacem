@@ -39,20 +39,22 @@ public class C6502 {
    * The address bus for access to memory.
    */
   private final AddressBus bus;
-
+  /**
+   * The X register.
+   */
+  private final Register8Bit regX;
+  /**
+   * The Y register.
+   */
+  private final Register8Bit regY;
   /**
    * The accumulator.
    */
   private Register8Bit registerA;
-
   /**
    * Process Status Flags
    */
   private ArithmeticFlags psf;
-
-  private final Register8Bit regX;
-
-  private final Register8Bit regY;
 
   public C6502(AddressBus bus) {
     this.bus = bus;
@@ -72,19 +74,69 @@ public class C6502 {
 
   private void execute(Instruction instruction) {
     switch (instruction.getOpc().getOpCode()) {
+      case ADC:
+        adc(instruction);
+        break;
       case NOP:
         break;
       case LDA:
-        byte value = resolveOperand(instruction);
-        registerA.setValue(value);
-        psf.setValue(Byte.toUnsignedInt(value));
+        lda(instruction);
         break;
       case INX:
-        regX.incr();
-        psf.setValue(Byte.toUnsignedInt(regX.value()));
+        inx(instruction);
+        break;
+      case SEC:
+        psf.setCarryFlag(true);
+        break;
+      case SED:
+        psf.setDecimalModeFlag(true);
+        break;
+      case SEI:
+        psf.setInteruptDisable(true);
+        break;
+      case CLC:
+        psf.setCarryFlag(false);
+        break;
+      case CLD:
+        psf.setDecimalModeFlag(false);
+        break;
+      case CLI:
+        psf.setInteruptDisable(false);
+        break;
+      case CLV:
+        psf.setOverflowFlag(false);
         break;
       default:
     }
+  }
+
+  private void lda(Instruction instruction) {
+    byte value = resolveOperand(instruction);
+    registerA.setValue(value);
+    psf.setValue(Byte.toUnsignedInt(value));
+  }
+
+  private void inx(Instruction in) {
+    regX.incr();
+    psf.setValue(Byte.toUnsignedInt(regX.value()));
+  }
+
+  private void adc(Instruction in) {
+    byte operand = resolveOperand(in);
+    boolean carryFlag = getPsf().isCarryFlag();
+    if (getPsf().isDecimalModeFlag()) {
+      adcDecimal(registerA, operand, carryFlag);
+    } else {
+      adcNormal(registerA, operand, carryFlag);
+    }
+  }
+
+  private void adcDecimal(Register8Bit a, byte operand, boolean carryFlag) {
+
+  }
+
+  private void adcNormal(Register8Bit a, byte operand, boolean carryFlag) {
+
   }
 
   private int memoryAddress(Instruction instruction) {

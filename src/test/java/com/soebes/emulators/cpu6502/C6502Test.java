@@ -54,10 +54,10 @@ class C6502Test {
 
     c6502.step();
 
-    assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false);
+    assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
   }
 
-  private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag) {
+  private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag, boolean dFlag, boolean iFlag) {
     assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
     assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
     assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
@@ -66,7 +66,9 @@ class C6502Test {
     assertThat(c6502.getPsf().isNegativeFlag()).as("The negative flag expected to be '%s'", nFlag).isEqualTo(nFlag);
     assertThat(c6502.getPsf().isZeroFlag()).as("The zero flag expected to be '%s'", zFlag).isEqualTo(zFlag);
     assertThat(c6502.getPsf().isCarryFlag()).as("The carry flag expected to be '%s'", cFlag).isEqualTo(cFlag);
-    assertThat(c6502.getPsf().isOverflowFlag()).as("The overflow flag expected to be '%s'").isEqualTo(oFlag);
+    assertThat(c6502.getPsf().isOverflowFlag()).as("The overflow flag expected to be '%s'", oFlag).isEqualTo(oFlag);
+    assertThat(c6502.getPsf().isDecimalModeFlag()).as("The decimal flag expected to be '%s'", dFlag).isEqualTo(dFlag);
+    assertThat(c6502.getPsf().isInteruptDisable()).as("The interrupt disable flag expected to be '%s'", iFlag).isEqualTo(iFlag);
 
   }
 
@@ -81,7 +83,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x33, 0x00, 0x00, 0x0002, false, false, false, false);
+      assertThatRegister(0x33, 0x00, 0x00, 0x0002, false, false, false, false, false, false);
     }
 
     @Test
@@ -92,7 +94,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x80, 0x00, 0x00, 0x0002, true, false, false, false);
+      assertThatRegister(0x80, 0x00, 0x00, 0x0002, true, false, false, false, false, false);
     }
 
   }
@@ -109,7 +111,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x13, 0x00, 0x0001, false, false, false, false);
+      assertThatRegister(0x00, 0x13, 0x00, 0x0001, false, false, false, false, false, false);
     }
 
     @Test
@@ -121,7 +123,102 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x80, 0x00, 0x0001, true, false, false, false);
+      assertThatRegister(0x00, 0x80, 0x00, 0x0001, true, false, false, false, false, false);
     }
   }
+
+  @Nested
+  class SetFlag {
+
+    @Test
+    @DisplayName("SEC set carry.")
+    void sec() {
+      ram.write(0x0000, new int[]{0x38});
+
+      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, true, false, false, false);
+    }
+
+    @Test
+    @DisplayName("SED set decimal.")
+    void sed() {
+      ram.write(0x0000, new int[]{0xF8});
+
+      assertThat(c6502.getPsf().isDecimalModeFlag()).isFalse();
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, true, false);
+    }
+
+    @Test
+    @DisplayName("SEI set interrupt disable.")
+    void sei() {
+      ram.write(0x0000, new int[]{0x78});
+
+      assertThat(c6502.getPsf().isInteruptDisable()).isFalse();
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, true);
+    }
+
+  }
+
+  @Nested
+  class ClearFlag {
+
+    @Test
+    @DisplayName("CLC clear carry.")
+    void clc() {
+      ram.write(0x0000, new int[]{0x18});
+
+      c6502.getPsf().setCarryFlag(true);
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+    }
+
+    @Test
+    @DisplayName("CLD clear decimal.")
+    void cld() {
+      ram.write(0x0000, new int[]{0xD8});
+
+      c6502.getPsf().setDecimalModeFlag(true);
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+    }
+
+    @Test
+    @DisplayName("CLI clear interuppt disable.")
+    void cli() {
+      ram.write(0x0000, new int[]{0x58});
+
+      c6502.getPsf().setInteruptDisable(true);
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+    }
+
+    @Test
+    @DisplayName("CLV clear overflow")
+    void clv() {
+      ram.write(0x0000, new int[]{0xB8});
+
+      c6502.getPsf().setOverflowFlag(true);
+
+      c6502.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+    }
+
+  }
+
 }
