@@ -60,6 +60,7 @@ public class CPU6502 {
         return instruction.getAddress() + registerY.value();
 
       default:
+
         throw new IllegalStateException("Unknown adressing mode.");
     }
   }

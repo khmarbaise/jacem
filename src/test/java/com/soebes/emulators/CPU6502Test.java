@@ -46,7 +46,7 @@ class CPU6502Test {
 
     cpu6502.step();
 
-    assertThat(cpu6502.getRegisterA().value()).isEqualTo((byte) 0x33);
+    assertThat(cpu6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x33).byteValue());
     assertThat(cpu6502.getRegisterPC().value()).isEqualTo(0x0002);
     assertThat(cpu6502.getRegisterX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
     assertThat(cpu6502.getRegisterY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
