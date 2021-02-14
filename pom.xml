@@ -33,24 +33,24 @@
   </parent>
 
   <groupId>com.soebes.emulators</groupId>
-  <artifactId>emux</artifactId>
+  <artifactId>jacem</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <scm>
-    <connection>scm:git:https://github.com/khmarbaise/emux.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/khmarbaise/emux.git</developerConnection>
-    <url>https://github.com/khmarbaise/emux</url>
+    <connection>scm:git:https://github.com/khmarbaise/jacem.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/khmarbaise/jacem.git</developerConnection>
+    <url>https://github.com/khmarbaise/jacem</url>
   </scm>
 
   <distributionManagement>
     <site>
       <id>github</id>
-      <url>scm:git:ssh://git@github.com/khmarbaise/emux.git</url>
+      <url>scm:git:ssh://git@github.com/khmarbaise/jacem.git</url>
     </site>
   </distributionManagement>
 
   <properties>
-    <smpp.component>emux</smpp.component>
+    <smpp.component>jacem</smpp.component>
 
     <maven.compiler.release>11</maven.compiler.release>
     <maven.compiler.target>11</maven.compiler.target>

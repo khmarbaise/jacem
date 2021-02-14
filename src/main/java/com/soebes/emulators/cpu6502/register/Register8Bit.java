@@ -24,7 +24,6 @@ package com.soebes.emulators.cpu6502.register;
  */
 public class Register8Bit {
 
-
   private Byte value;
 
   public Register8Bit(Byte value) {

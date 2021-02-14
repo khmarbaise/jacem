@@ -22,6 +22,9 @@ Instruction codes http://www.obelisk.me.uk/6502/reference.html
 
 # Build
 
+* JDK11+
+* Maven 3.6.3+
+
 Code coverage via:
 ```bash
 mvn clean verify org.jacoco:jacoco-maven-plugin:report

@@ -24,18 +24,18 @@ package com.soebes.emulators.cpu6502;
  */
 public enum AddressingMode {
   absolute("absolute"),
-  absoluteX("absoluteX"),
-  absoluteY("absoluteY"),
+  absoluteX("absolute,X"),
+  absoluteY("absolute,Y"),
   accumulator("accumulator"),
   immediate("immediate"),
-  implied("immediate"),
+  implied("implied"),
   indirect("(indirect)"),
   indirectX("(indirect,X)"),
   indirectY("(indirect,Y)"),
   relative("relative"),
   zeropage("zeropage"),
-  zeropageX("zeropageX"),
-  zeropageY("zeropageY");
+  zeropageX("zeropage,X"),
+  zeropageY("zeropage,Y");
 
   private String info;
 

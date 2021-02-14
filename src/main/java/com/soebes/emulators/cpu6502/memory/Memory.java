@@ -28,6 +28,7 @@ public interface Memory {
    * @return The size of the memory.
    */
   int Size();
+
   /**
    * @param address The address within the memory.
    * @return a single byte read from the given memory location.

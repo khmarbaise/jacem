@@ -24,6 +24,9 @@ import com.soebes.emulators.cpu6502.memory.Memory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Karl Heinz Marbaise
+ */
 public class AddressBus {
 
   private final List<Addressable> addressables;
