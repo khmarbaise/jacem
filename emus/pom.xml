@@ -37,8 +37,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>6502</module>
-    <module>8085</module>
+    <module>c6502</module>
+    <module>c8085</module>
   </modules>
 
 </project>
