@@ -7,37 +7,41 @@ import com.soebes.emulators.register.Register8Bit;
 
 public class CPU6502 {
 
-  private final Register8Bit registerX;
-
-  private final Register8Bit registerY;
 
   /**
    * The Program Counter.
    */
-  private final Register16Bit registerPC;
+  private final Register16Bit PC;
 
 
-  private final AddressBus addressBus;
+  private final AddressBus bus;
 
   /**
    * The accumulator.
    */
   private Register8Bit registerA;
 
-  private ArithmethicFlags arithmethicFlags;
+  /**
+   * Process Status Flags
+   */
+  private ArithmethicFlags psf;
 
-  public CPU6502(AddressBus addressBus) {
-    this.addressBus = addressBus;
+  private final Register8Bit regX;
+
+  private final Register8Bit regY;
+
+  public CPU6502(AddressBus bus) {
+    this.bus = bus;
     this.registerA = new Register8Bit((byte) 0);
-    this.registerX = new Register8Bit((byte) 0);
-    this.registerY = new Register8Bit((byte) 0);
-    this.registerPC = new Register16Bit(0);
-    this.arithmethicFlags = new ArithmethicFlags();
+    this.regX = new Register8Bit((byte) 0);
+    this.regY = new Register8Bit((byte) 0);
+    this.PC = new Register16Bit(0);
+    this.psf = new ArithmethicFlags();
   }
 
   public CPU6502 step() {
     Instruction instruction = readNextInstruction();
-    registerPC.incrementBy(instruction.getOpc().getInstructionSize());
+    PC.incrementBy(instruction.getOpc().getInstructionSize());
     execute(instruction);
     return this;
   }
@@ -49,11 +53,11 @@ public class CPU6502 {
       case LDA:
         byte value = resolveOperand(instruction);
         registerA.setValue(value);
-        arithmethicFlags.setValue(value);
+        psf.setValue(value);
         break;
       case INX:
-        registerX.incr();
-        arithmethicFlags.setValue(registerX.value());
+        regX.incr();
+        psf.setValue(regX.value());
         break;
       default:
     }
@@ -64,9 +68,9 @@ public class CPU6502 {
       case absolute:
         return instruction.getAddress();
       case absoluteX:
-        return instruction.getAddress() + registerX.value();
+        return instruction.getAddress() + regX.value();
       case absoluteY:
-        return instruction.getAddress() + registerY.value();
+        return instruction.getAddress() + regY.value();
 
       default:
 
@@ -79,12 +83,12 @@ public class CPU6502 {
       case immediate:
         return instruction.getOp8();
       default:
-        return addressBus.read(memoryAddress(instruction));
+        return bus.read(memoryAddress(instruction));
     }
   }
 
   private Instruction readNextInstruction() {
-    Byte opcode = addressBus.read(registerPC.value());
+    Byte opcode = bus.read(PC.value());
 
     if (!InstructionSet.opcExists(Byte.toUnsignedInt(opcode))) {
       throw new IllegalStateException(String.format("Unknown operation code %02x", opcode));
@@ -95,33 +99,33 @@ public class CPU6502 {
     switch (opc.getInstructionSize()) {
       case 1:
       case 2:
-        byte read8 = addressBus.read(this.registerPC.value() + 1);
-        return new Instruction(opc, read8, (byte) 0, registerPC.value());
+        byte read8 = bus.read(this.PC.value() + 1);
+        return new Instruction(opc, read8, (byte) 0, PC.value());
       case 3:
-        int read16 = addressBus.read16(this.registerPC.value() + 1);
-        return new Instruction(opc, (byte) 0, read16, registerPC.value());
+        int read16 = bus.read16(this.PC.value() + 1);
+        return new Instruction(opc, (byte) 0, read16, PC.value());
       default:
         throw new IllegalStateException("Unknown instruction size");
     }
   }
 
-  public Register8Bit getRegisterX() {
-    return registerX;
+  public Register8Bit getRegX() {
+    return regX;
   }
 
-  public Register8Bit getRegisterY() {
-    return registerY;
+  public Register8Bit getRegY() {
+    return regY;
   }
 
-  public Register16Bit getRegisterPC() {
-    return registerPC;
+  public Register16Bit getPC() {
+    return PC;
   }
 
   public Register8Bit getRegisterA() {
     return registerA;
   }
 
-  public ArithmethicFlags getArithmethicFlags() {
-    return arithmethicFlags;
+  public ArithmethicFlags getPsf() {
+    return psf;
   }
 }

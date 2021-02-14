@@ -33,14 +33,14 @@ class CPU6502Test {
     cpu6502.step();
 
     assertThat(cpu6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x0).byteValue());
-    assertThat(cpu6502.getRegisterX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(cpu6502.getRegisterY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(cpu6502.getRegisterPC().value()).isEqualTo(0x0001);
+    assertThat(cpu6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+    assertThat(cpu6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+    assertThat(cpu6502.getPC().value()).isEqualTo(0x0001);
 
-    assertThat(cpu6502.getArithmethicFlags().isNegativeFlag()).isFalse();
-    assertThat(cpu6502.getArithmethicFlags().isZeroFlag()).isFalse();
-    assertThat(cpu6502.getArithmethicFlags().isCarryFlag()).isFalse();
-    assertThat(cpu6502.getArithmethicFlags().isOverflowFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isNegativeFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isZeroFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isCarryFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isOverflowFlag()).isFalse();
 
   }
 
@@ -53,14 +53,14 @@ class CPU6502Test {
     cpu6502.step();
 
     assertThat(cpu6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x33).byteValue());
-    assertThat(cpu6502.getRegisterX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(cpu6502.getRegisterY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(cpu6502.getRegisterPC().value()).isEqualTo(0x0002);
+    assertThat(cpu6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+    assertThat(cpu6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+    assertThat(cpu6502.getPC().value()).isEqualTo(0x0002);
 
-    assertThat(cpu6502.getArithmethicFlags().isNegativeFlag()).isFalse();
-    assertThat(cpu6502.getArithmethicFlags().isZeroFlag()).isFalse();
-    assertThat(cpu6502.getArithmethicFlags().isCarryFlag()).isFalse();
-    assertThat(cpu6502.getArithmethicFlags().isOverflowFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isNegativeFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isZeroFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isCarryFlag()).isFalse();
+    assertThat(cpu6502.getPsf().isOverflowFlag()).isFalse();
 
 
   }
@@ -73,19 +73,19 @@ class CPU6502Test {
       // INX
       ram.write(0x0000, new int[]{0xE8});
 
-      cpu6502.getRegisterX().setValue((byte) 0x12);
+      cpu6502.getRegX().setValue((byte) 0x12);
 
       cpu6502.step();
 
       assertThat(cpu6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(cpu6502.getRegisterX().value()).isEqualTo(Integer.valueOf(0x13).byteValue());
-      assertThat(cpu6502.getRegisterY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(cpu6502.getRegisterPC().value()).isEqualTo(0x0001);
+      assertThat(cpu6502.getRegX().value()).isEqualTo(Integer.valueOf(0x13).byteValue());
+      assertThat(cpu6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+      assertThat(cpu6502.getPC().value()).isEqualTo(0x0001);
 
-      assertThat(cpu6502.getArithmethicFlags().isNegativeFlag()).isFalse();
-      assertThat(cpu6502.getArithmethicFlags().isZeroFlag()).isFalse();
-      assertThat(cpu6502.getArithmethicFlags().isCarryFlag()).isFalse();
-      assertThat(cpu6502.getArithmethicFlags().isOverflowFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isNegativeFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isZeroFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isCarryFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isOverflowFlag()).isFalse();
     }
 
     @Test
@@ -94,19 +94,19 @@ class CPU6502Test {
       // INX
       ram.write(0x0000, new int[]{0xE8});
 
-      cpu6502.getRegisterX().setValue((byte) 0x7f);
+      cpu6502.getRegX().setValue((byte) 0x7f);
 
       cpu6502.step();
 
       assertThat(cpu6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(cpu6502.getRegisterX().value()).isEqualTo(Integer.valueOf(0x80).byteValue());
-      assertThat(cpu6502.getRegisterY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(cpu6502.getRegisterPC().value()).isEqualTo(0x0001);
+      assertThat(cpu6502.getRegX().value()).isEqualTo(Integer.valueOf(0x80).byteValue());
+      assertThat(cpu6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+      assertThat(cpu6502.getPC().value()).isEqualTo(0x0001);
 
-      assertThat(cpu6502.getArithmethicFlags().isNegativeFlag()).as("The negativeFlage should be set to true.").isTrue();
-      assertThat(cpu6502.getArithmethicFlags().isZeroFlag()).isFalse();
-      assertThat(cpu6502.getArithmethicFlags().isCarryFlag()).isFalse();
-      assertThat(cpu6502.getArithmethicFlags().isOverflowFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isNegativeFlag()).as("The negativeFlage should be set to true.").isTrue();
+      assertThat(cpu6502.getPsf().isZeroFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isCarryFlag()).isFalse();
+      assertThat(cpu6502.getPsf().isOverflowFlag()).isFalse();
     }
   }
 }
