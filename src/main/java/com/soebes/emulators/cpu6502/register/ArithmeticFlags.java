@@ -21,10 +21,24 @@ package com.soebes.emulators.cpu6502.register;
 
 
 /**
- * @author Karl Heinz Marbaise
  *
+ * <pre>
  * NV-BDIZC
  * 00110000
+ * </pre>
+ * <pre>
+ * SR Flags (bit 7 to bit 0):
+ *
+ * N	....	Negative
+ * V	....	Overflow
+ * -	....	ignored
+ * B	....	Break
+ * D	....	Decimal (use BCD for arithmetics)
+ * I	....	Interrupt (IRQ disable)
+ * Z	....	Zero
+ * C	....	Carry
+ * </pre>
+ * @author Karl Heinz Marbaise
  */
 public class ArithmeticFlags {
 

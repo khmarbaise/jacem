@@ -39,7 +39,7 @@ class C6502Test {
 
   private Ram zeroPage;
 
-  private C6502 c6502;
+  private C6502 cpu;
 
   @BeforeEach
   void beforeEach() {
@@ -58,7 +58,7 @@ class C6502Test {
     //Add ram at 0x1000
     addressBus.attach(ram, 0x1000);
     //TODO: consider attaching a ROM/RAM at 0xFF00 which contains reset/irq vector.
-    this.c6502 = new C6502(addressBus);
+    this.cpu = new C6502(addressBus);
   }
 
   @Test
@@ -67,23 +67,23 @@ class C6502Test {
     // NOP
     ram.write(0x0000, new int[]{0xEA});
 
-    c6502.step();
+    cpu.step();
 
     assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
   }
 
   private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag, boolean dFlag, boolean iFlag) {
-    assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
-    assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
-    assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
-    assertThat(c6502.getPC().value()).isEqualTo(pc);
+    assertThat(cpu.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
+    assertThat(cpu.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
+    assertThat(cpu.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
+    assertThat(cpu.getPC().value()).isEqualTo(pc);
 
-    assertThat(c6502.getPsf().isNegativeFlag()).as("The negative flag expected to be '%s'", nFlag).isEqualTo(nFlag);
-    assertThat(c6502.getPsf().isZeroFlag()).as("The zero flag expected to be '%s'", zFlag).isEqualTo(zFlag);
-    assertThat(c6502.getPsf().isCarryFlag()).as("The carry flag expected to be '%s'", cFlag).isEqualTo(cFlag);
-    assertThat(c6502.getPsf().isOverflowFlag()).as("The overflow flag expected to be '%s'", oFlag).isEqualTo(oFlag);
-    assertThat(c6502.getPsf().isDecimalModeFlag()).as("The decimal flag expected to be '%s'", dFlag).isEqualTo(dFlag);
-    assertThat(c6502.getPsf().isInteruptDisable()).as("The interrupt disable flag expected to be '%s'", iFlag).isEqualTo(iFlag);
+    assertThat(cpu.getPsf().isNegativeFlag()).as("The negative flag expected to be '%s'", nFlag).isEqualTo(nFlag);
+    assertThat(cpu.getPsf().isZeroFlag()).as("The zero flag expected to be '%s'", zFlag).isEqualTo(zFlag);
+    assertThat(cpu.getPsf().isCarryFlag()).as("The carry flag expected to be '%s'", cFlag).isEqualTo(cFlag);
+    assertThat(cpu.getPsf().isOverflowFlag()).as("The overflow flag expected to be '%s'", oFlag).isEqualTo(oFlag);
+    assertThat(cpu.getPsf().isDecimalModeFlag()).as("The decimal flag expected to be '%s'", dFlag).isEqualTo(dFlag);
+    assertThat(cpu.getPsf().isInteruptDisable()).as("The interrupt disable flag expected to be '%s'", iFlag).isEqualTo(iFlag);
 
   }
 
@@ -96,7 +96,7 @@ class C6502Test {
       // LDA #$33
       ram.write(0x0000, new int[]{0xa9, 0x33});
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x33, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
     }
@@ -107,7 +107,7 @@ class C6502Test {
       // LDA #$33
       ram.write(0x0000, new int[]{0xa9, 0x80});
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x80, 0x00, 0x00, 0x1002, true, false, false, false, false, false);
     }
@@ -122,9 +122,9 @@ class C6502Test {
       // INX
       ram.write(0x0000, new int[]{0xE8});
 
-      c6502.getRegX().setValue((byte) 0x12);
+      cpu.getRegX().setValue((byte) 0x12);
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x13, 0x00, 0x1001, false, false, false, false, false, false);
     }
@@ -134,9 +134,9 @@ class C6502Test {
     void inx_of_positive_value_which_becomes_negative() {
       ram.write(0x0000, new int[]{0xE8});
 
-      c6502.getRegX().setValue((byte) 0x7f);
+      cpu.getRegX().setValue((byte) 0x7f);
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x80, 0x00, 0x1001, true, false, false, false, false, false);
     }
@@ -150,9 +150,9 @@ class C6502Test {
     void sec() {
       ram.write(0x0000, new int[]{0x38});
 
-      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
+      assertThat(cpu.getPsf().isCarryFlag()).isFalse();
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, true, false, false, false);
     }
@@ -162,9 +162,9 @@ class C6502Test {
     void sed() {
       ram.write(0x0000, new int[]{0xF8});
 
-      assertThat(c6502.getPsf().isDecimalModeFlag()).isFalse();
+      assertThat(cpu.getPsf().isDecimalModeFlag()).isFalse();
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, true, false);
     }
@@ -174,9 +174,9 @@ class C6502Test {
     void sei() {
       ram.write(0x0000, new int[]{0x78});
 
-      assertThat(c6502.getPsf().isInteruptDisable()).isFalse();
+      assertThat(cpu.getPsf().isInteruptDisable()).isFalse();
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, true);
     }
@@ -191,9 +191,9 @@ class C6502Test {
     void clc() {
       ram.write(0x0000, new int[]{0x18});
 
-      c6502.getPsf().setCarryFlag(true);
+      cpu.getPsf().setCarryFlag(true);
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
@@ -203,9 +203,9 @@ class C6502Test {
     void cld() {
       ram.write(0x0000, new int[]{0xD8});
 
-      c6502.getPsf().setDecimalModeFlag(true);
+      cpu.getPsf().setDecimalModeFlag(true);
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
@@ -215,9 +215,9 @@ class C6502Test {
     void cli() {
       ram.write(0x0000, new int[]{0x58});
 
-      c6502.getPsf().setInteruptDisable(true);
+      cpu.getPsf().setInteruptDisable(true);
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
@@ -227,9 +227,9 @@ class C6502Test {
     void clv() {
       ram.write(0x0000, new int[]{0xB8});
 
-      c6502.getPsf().setOverflowFlag(true);
+      cpu.getPsf().setOverflowFlag(true);
 
-      c6502.step();
+      cpu.step();
 
       assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }

@@ -20,6 +20,7 @@ This is the 3nd incarnation of the [Java CPU Emulator](https://github.com/khmarb
 
 * Instruction codes http://www.obelisk.me.uk/6502/reference.html
 * More details http://wilsonminesco.com/6502primer/index.html
+* https://www.masswerk.at/6502/
 
 # Build
 
