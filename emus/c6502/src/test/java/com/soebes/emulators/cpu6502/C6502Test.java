@@ -75,9 +75,9 @@ class C6502Test {
   }
 
   private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag, boolean dFlag, boolean iFlag) {
-    assertThat(cpu.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
-    assertThat(cpu.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
-    assertThat(cpu.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
+    assertThat(cpu.getRegisterA().value()).as("The register A has not the expected value: '%s' instead of '%s'", regA, cpu.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
+    assertThat(cpu.getRegX().value()).as("The register X has not the expected value: '%s' instead of '%s'", regX, cpu.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
+    assertThat(cpu.getRegY().value()).as("The register Y has not the expected value: '%s' instead of '%s'", regY, cpu.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
     assertThat(cpu.getPC().value()).isEqualTo(pc);
 
     assertThat(cpu.getPsf().isNegativeFlag()).as("The negative flag expected to be '%s'", nFlag).isEqualTo(nFlag);
@@ -173,12 +173,6 @@ class C6502Test {
 
   @Nested
   class INC {
-    /*
-      entry(0xE6, of(INC, zeropage, 2, 5)),
-      entry(0xF6, of(INC, zeropageX, 2, 6)),
-      entry(0xEE, of(INC, absolute, 3, 6)),
-      entry(0xFE, of(INC, absoluteX, 3, 7)),
-     */
     @Test
     @DisplayName("INC $20 (zero page)")
     void inc_zero_page() {
@@ -210,6 +204,14 @@ class C6502Test {
       assertThat(read).isEqualTo(Integer.valueOf(53).byteValue());
       assertThatRegister(0x00, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
     }
+
+    /*
+          entry(0xE6, of(INC, zeropage, 2, 5)),
+      entry(0xF6, of(INC, zeropageX, 2, 6)),
+      entry(0xEE, of(INC, absolute, 3, 6)),
+      entry(0xFE, of(INC, absoluteX, 3, 7)),
+
+     */
     @Test
     @DisplayName("INC $1005")
     void inc_absolute() {
@@ -224,6 +226,23 @@ class C6502Test {
       read = addressBus.read(0x1005);
       assertThat(read).isEqualTo(Integer.valueOf(0x55).byteValue());
       assertThatRegister(0x00, 0x00, 0x00, 0x1003, false, false, false, false, false, false);
+    }
+
+    @Test
+    @DisplayName("INC $1005,X")
+    void inc_absolute_x() {
+      ram.write(0x0000, new int[]{0xFE, 0x05, 0x10});
+
+      cpu.getRegX().setValue(Integer.valueOf(0x03).byteValue());
+      addressBus.write(0x1008, 0x60);
+      Byte read = addressBus.read(0x1008);
+      assertThat(read).isEqualTo(Integer.valueOf(0x60).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x1008);
+      assertThat(read).isEqualTo(Integer.valueOf(0x61).byteValue());
+      assertThatRegister(0x00, 0x03, 0x00, 0x1003, false, false, false, false, false, false);
     }
   }
 

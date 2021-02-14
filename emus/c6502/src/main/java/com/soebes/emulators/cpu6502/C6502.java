@@ -164,9 +164,9 @@ public class C6502 {
       case absolute:
         return instruction.getOp16();
       case absoluteX:
-        return instruction.getAddress() + regX.value();
+        return instruction.getOp16() + regX.value();
       case absoluteY:
-        return instruction.getAddress() + regY.value();
+        return instruction.getOp16() + regY.value();
       case zeropage:
         return instruction.getOp8();
       case zeropageX:
@@ -198,10 +198,10 @@ public class C6502 {
       case 1:
       case 2:
         byte read8 = bus.read(this.PC.value() + 1);
-        return new Instruction(opc, read8, (byte) 0, PC.value());
+        return new Instruction(opc, read8, (byte) 0, PC.value() + 1);
       case 3:
         int read16 = bus.read16(this.PC.value() + 1);
-        return new Instruction(opc, (byte) 0, read16, PC.value());
+        return new Instruction(opc, (byte) 0, read16, PC.value() + 1);
       default:
         throw new IllegalStateException("Unknown instruction size");
     }
