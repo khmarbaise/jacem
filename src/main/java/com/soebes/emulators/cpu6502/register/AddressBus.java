@@ -39,6 +39,7 @@ public class AddressBus {
    * @param memoryAccess The memory which should be attached.
    */
   public void attach(Memory memoryAccess, int start) {
+    // TODO: Make a check for an existing start address in addressable and fail.
     this.addressables.add(new Addressable(memoryAccess, start));
   }
 

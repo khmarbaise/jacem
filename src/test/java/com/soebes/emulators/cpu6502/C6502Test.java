@@ -35,14 +35,29 @@ class C6502Test {
 
   private Ram ram;
 
+  private Ram stack;
+
+  private Ram zeroPage;
+
   private C6502 c6502;
 
   @BeforeEach
   void beforeEach() {
-    // 16 Byte of RAM
+    // Page 0: zero page.
+    this.zeroPage = new Ram(0x0100);
+    // Page 1: stack memory
+    this.stack = new Ram(0x0100);
+    // 16 Byte of RAM which is needed for the tests.
     this.ram = new Ram(0x0010);
     AddressBus addressBus = new AddressBus();
-    addressBus.attach(ram, 0x0000);
+
+    //Page 0 zero page
+    addressBus.attach(zeroPage, 0x0000);
+    //Page 1 with stack memory.
+    addressBus.attach(stack, 0x0100);
+    //Add ram at 0x1000
+    addressBus.attach(ram, 0x1000);
+    //TODO: consider attaching a ROM/RAM at 0xFF00 which contains reset/irq vector.
     this.c6502 = new C6502(addressBus);
   }
 
@@ -54,7 +69,7 @@ class C6502Test {
 
     c6502.step();
 
-    assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+    assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
   }
 
   private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag, boolean dFlag, boolean iFlag) {
@@ -83,7 +98,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x33, 0x00, 0x00, 0x0002, false, false, false, false, false, false);
+      assertThatRegister(0x33, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
     }
 
     @Test
@@ -94,7 +109,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x80, 0x00, 0x00, 0x0002, true, false, false, false, false, false);
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002, true, false, false, false, false, false);
     }
 
   }
@@ -111,7 +126,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x13, 0x00, 0x0001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x13, 0x00, 0x1001, false, false, false, false, false, false);
     }
 
     @Test
@@ -123,7 +138,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x80, 0x00, 0x0001, true, false, false, false, false, false);
+      assertThatRegister(0x00, 0x80, 0x00, 0x1001, true, false, false, false, false, false);
     }
   }
 
@@ -139,7 +154,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, true, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, true, false, false, false);
     }
 
     @Test
@@ -151,7 +166,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, true, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, true, false);
     }
 
     @Test
@@ -163,7 +178,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, true);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, true);
     }
 
   }
@@ -180,7 +195,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
 
     @Test
@@ -192,7 +207,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
 
     @Test
@@ -204,7 +219,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
 
     @Test
@@ -216,7 +231,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
     }
 
   }

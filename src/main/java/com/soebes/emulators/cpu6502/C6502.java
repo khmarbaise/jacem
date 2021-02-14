@@ -61,7 +61,8 @@ public class C6502 {
     this.registerA = new Register8Bit((byte) 0);
     this.regX = new Register8Bit((byte) 0);
     this.regY = new Register8Bit((byte) 0);
-    this.PC = new Register16Bit(0);
+    //TODO: This might be wrong. Currently for the tests it works.
+    this.PC = new Register16Bit(0x1000);
     this.psf = new ArithmeticFlags();
   }
 

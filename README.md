@@ -18,7 +18,8 @@
 
 This is the 3nd incarnation of the [Java CPU Emulator](https://github.com/khmarbaise/CPUEmu). 
 
-Instruction codes http://www.obelisk.me.uk/6502/reference.html
+* Instruction codes http://www.obelisk.me.uk/6502/reference.html
+* More details http://wilsonminesco.com/6502primer/index.html
 
 # Build
 

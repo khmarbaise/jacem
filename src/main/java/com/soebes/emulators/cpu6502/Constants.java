@@ -34,4 +34,14 @@ public final class Constants {
    */
   public static final int RESET_VECTOR = 0xFFFC;
 
+  /**
+   * The IRQ vectors.
+   * <ul>
+   *   <li>0xFFFE</li>
+   *   <li>0xFFFF</li>
+   * </ul>
+   *
+   */
+  public static final int IRQ_VECTOR = 0xFFFE;
+
 }
