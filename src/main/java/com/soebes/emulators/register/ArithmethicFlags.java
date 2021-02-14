@@ -68,4 +68,10 @@ public class ArithmethicFlags {
   public void setNegativeFlag(boolean negativeFlag) {
     this.negativeFlag = negativeFlag;
   }
+
+  public void setValue(int value) {
+    setNegativeFlag((value >> 7) == 1);
+    setZeroFlag(value == 0);
+  }
+
 }

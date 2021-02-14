@@ -1,7 +1,7 @@
 package com.soebes.emulators;
 
-import com.soebes.emulators.register.Accumulator;
 import com.soebes.emulators.register.AddressBus;
+import com.soebes.emulators.register.ArithmethicFlags;
 import com.soebes.emulators.register.Register16Bit;
 import com.soebes.emulators.register.Register8Bit;
 
@@ -22,14 +22,17 @@ public class CPU6502 {
   /**
    * The accumulator.
    */
-  private Accumulator registerA;
+  private Register8Bit registerA;
+
+  private ArithmethicFlags arithmethicFlags;
 
   public CPU6502(AddressBus addressBus) {
     this.addressBus = addressBus;
-    this.registerA = new Accumulator((byte) 0);
+    this.registerA = new Register8Bit((byte) 0);
     this.registerX = new Register8Bit((byte) 0);
     this.registerY = new Register8Bit((byte) 0);
     this.registerPC = new Register16Bit(0);
+    this.arithmethicFlags = new ArithmethicFlags();
   }
 
   public CPU6502 step() {
@@ -44,7 +47,13 @@ public class CPU6502 {
       case NOP:
         break;
       case LDA:
-        registerA.setValue(resolveOperand(instruction));
+        byte value = resolveOperand(instruction);
+        registerA.setValue(value);
+        arithmethicFlags.setValue(value);
+        break;
+      case INX:
+        registerX.incr();
+        arithmethicFlags.setValue(registerX.value());
         break;
       default:
     }
@@ -110,5 +119,9 @@ public class CPU6502 {
 
   public Register8Bit getRegisterA() {
     return registerA;
+  }
+
+  public ArithmethicFlags getArithmethicFlags() {
+    return arithmethicFlags;
   }
 }
