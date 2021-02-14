@@ -29,13 +29,15 @@ import com.soebes.emulators.cpu6502.register.Register8Bit;
  */
 public class C6502 {
 
-
   /**
    * The Program Counter.
    */
   private final Register16Bit PC;
 
 
+  /**
+   * The address bus for access to memory.
+   */
   private final AddressBus bus;
 
   /**
@@ -75,11 +77,11 @@ public class C6502 {
       case LDA:
         byte value = resolveOperand(instruction);
         registerA.setValue(value);
-        psf.setValue(value);
+        psf.setValue(Byte.toUnsignedInt(value));
         break;
       case INX:
         regX.incr();
-        psf.setValue(regX.value());
+        psf.setValue(Byte.toUnsignedInt(regX.value()));
         break;
       default:
     }

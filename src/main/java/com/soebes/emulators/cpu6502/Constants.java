@@ -24,6 +24,14 @@ package com.soebes.emulators.cpu6502;
  */
 public final class Constants {
 
-  public static final int ResetVector = 0xFFFC; // 0xFFFC-FFFD
+  /**
+   * The reset vector contains the address where to jump
+   * when a reset is triggered. The address is stored in:
+   * <ul>
+   *   <li>0xFFFC</li>
+   *   <li>0xFFFD</li>
+   * </ul>
+   */
+  public static final int RESET_VECTOR = 0xFFFC;
 
 }

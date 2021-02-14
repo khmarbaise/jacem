@@ -66,32 +66,57 @@ class C6502Test {
 
   }
 
-  @Test
-  @DisplayName("LDA #$33")
-  void lda_immediate() {
-    // LDA #$33
-    ram.write(0x0000, new int[]{0xa9, 0x33});
+  @Nested
+  class LoadAccumulator {
 
-    c6502.step();
+    @Test
+    @DisplayName("LDA #$33")
+    void lda_immediate() {
+      // LDA #$33
+      ram.write(0x0000, new int[]{0xa9, 0x33});
 
-    assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x33).byteValue());
-    assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(c6502.getPC().value()).isEqualTo(0x0002);
+      c6502.step();
 
-    assertThat(c6502.getPsf().isNegativeFlag()).isFalse();
-    assertThat(c6502.getPsf().isZeroFlag()).isFalse();
-    assertThat(c6502.getPsf().isCarryFlag()).isFalse();
-    assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
+      assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x33).byteValue());
+      assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+      assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+      assertThat(c6502.getPC().value()).isEqualTo(0x0002);
 
+      assertThat(c6502.getPsf().isNegativeFlag()).isFalse();
+      assertThat(c6502.getPsf().isZeroFlag()).isFalse();
+      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
+      assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
+
+
+    }
+    @Test
+    @DisplayName("LDA #$80")
+    void lda_immediate_negative() {
+      // LDA #$33
+      ram.write(0x0000, new int[]{0xa9, 0x80});
+
+      c6502.step();
+
+      assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x80).byteValue());
+      assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+      assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
+      assertThat(c6502.getPC().value()).isEqualTo(0x0002);
+
+      assertThat(c6502.getPsf().isNegativeFlag()).isTrue();
+      assertThat(c6502.getPsf().isZeroFlag()).isFalse();
+      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
+      assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
+
+
+    }
 
   }
 
   @Nested
   class IncrementX {
     @Test
-    @DisplayName("INX")
-    void inx() {
+    @DisplayName("INX with positive value")
+    void inx_positive() {
       // INX
       ram.write(0x0000, new int[]{0xE8});
 
@@ -112,8 +137,7 @@ class C6502Test {
 
     @Test
     @DisplayName("INX 0x7f to 0x80 Flags")
-    void inx12() {
-      // INX
+    void inx_of_positive_value_which_becomes_negative() {
       ram.write(0x0000, new int[]{0xE8});
 
       c6502.getRegX().setValue((byte) 0x7f);
@@ -125,7 +149,7 @@ class C6502Test {
       assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
       assertThat(c6502.getPC().value()).isEqualTo(0x0001);
 
-      assertThat(c6502.getPsf().isNegativeFlag()).as("The negativeFlage should be set to true.").isTrue();
+      assertThat(c6502.getPsf().isNegativeFlag()).as("The negativeFlag should be set to true.").isTrue();
       assertThat(c6502.getPsf().isZeroFlag()).isFalse();
       assertThat(c6502.getPsf().isCarryFlag()).isFalse();
       assertThat(c6502.getPsf().isOverflowFlag()).isFalse();

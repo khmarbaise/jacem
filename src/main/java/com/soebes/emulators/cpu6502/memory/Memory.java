@@ -24,6 +24,9 @@ package com.soebes.emulators.cpu6502.memory;
  */
 public interface Memory {
 
+  /**
+   * @return The size of the memory.
+   */
   int Size();
   /**
    * @param address The address within the memory.

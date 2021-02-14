@@ -25,19 +25,20 @@ package com.soebes.emulators.cpu6502.register;
 public class Register8Bit {
 
 
-  private byte value;
+  private Byte value;
 
-  public Register8Bit(byte value) {
+  public Register8Bit(Byte value) {
     this.value = value;
   }
 
-  public byte value() {
+  public Byte value() {
     return this.value;
   }
 
-  public void setValue(byte value) {
+  public void setValue(Byte value) {
     this.value = value;
   }
+
   public void incr() {
     Integer integer = Integer.valueOf(this.value);
     Integer result = integer + 1;

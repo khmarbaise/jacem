@@ -24,8 +24,6 @@ package com.soebes.emulators.cpu6502.memory;
  */
 public class Rom implements Memory {
 
-  public static final int RAM_64K = 64 * 1024;
-
   private Byte[] memory;
 
   public Rom(int sizeOfMemory) {
