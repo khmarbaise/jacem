@@ -49,7 +49,6 @@ class InstructionSetTest {
   @Test
   void name() {
     int readByte = 0xa9;
-    System.out.printf("readByte = %02x", readByte);
     assertThat(InstructionSet.opcExists(readByte)).isTrue();
   }
 

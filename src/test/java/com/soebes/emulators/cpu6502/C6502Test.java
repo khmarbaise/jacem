@@ -54,15 +54,19 @@ class C6502Test {
 
     c6502.step();
 
-    assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x0).byteValue());
-    assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-    assertThat(c6502.getPC().value()).isEqualTo(0x0001);
+    assertThatRegister(0x00, 0x00, 0x00, 0x0001, false, false, false, false);
+  }
 
-    assertThat(c6502.getPsf().isNegativeFlag()).isFalse();
-    assertThat(c6502.getPsf().isZeroFlag()).isFalse();
-    assertThat(c6502.getPsf().isCarryFlag()).isFalse();
-    assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
+  private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag) {
+    assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
+    assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
+    assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
+    assertThat(c6502.getPC().value()).isEqualTo(pc);
+
+    assertThat(c6502.getPsf().isNegativeFlag()).as("The negative flag expected to be '%s'", nFlag).isEqualTo(nFlag);
+    assertThat(c6502.getPsf().isZeroFlag()).as("The zero flag expected to be '%s'", zFlag).isEqualTo(zFlag);
+    assertThat(c6502.getPsf().isCarryFlag()).as("The carry flag expected to be '%s'", cFlag).isEqualTo(cFlag);
+    assertThat(c6502.getPsf().isOverflowFlag()).as("The overflow flag expected to be '%s'").isEqualTo(oFlag);
 
   }
 
@@ -77,18 +81,9 @@ class C6502Test {
 
       c6502.step();
 
-      assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x33).byteValue());
-      assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getPC().value()).isEqualTo(0x0002);
-
-      assertThat(c6502.getPsf().isNegativeFlag()).isFalse();
-      assertThat(c6502.getPsf().isZeroFlag()).isFalse();
-      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
-      assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
-
-
+      assertThatRegister(0x33, 0x00, 0x00, 0x0002, false, false, false, false);
     }
+
     @Test
     @DisplayName("LDA #$80")
     void lda_immediate_negative() {
@@ -97,17 +92,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x80).byteValue());
-      assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getPC().value()).isEqualTo(0x0002);
-
-      assertThat(c6502.getPsf().isNegativeFlag()).isTrue();
-      assertThat(c6502.getPsf().isZeroFlag()).isFalse();
-      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
-      assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
-
-
+      assertThatRegister(0x80, 0x00, 0x00, 0x0002, true, false, false, false);
     }
 
   }
@@ -124,19 +109,11 @@ class C6502Test {
 
       c6502.step();
 
-      assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x13).byteValue());
-      assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getPC().value()).isEqualTo(0x0001);
-
-      assertThat(c6502.getPsf().isNegativeFlag()).isFalse();
-      assertThat(c6502.getPsf().isZeroFlag()).isFalse();
-      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
-      assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
+      assertThatRegister(0x00, 0x13, 0x00, 0x0001, false, false, false, false);
     }
 
     @Test
-    @DisplayName("INX 0x7f to 0x80 Flags")
+    @DisplayName("INX 0x7F to 0x80 Flags")
     void inx_of_positive_value_which_becomes_negative() {
       ram.write(0x0000, new int[]{0xE8});
 
@@ -144,15 +121,7 @@ class C6502Test {
 
       c6502.step();
 
-      assertThat(c6502.getRegisterA().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getRegX().value()).isEqualTo(Integer.valueOf(0x80).byteValue());
-      assertThat(c6502.getRegY().value()).isEqualTo(Integer.valueOf(0x00).byteValue());
-      assertThat(c6502.getPC().value()).isEqualTo(0x0001);
-
-      assertThat(c6502.getPsf().isNegativeFlag()).as("The negativeFlag should be set to true.").isTrue();
-      assertThat(c6502.getPsf().isZeroFlag()).isFalse();
-      assertThat(c6502.getPsf().isCarryFlag()).isFalse();
-      assertThat(c6502.getPsf().isOverflowFlag()).isFalse();
+      assertThatRegister(0x00, 0x80, 0x00, 0x0001, true, false, false, false);
     }
   }
 }
