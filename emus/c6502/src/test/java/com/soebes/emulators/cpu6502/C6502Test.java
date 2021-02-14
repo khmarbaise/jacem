@@ -41,6 +41,8 @@ class C6502Test {
 
   private C6502 cpu;
 
+  private AddressBus addressBus;
+
   @BeforeEach
   void beforeEach() {
     // Page 0: zero page.
@@ -49,7 +51,7 @@ class C6502Test {
     this.stack = new Ram(0x0100);
     // 16 Byte of RAM which is needed for the tests.
     this.ram = new Ram(0x0010);
-    AddressBus addressBus = new AddressBus();
+    this.addressBus = new AddressBus();
 
     //Page 0 zero page
     addressBus.attach(zeroPage, 0x0000);
@@ -139,6 +141,89 @@ class C6502Test {
       cpu.step();
 
       assertThatRegister(0x00, 0x80, 0x00, 0x1001, true, false, false, false, false, false);
+    }
+  }
+
+  @Nested
+  class IncrementY {
+    @Test
+    @DisplayName("INY with positive value")
+    void iny_positive() {
+      ram.write(0x0000, new int[]{0xC8});
+
+      cpu.getRegY().setValue((byte) 0x34);
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x35, 0x1001, false, false, false, false, false, false);
+    }
+
+    @Test
+    @DisplayName("INY 0x7F to 0x80 Flags")
+    void iny_of_positive_value_which_becomes_negative() {
+      ram.write(0x0000, new int[]{0xC8});
+
+      cpu.getRegY().setValue((byte) 0x7f);
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x80, 0x1001, true, false, false, false, false, false);
+    }
+  }
+
+  @Nested
+  class INC {
+    /*
+      entry(0xE6, of(INC, zeropage, 2, 5)),
+      entry(0xF6, of(INC, zeropageX, 2, 6)),
+      entry(0xEE, of(INC, absolute, 3, 6)),
+      entry(0xFE, of(INC, absoluteX, 3, 7)),
+     */
+    @Test
+    @DisplayName("INC $20 (zero page)")
+    void inc_zero_page() {
+      ram.write(0x0000, new int[]{0xE6, 0x20});
+
+      zeroPage.write(0x0020, new int[]{0x21});
+      Byte read = addressBus.read(0x0020);
+      assertThat(read).isEqualTo(Integer.valueOf(33).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x0020);
+      assertThat(read).isEqualTo(Integer.valueOf(34).byteValue());
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
+    }
+
+    @Test
+    @DisplayName("INC $20,X (zero page,X)")
+    void inc_zero_page_x() {
+      ram.write(0x0000, new int[]{0xF6, 0x21});
+
+      zeroPage.write(0x0021, new int[]{0x34});
+      Byte read = addressBus.read(0x0021);
+      assertThat(read).isEqualTo(Integer.valueOf(52).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x0021);
+      assertThat(read).isEqualTo(Integer.valueOf(53).byteValue());
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
+    }
+    @Test
+    @DisplayName("INC $1005")
+    void inc_absolute() {
+      ram.write(0x0000, new int[]{0xEE, 0x05, 0x10});
+
+      addressBus.write(0x1005, 0x54);
+      Byte read = addressBus.read(0x1005);
+      assertThat(read).isEqualTo(Integer.valueOf(0x54).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x1005);
+      assertThat(read).isEqualTo(Integer.valueOf(0x55).byteValue());
+      assertThatRegister(0x00, 0x00, 0x00, 0x1003, false, false, false, false, false, false);
     }
   }
 

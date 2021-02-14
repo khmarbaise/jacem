@@ -84,8 +84,15 @@ public class C6502 {
         lda(instruction);
         break;
       case INX:
-        inx(instruction);
+        inx();
         break;
+      case INY:
+        iny();
+        break;
+      case INC:
+        inc(instruction);
+        break;
+
       case SEC:
         psf.setCarryFlag(true);
         break;
@@ -117,9 +124,21 @@ public class C6502 {
     psf.setValue(Byte.toUnsignedInt(value));
   }
 
-  private void inx(Instruction in) {
+  private void inx() {
     regX.incr();
     psf.setValue(Byte.toUnsignedInt(regX.value()));
+  }
+
+  private void iny() {
+    regY.incr();
+    psf.setValue(Byte.toUnsignedInt(regY.value()));
+  }
+
+  private void inc(Instruction in) {
+    int address = memoryAddress(in);
+    int value = bus.read(address) + 1;
+    bus.write(address, value);
+    psf.setValue(value);
   }
 
   private void adc(Instruction in) {
@@ -143,12 +162,15 @@ public class C6502 {
   private int memoryAddress(Instruction instruction) {
     switch (instruction.getOpc().getAddressingMode()) {
       case absolute:
-        return instruction.getAddress();
+        return instruction.getOp16();
       case absoluteX:
         return instruction.getAddress() + regX.value();
       case absoluteY:
         return instruction.getAddress() + regY.value();
-
+      case zeropage:
+        return instruction.getOp8();
+      case zeropageX:
+        return instruction.getOp8() + regX.value();
       default:
         throw new IllegalStateException("Unknown adressing mode.");
     }
