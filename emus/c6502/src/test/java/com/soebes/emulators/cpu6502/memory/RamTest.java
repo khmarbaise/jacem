@@ -19,6 +19,8 @@ package com.soebes.emulators.cpu6502.memory;
  * under the License.
  */
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -27,9 +29,19 @@ import org.junit.jupiter.api.Test;
 class RamTest {
 
   @Test
-  void first() {
-    Ram ram = new Ram(1024);
+  void write_amount_of_memory_and_check_if_the_same_is_read() {
+    Ram ram = new Ram(0x0100);
 
-//    ram.write();
+    int[] givenContent = {0x01, 0x02, 0x03, 0x10, 0x20, 0x50};
+    ram.write(0x0000, givenContent);
+
+    int[] realMemoryContent = new int[givenContent.length];
+    for (int address = 0; address < givenContent.length; address++) {
+      Byte aByte = ram.readByte(address);
+      realMemoryContent[address] = aByte;
+    }
+
+    assertThat(givenContent).isEqualTo(realMemoryContent);
+
   }
 }
