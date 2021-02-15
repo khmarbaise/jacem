@@ -205,13 +205,6 @@ class C6502Test {
       assertThatRegister(0x00, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
     }
 
-    /*
-          entry(0xE6, of(INC, zeropage, 2, 5)),
-      entry(0xF6, of(INC, zeropageX, 2, 6)),
-      entry(0xEE, of(INC, absolute, 3, 6)),
-      entry(0xFE, of(INC, absoluteX, 3, 7)),
-
-     */
     @Test
     @DisplayName("INC $1005")
     void inc_absolute() {

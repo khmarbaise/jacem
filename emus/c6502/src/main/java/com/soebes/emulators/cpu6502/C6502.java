@@ -94,28 +94,55 @@ public class C6502 {
         break;
 
       case SEC:
-        psf.setCarryFlag(true);
+        sec();
         break;
       case SED:
-        psf.setDecimalModeFlag(true);
+        sed();
         break;
       case SEI:
-        psf.setInteruptDisable(true);
+        sei();
         break;
       case CLC:
-        psf.setCarryFlag(false);
+        clc();
         break;
       case CLD:
-        psf.setDecimalModeFlag(false);
+        cld();
         break;
       case CLI:
-        psf.setInteruptDisable(false);
+        cli();
         break;
       case CLV:
-        psf.setOverflowFlag(false);
+        clv();
         break;
       default:
     }
+  }
+
+  private void clv() {
+    psf.setOverflowFlag(false);
+  }
+  private void cli() {
+    psf.setInteruptDisable(false);
+  }
+
+  private void cld() {
+    psf.setDecimalModeFlag(false);
+  }
+
+  private void clc() {
+    psf.setCarryFlag(false);
+  }
+
+  private void sei() {
+    psf.setInteruptDisable(true);
+  }
+
+  private void sed() {
+    psf.setDecimalModeFlag(true);
+  }
+
+  private void sec() {
+    psf.setCarryFlag(true);
   }
 
   private void lda(Instruction instruction) {
