@@ -21,7 +21,7 @@
 This is the 3nd incarnation of the [Java CPU Emulator](https://github.com/khmarbaise/CPUEmu). 
 
 I had started that because I had long time ago an idea to make an 
-emulator for 8085/6502 cpu working just as a learning experience.
+emulator for 8085/6502 cpu working just as a learning experiment.
 In the meantime I have other design idea how to handle that.
 
 This project is now the state of the design ideas.
