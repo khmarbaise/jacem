@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.register;
+package com.soebes.emulators.cpu6502.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -19,7 +19,7 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.register.AddressBus;
+import com.soebes.emulators.cpu6502.memory.AddressBus;
 import com.soebes.emulators.cpu6502.register.ArithmeticFlags;
 import com.soebes.emulators.cpu6502.register.Register16Bit;
 import com.soebes.emulators.cpu6502.register.Register8Bit;
@@ -62,6 +62,8 @@ public class C6502 {
     this.regX = new Register8Bit((byte) 0);
     this.regY = new Register8Bit((byte) 0);
     //TODO: This might be wrong. Currently for the tests it works.
+    // It would be better to make a Reset() method which
+    // loads the correct address from reset vector.
     this.PC = new Register16Bit(0x1000);
     this.psf = new ArithmeticFlags();
   }

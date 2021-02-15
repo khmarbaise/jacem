@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.register;
+package com.soebes.emulators.cpu6502.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,13 +19,15 @@ package com.soebes.emulators.cpu6502.register;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.Memory;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Karl Heinz Marbaise
+ *
+ * @implNote Current implementation is lacking performance for a larger amount
+ * of Addressable elements see the unit tests. For example 32 K segments with
+ * two bytes each.
  */
 public class AddressBus {
 

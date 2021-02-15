@@ -20,7 +20,7 @@ package com.soebes.emulators.cpu6502;
  */
 
 import com.soebes.emulators.cpu6502.memory.Ram;
-import com.soebes.emulators.cpu6502.register.AddressBus;
+import com.soebes.emulators.cpu6502.memory.AddressBus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
