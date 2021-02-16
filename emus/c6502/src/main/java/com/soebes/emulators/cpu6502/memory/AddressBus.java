@@ -49,18 +49,18 @@ public class AddressBus {
   }
 
   public void write(int address, int value) {
-    Addressable addressableStream = getAddressable(address);
+    Addressable addressableStream = findAdressable(address);
     int segmentAddress = address - addressableStream.getStart();
     addressableStream.getMemory().writeByte(segmentAddress, (byte) value);
   }
 
   public Byte read(int address) {
-    Addressable addressableStream = getAddressable(address);
+    Addressable addressableStream = findAdressable(address);
     int segmentAddress = address - addressableStream.getStart();
     return addressableStream.getMemory().readByte(segmentAddress);
   }
 
-  private Addressable getAddressable(int address) {
+  private Addressable findAdressable(int address) {
     return this.addressables.stream()
         .filter(contains(address))
         .findAny()
