@@ -19,14 +19,14 @@ package com.soebes.emulators.cpu6502.memory;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.AddressBus;
-import com.soebes.emulators.cpu6502.memory.Ram;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Karl Heinz Marbaise
@@ -37,6 +37,7 @@ class AddressBusTest {
   class SingleRamSegment {
 
     private AddressBus addressBus;
+
     private Ram ram;
 
     @BeforeEach
