@@ -21,13 +21,12 @@ package com.soebes.emulators.cpu6502.memory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author Karl Heinz Marbaise
- *
- * @implNote Current implementation is lacking performance for a larger amount
- * of Addressable elements see the unit tests. For example 32 K segments with
- * two bytes each.
+ * @implNote Current implementation is lacking performance for a larger amount of Addressable elements see the unit
+ * tests. For example 32 K segments with two bytes each.
  */
 public class AddressBus {
 
@@ -35,6 +34,10 @@ public class AddressBus {
 
   public AddressBus() {
     this.addressables = new ArrayList<>();
+  }
+
+  private final Predicate<Addressable> contains(int address) {
+    return s -> address >= s.getStart() && address <= s.getEnd();
   }
 
   /**
@@ -46,21 +49,22 @@ public class AddressBus {
   }
 
   public void write(int address, int value) {
-    Addressable addressableStream = this.addressables
-        .stream()
-        .filter(s -> address >= s.getStart() && address <= s.getEnd()).findAny()
-        .orElseThrow(() -> new IllegalStateException("Unknown address given"));
+    Addressable addressableStream = getAddressable(address);
     int segmentAddress = address - addressableStream.getStart();
-    addressableStream.getMemory().writeByte(segmentAddress, (byte)value);
+    addressableStream.getMemory().writeByte(segmentAddress, (byte) value);
   }
 
   public Byte read(int address) {
-    Addressable addressableStream = this.addressables
-        .stream()
-        .filter(s -> address >= s.getStart() && address <= s.getEnd()).findAny()
-        .orElseThrow(() -> new IllegalStateException("Unknown address given"));
+    Addressable addressableStream = getAddressable(address);
     int segmentAddress = address - addressableStream.getStart();
     return addressableStream.getMemory().readByte(segmentAddress);
+  }
+
+  private Addressable getAddressable(int address) {
+    return this.addressables.stream()
+        .filter(contains(address))
+        .findAny()
+        .orElseThrow(() -> new IllegalStateException("Unknown address given"));
   }
 
   public int read16(int address) {
