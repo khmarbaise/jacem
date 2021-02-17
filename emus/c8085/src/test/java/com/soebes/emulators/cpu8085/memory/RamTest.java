@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.memory;
+package com.soebes.emulators.cpu8085.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,11 +21,7 @@ package com.soebes.emulators.cpu6502.memory;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
 
 /**
  * @author Karl Heinz Marbaise
@@ -49,22 +45,22 @@ class RamTest {
 
   }
 
-  @Test
-  void load_binary_memory_dump() {
-    String path = this.getClass().getResource("/6502_functional_test.bin").getPath();
-    Ram ram = new Ram(0x10000);
-    assertThatNoException().isThrownBy(() -> ram.load(Path.of(path)));
-  }
-
-  @Test
-  void load_and_dump_memory_content() throws IOException {
-    Path resultDump = Path.of("target", "result.dump");
-
-    String path = this.getClass().getResource("/6502_functional_test.bin").getPath();
-    Ram ram = new Ram(0x10000);
-    ram.load(Path.of(path));
-    ram.dump(resultDump);
-
-    assertThat(Path.of(path)).hasSameBinaryContentAs(resultDump);
-  }
+//  @Test
+//  void load_binary_memory_dump() {
+//    String path = this.getClass().getResource("/6502_functional_test.bin").getPath();
+//    Ram ram = new Ram(0x10000);
+//    assertThatNoException().isThrownBy(() -> ram.load(Path.of(path)));
+//  }
+//
+//  @Test
+//  void load_and_dump_memory_content() throws IOException {
+//    Path resultDump = Path.of("target", "result.dump");
+//
+//    String path = this.getClass().getResource("/6502_functional_test.bin").getPath();
+//    Ram ram = new Ram(0x10000);
+//    ram.load(Path.of(path));
+//    ram.dump(resultDump);
+//
+//    assertThat(Path.of(path)).hasSameBinaryContentAs(resultDump);
+//  }
 }

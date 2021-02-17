@@ -19,31 +19,27 @@ package com.soebes.emulators.cpu6502.register;
  * under the License.
  */
 
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Karl Heinz Marbaise
  */
-public class Register8Bit {
+class Register16BitTest {
 
-  private Byte value;
+  @Test
+  void check_for_initial_value() {
+    Register16Bit register16Bit = new Register16Bit(0);
 
-  public Register8Bit(Byte value) {
-    this.value = value;
+    assertThat(register16Bit.value()).isZero();
   }
 
-  public Byte value() {
-    return this.value;
-  }
+  @Test
+  void check_increment() {
+    Register16Bit register16Bit = new Register16Bit(0);
+    register16Bit.incrementBy(1);
 
-  public void setValue(Byte value) {
-    this.value = value;
-  }
-
-  public void incr() {
-    Integer result = Integer.valueOf(this.value) + 1;
-    this.value = result.byteValue();
-  }
-  public void decr() {
-    Integer result = Integer.valueOf(this.value) - 1;
-    this.value = result.byteValue();
+    assertThat(register16Bit.value()).isEqualTo(1);
   }
 }

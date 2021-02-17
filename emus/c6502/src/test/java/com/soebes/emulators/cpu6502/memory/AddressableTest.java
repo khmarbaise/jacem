@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.register;
+package com.soebes.emulators.cpu6502.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,31 +19,19 @@ package com.soebes.emulators.cpu6502.register;
  * under the License.
  */
 
-/**
- * @author Karl Heinz Marbaise
- */
-public class Register8Bit {
+import org.junit.jupiter.api.Test;
 
-  private Byte value;
+import static org.assertj.core.api.Assertions.assertThat;
 
-  public Register8Bit(Byte value) {
-    this.value = value;
-  }
+class AddressableTest {
 
-  public Byte value() {
-    return this.value;
-  }
+  @Test
+  void start_end_should_be_calculated_correctly() {
+    Ram ram = new Ram(0x1000);
+    Addressable addressable = new Addressable(ram, 0x0000);
 
-  public void setValue(Byte value) {
-    this.value = value;
-  }
-
-  public void incr() {
-    Integer result = Integer.valueOf(this.value) + 1;
-    this.value = result.byteValue();
-  }
-  public void decr() {
-    Integer result = Integer.valueOf(this.value) - 1;
-    this.value = result.byteValue();
+    assertThat(addressable.getStart()).isEqualTo(0x0000);
+    assertThat(addressable.getEnd()).isEqualTo(0x0FFF);
+    assertThat(addressable.getMemory()).isEqualTo(ram);
   }
 }

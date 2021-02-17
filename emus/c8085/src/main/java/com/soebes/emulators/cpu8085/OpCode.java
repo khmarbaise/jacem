@@ -23,5 +23,14 @@ package com.soebes.emulators.cpu8085;
  * @author Karl Heinz Marbaise
  */
 public enum OpCode {
+  NOP,
   LDA,
+  MOV,
+  MVI,
+  LXI,
+  LDAX,
+  STAX,
+
+  RIM, // 8085 only
+  SIM, // 8085 only
 }

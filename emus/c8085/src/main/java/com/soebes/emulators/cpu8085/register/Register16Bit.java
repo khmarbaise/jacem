@@ -29,6 +29,9 @@ public class Register16Bit {
   public Register16Bit(int value) {
     this.value = value;
   }
+  public Register16Bit() {
+    this(0);
+  }
 
   public void incrementBy(int value) {
     this.value += value;

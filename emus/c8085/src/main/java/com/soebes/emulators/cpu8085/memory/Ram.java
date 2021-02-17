@@ -19,22 +19,27 @@ package com.soebes.emulators.cpu8085.memory;
  * under the License.
  */
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+
 /**
  * @author Karl Heinz Marbaise
  */
 public class Ram implements Memory {
 
-  private Byte[] memory;
+  private byte[] memory;
 
   public Ram(int sizeOfMemory) {
-    this.memory = new Byte[sizeOfMemory];
+    this.memory = new byte[sizeOfMemory];
     for (int i = 0; i < memory.length; i++) {
-      this.memory[i] = Byte.valueOf((byte) 0);
+      this.memory[i] = (byte) 0;
     }
   }
 
   public byte[] readWord(int address) {
-    return new byte[] {this.memory[address], this.memory[address + 1]};
+    return new byte[]{this.memory[address], this.memory[address + 1]};
   }
 
 
@@ -60,7 +65,15 @@ public class Ram implements Memory {
 
   public void write(int address, int[] ints) {
     for (int i = 0; i < ints.length; i++) {
-      this.memory[address+i] = (byte)ints[i];
+      this.memory[address + i] = (byte) ints[i];
     }
+  }
+
+  public void dump(Path memoryDump) throws IOException {
+    Files.write(memoryDump, this.memory, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+  }
+
+  public void load(Path memoryDump) throws IOException {
+    this.memory = Files.readAllBytes(memoryDump);
   }
 }

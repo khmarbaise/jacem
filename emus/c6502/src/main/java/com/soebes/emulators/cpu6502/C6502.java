@@ -20,9 +20,16 @@ package com.soebes.emulators.cpu6502;
  */
 
 import com.soebes.emulators.cpu6502.memory.AddressBus;
-import com.soebes.emulators.cpu6502.register.ArithmeticFlags;
 import com.soebes.emulators.cpu6502.register.Register16Bit;
 import com.soebes.emulators.cpu6502.register.Register8Bit;
+import com.soebes.emulators.cpu6502.register.StatusRegister;
+
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Carry;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Decimal;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Interrupt;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Negative;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Overflow;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Zero;
 
 /**
  * @author Karl Heinz Marbaise
@@ -54,7 +61,7 @@ public class C6502 {
   /**
    * Process Status Flags
    */
-  private ArithmeticFlags psf;
+  private StatusRegister psr;
 
   public C6502(AddressBus bus) {
     this.bus = bus;
@@ -65,7 +72,7 @@ public class C6502 {
     // It would be better to make a Reset() method which
     // loads the correct address from reset vector.
     this.PC = new Register16Bit(0x1000);
-    this.psf = new ArithmeticFlags();
+    this.psr = new StatusRegister();
   }
 
   public C6502 step() {
@@ -76,25 +83,17 @@ public class C6502 {
   }
 
   private void execute(Instruction instruction) {
+    // BiConsumer<C6502, Instruction> adc = C6502::adc;
+
     switch (instruction.getOpc().getOpCode()) {
+      case NOP:
+        break;
       case ADC:
         adc(instruction);
         break;
-      case NOP:
+      case SBC:
+        sbc(instruction);
         break;
-      case LDA:
-        lda(instruction);
-        break;
-      case INX:
-        inx();
-        break;
-      case INY:
-        iny();
-        break;
-      case INC:
-        inc(instruction);
-        break;
-
       case SEC:
         sec();
         break;
@@ -116,76 +115,155 @@ public class C6502 {
       case CLV:
         clv();
         break;
+
+      case INX:
+        inx();
+        break;
+      case INY:
+        iny();
+        break;
+      case INC:
+        inc(instruction);
+        break;
+      case DEX:
+        dex();
+        break;
+      case DEY:
+        dey();
+        break;
+      case DEC:
+        dec(instruction);
+        break;
+      case LDA:
+        lda(instruction);
+        break;
+      case LDX:
+        ldx(instruction);
+        break;
+      case LDY:
+        ldy(instruction);
+        break;
       default:
+        throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
     }
   }
 
   private void clv() {
-    psf.setOverflowFlag(false);
+    psr.unset(Overflow);
   }
+
   private void cli() {
-    psf.setInteruptDisable(false);
+    psr.unset(Interrupt);
   }
 
   private void cld() {
-    psf.setDecimalModeFlag(false);
+    psr.unset(Decimal);
   }
 
   private void clc() {
-    psf.setCarryFlag(false);
+    psr.unset(Carry);
   }
 
   private void sei() {
-    psf.setInteruptDisable(true);
+    psr.set(Interrupt);
   }
 
   private void sed() {
-    psf.setDecimalModeFlag(true);
+    psr.set(Decimal);
   }
 
   private void sec() {
-    psf.setCarryFlag(true);
+    psr.set(Carry);
   }
 
   private void lda(Instruction instruction) {
     byte value = resolveOperand(instruction);
     registerA.setValue(value);
-    psf.setValue(Byte.toUnsignedInt(value));
+    setCarryAndNegativeFlag(value);
+  }
+  private void ldx(Instruction instruction) {
+    byte value = resolveOperand(instruction);
+    regX.setValue(value);
+  }
+  private void ldy(Instruction instruction) {
+    byte value = resolveOperand(instruction);
+    regY.setValue(value);
   }
 
+  private void sbc(Instruction in) {
+    byte operand = resolveOperand(in);
+    if (psr.isSet(Decimal)) {
+      sbcDecimal(operand);
+    } else {
+      adcNormal((byte) (operand ^ operand));
+    }
+  }
+
+  private void setCarryAndNegativeFlag(byte value) {
+    if ((value & 0x80) >0) {
+      psr.set(Negative);
+    } else {
+      psr.unset(Negative);
+    }
+
+    if (value == 0) {
+      psr.set(Zero);
+    } else {
+      psr.unset(Zero);
+    }
+
+  }
   private void inx() {
     regX.incr();
-    psf.setValue(Byte.toUnsignedInt(regX.value()));
+    setCarryAndNegativeFlag(regX.value());
+  }
+  private void dex() {
+    regX.decr();
+    setCarryAndNegativeFlag(regX.value());
+  }
+  private void dey() {
+    regY.decr();
+    setCarryAndNegativeFlag(regY.value());
   }
 
   private void iny() {
     regY.incr();
-    psf.setValue(Byte.toUnsignedInt(regY.value()));
+    setCarryAndNegativeFlag(regY.value());
   }
 
   private void inc(Instruction in) {
     int address = memoryAddress(in);
     int value = bus.read(address) + 1;
     bus.write(address, value);
-    psf.setValue(value);
+    setCarryAndNegativeFlag(Integer.valueOf(value).byteValue());
+  }
+  private void dec(Instruction in) {
+    int address = memoryAddress(in);
+    int value = bus.read(address) - 1;
+    bus.write(address, value);
+    setCarryAndNegativeFlag(Integer.valueOf(value).byteValue());
   }
 
-  private void adc(Instruction in) {
+  void adc(Instruction in) {
     byte operand = resolveOperand(in);
-    boolean carryFlag = getPsf().isCarryFlag();
-    if (getPsf().isDecimalModeFlag()) {
-      adcDecimal(registerA, operand, carryFlag);
+
+    if (psr.isDecimal()) {
+      adcDecimal(operand);
     } else {
-      adcNormal(registerA, operand, carryFlag);
+      adcNormal(operand);
     }
   }
 
-  private void adcDecimal(Register8Bit a, byte operand, boolean carryFlag) {
+  private void sbcDecimal(byte operand) {
+
+  }
+  private void adcDecimal(byte operand) {
+    this.psr.isSet(Carry);
 
   }
 
-  private void adcNormal(Register8Bit a, byte operand, boolean carryFlag) {
-
+  private void adcNormal(byte operand) {
+    registerA.value();
   }
 
   private int memoryAddress(Instruction instruction) {
@@ -201,7 +279,7 @@ public class C6502 {
       case zeropageX:
         return instruction.getOp8() + regX.value();
       default:
-        throw new IllegalStateException("Unknown adressing mode.");
+        throw new IllegalStateException("Unknown addressing mode.");
     }
   }
 
@@ -236,23 +314,23 @@ public class C6502 {
     }
   }
 
-  public Register8Bit getRegX() {
+  public Register8Bit regX() {
     return regX;
   }
 
-  public Register8Bit getRegY() {
+  public Register8Bit regY() {
     return regY;
   }
 
-  public Register16Bit getPC() {
+  public Register16Bit PC() {
     return PC;
   }
 
-  public Register8Bit getRegisterA() {
+  public Register8Bit regA() {
     return registerA;
   }
 
-  public ArithmeticFlags getPsf() {
-    return psf;
+  public StatusRegister getPsr() {
+    return psr;
   }
 }

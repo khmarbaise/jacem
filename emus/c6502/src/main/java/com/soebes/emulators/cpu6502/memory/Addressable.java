@@ -19,8 +19,6 @@ package com.soebes.emulators.cpu6502.memory;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.Memory;
-
 /**
  * @author Karl Heinz Marbaise
  */

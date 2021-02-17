@@ -19,13 +19,23 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.Ram;
 import com.soebes.emulators.cpu6502.memory.AddressBus;
+import com.soebes.emulators.cpu6502.memory.Ram;
+import com.soebes.emulators.cpu6502.register.StatusRegister;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Carry;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Decimal;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Interrupt;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Negative;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Overflow;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -71,22 +81,28 @@ class C6502Test {
 
     cpu.step();
 
-    assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
+    assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+    assertThatFlags();
   }
 
-  private void assertThatRegister(int regA, int regX, int regY, int pc, boolean nFlag, boolean zFlag, boolean cFlag, boolean oFlag, boolean dFlag, boolean iFlag) {
-    assertThat(cpu.getRegisterA().value()).as("The register A has not the expected value: '%s' instead of '%s'", regA, cpu.getRegisterA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
-    assertThat(cpu.getRegX().value()).as("The register X has not the expected value: '%s' instead of '%s'", regX, cpu.getRegX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
-    assertThat(cpu.getRegY().value()).as("The register Y has not the expected value: '%s' instead of '%s'", regY, cpu.getRegY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
-    assertThat(cpu.getPC().value()).isEqualTo(pc);
+  private void assertThatRegister(int regA, int regX, int regY, int pc) {
+    assertThat(cpu.regA().value()).as("The register A has not the expected value: '%s' instead of '%s'", regA, cpu.regA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
+    assertThat(cpu.regX().value()).as("The register X has not the expected value: '%s' instead of '%s'", regX, cpu.regX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
+    assertThat(cpu.regY().value()).as("The register Y has not the expected value: '%s' instead of '%s'", regY, cpu.regY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
+    assertThat(cpu.PC().value()).as("The registry PC has not the expected value: '%s' instead of '%s'", pc, cpu.PC()).isEqualTo(pc);
+  }
 
-    assertThat(cpu.getPsf().isNegativeFlag()).as("The negative flag expected to be '%s'", nFlag).isEqualTo(nFlag);
-    assertThat(cpu.getPsf().isZeroFlag()).as("The zero flag expected to be '%s'", zFlag).isEqualTo(zFlag);
-    assertThat(cpu.getPsf().isCarryFlag()).as("The carry flag expected to be '%s'", cFlag).isEqualTo(cFlag);
-    assertThat(cpu.getPsf().isOverflowFlag()).as("The overflow flag expected to be '%s'", oFlag).isEqualTo(oFlag);
-    assertThat(cpu.getPsf().isDecimalModeFlag()).as("The decimal flag expected to be '%s'", dFlag).isEqualTo(dFlag);
-    assertThat(cpu.getPsf().isInteruptDisable()).as("The interrupt disable flag expected to be '%s'", iFlag).isEqualTo(iFlag);
-
+  private void assertThatFlags(StatusRegister.Status... states) {
+    EnumSet<StatusRegister.Status> all = EnumSet.allOf(StatusRegister.Status.class);
+    Arrays.stream(states).forEach(state -> {
+          assertThat(cpu.getPsr().isSet(state)).as("The " + state.name() + " flag expected to be set.").isEqualTo(true);
+        }
+    );
+    all.removeAll(Arrays.asList(states));
+    all.forEach(state -> {
+          assertThat(cpu.getPsr().isNotSet(state)).as("The " + state.name() + " flag expected not being set.").isTrue();
+        }
+    );
   }
 
   @Nested
@@ -100,7 +116,8 @@ class C6502Test {
 
       cpu.step();
 
-      assertThatRegister(0x33, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
+      assertThatRegister(0x33, 0x00, 0x00, 0x1002);
+      assertThatFlags();
     }
 
     @Test
@@ -111,7 +128,8 @@ class C6502Test {
 
       cpu.step();
 
-      assertThatRegister(0x80, 0x00, 0x00, 0x1002, true, false, false, false, false, false);
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002);
+      assertThatFlags(Negative);
     }
 
   }
@@ -124,11 +142,12 @@ class C6502Test {
       // INX
       ram.write(0x0000, new int[]{0xE8});
 
-      cpu.getRegX().setValue((byte) 0x12);
+      cpu.regX().setValue((byte) 0x12);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x13, 0x00, 0x1001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x13, 0x00, 0x1001);
+      assertThatFlags();
     }
 
     @Test
@@ -136,11 +155,12 @@ class C6502Test {
     void inx_of_positive_value_which_becomes_negative() {
       ram.write(0x0000, new int[]{0xE8});
 
-      cpu.getRegX().setValue((byte) 0x7f);
+      cpu.regX().setValue((byte) 0x7f);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x80, 0x00, 0x1001, true, false, false, false, false, false);
+      assertThatRegister(0x00, 0x80, 0x00, 0x1001);
+      assertThatFlags(Negative);
     }
   }
 
@@ -151,11 +171,12 @@ class C6502Test {
     void iny_positive() {
       ram.write(0x0000, new int[]{0xC8});
 
-      cpu.getRegY().setValue((byte) 0x34);
+      cpu.regY().setValue((byte) 0x34);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x35, 0x1001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x35, 0x1001);
+      assertThatFlags();
     }
 
     @Test
@@ -163,11 +184,12 @@ class C6502Test {
     void iny_of_positive_value_which_becomes_negative() {
       ram.write(0x0000, new int[]{0xC8});
 
-      cpu.getRegY().setValue((byte) 0x7f);
+      cpu.regY().setValue((byte) 0x7f);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x80, 0x1001, true, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x80, 0x1001);
+      assertThatFlags(Negative);
     }
   }
 
@@ -186,7 +208,8 @@ class C6502Test {
 
       read = addressBus.read(0x0020);
       assertThat(read).isEqualTo(Integer.valueOf(34).byteValue());
-      assertThatRegister(0x00, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags();
     }
 
     @Test
@@ -202,7 +225,8 @@ class C6502Test {
 
       read = addressBus.read(0x0021);
       assertThat(read).isEqualTo(Integer.valueOf(53).byteValue());
-      assertThatRegister(0x00, 0x00, 0x00, 0x1002, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags();
     }
 
     @Test
@@ -218,7 +242,8 @@ class C6502Test {
 
       read = addressBus.read(0x1005);
       assertThat(read).isEqualTo(Integer.valueOf(0x55).byteValue());
-      assertThatRegister(0x00, 0x00, 0x00, 0x1003, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1003);
+      assertThatFlags();
     }
 
     @Test
@@ -226,7 +251,7 @@ class C6502Test {
     void inc_absolute_x() {
       ram.write(0x0000, new int[]{0xFE, 0x05, 0x10});
 
-      cpu.getRegX().setValue(Integer.valueOf(0x03).byteValue());
+      cpu.regX().setValue(Integer.valueOf(0x03).byteValue());
       addressBus.write(0x1008, 0x60);
       Byte read = addressBus.read(0x1008);
       assertThat(read).isEqualTo(Integer.valueOf(0x60).byteValue());
@@ -235,7 +260,96 @@ class C6502Test {
 
       read = addressBus.read(0x1008);
       assertThat(read).isEqualTo(Integer.valueOf(0x61).byteValue());
-      assertThatRegister(0x00, 0x03, 0x00, 0x1003, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x03, 0x00, 0x1003);
+      assertThatFlags();
+    }
+  }
+
+  @Nested
+  class SBC {
+    /*
+            func TestSBCImmediate(t *testing.T) {
+          cpu, _, _ := NewRamMachine()
+          cpu.LoadProgram([]byte{0xE9, 0x01}, 0x0300)
+          cpu.A = 0x42
+          cpu.setCarry(true)
+
+          cpu.Step()
+
+          assert.EqualValues(t, 0x0302, cpu.PC)
+          assert.EqualValues(t, 0x41, cpu.A)
+          assert.True(t, cpu.getCarry())
+        }
+     */
+    @Test
+    @Disabled
+    @DisplayName("SBC #$01 (immediate)")
+    void sbc_immediate() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+
+      cpu.regA().setValue((byte) 0x42);
+      cpu.getPsr().set(Carry);
+
+      cpu.step();
+
+      assertThat(cpu.regA()).isEqualTo(Integer.valueOf(41).byteValue());
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("SBC $20,X (zero page,X)")
+    void inc_zero_page_x() {
+      ram.write(0x0000, new int[]{0xF6, 0x21});
+
+      zeroPage.write(0x0021, new int[]{0x34});
+      Byte read = addressBus.read(0x0021);
+      assertThat(read).isEqualTo(Integer.valueOf(52).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x0021);
+      assertThat(read).isEqualTo(Integer.valueOf(53).byteValue());
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("SBC $1005")
+    void inc_absolute() {
+      ram.write(0x0000, new int[]{0xEE, 0x05, 0x10});
+
+      addressBus.write(0x1005, 0x54);
+      Byte read = addressBus.read(0x1005);
+      assertThat(read).isEqualTo(Integer.valueOf(0x54).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x1005);
+      assertThat(read).isEqualTo(Integer.valueOf(0x55).byteValue());
+      assertThatRegister(0x00, 0x00, 0x00, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("SBC $1005,X")
+    void inc_absolute_x() {
+      ram.write(0x0000, new int[]{0xFE, 0x05, 0x10});
+
+      cpu.regX().setValue(Integer.valueOf(0x03).byteValue());
+      addressBus.write(0x1008, 0x60);
+      Byte read = addressBus.read(0x1008);
+      assertThat(read).isEqualTo(Integer.valueOf(0x60).byteValue());
+
+      cpu.step();
+
+      read = addressBus.read(0x1008);
+      assertThat(read).isEqualTo(Integer.valueOf(0x61).byteValue());
+      assertThatRegister(0x00, 0x03, 0x00, 0x1003);
+      assertThatFlags();
     }
   }
 
@@ -247,11 +361,12 @@ class C6502Test {
     void sec() {
       ram.write(0x0000, new int[]{0x38});
 
-      assertThat(cpu.getPsf().isCarryFlag()).isFalse();
+      assertThat(cpu.getPsr().isNotSet(Carry)).isTrue();
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, true, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags(Carry);
     }
 
     @Test
@@ -259,11 +374,12 @@ class C6502Test {
     void sed() {
       ram.write(0x0000, new int[]{0xF8});
 
-      assertThat(cpu.getPsf().isDecimalModeFlag()).isFalse();
+      assertThat(cpu.getPsr().isSet(Decimal)).isFalse();
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, true, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags(Decimal);
     }
 
     @Test
@@ -271,11 +387,12 @@ class C6502Test {
     void sei() {
       ram.write(0x0000, new int[]{0x78});
 
-      assertThat(cpu.getPsf().isInteruptDisable()).isFalse();
+      assertThat(cpu.getPsr().isNotSet(Interrupt)).isTrue();
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, true);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags(Interrupt);
     }
 
   }
@@ -288,11 +405,12 @@ class C6502Test {
     void clc() {
       ram.write(0x0000, new int[]{0x18});
 
-      cpu.getPsf().setCarryFlag(true);
+      cpu.getPsr().set(Carry);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags();
     }
 
     @Test
@@ -300,11 +418,12 @@ class C6502Test {
     void cld() {
       ram.write(0x0000, new int[]{0xD8});
 
-      cpu.getPsf().setDecimalModeFlag(true);
+      cpu.getPsr().set(Decimal);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags();
     }
 
     @Test
@@ -312,11 +431,12 @@ class C6502Test {
     void cli() {
       ram.write(0x0000, new int[]{0x58});
 
-      cpu.getPsf().setInteruptDisable(true);
+      cpu.getPsr().set(Interrupt);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags();
     }
 
     @Test
@@ -324,13 +444,15 @@ class C6502Test {
     void clv() {
       ram.write(0x0000, new int[]{0xB8});
 
-      cpu.getPsf().setOverflowFlag(true);
+      cpu.getPsr().set(Overflow);
 
       cpu.step();
 
-      assertThatRegister(0x00, 0x00, 0x00, 0x1001, false, false, false, false, false, false);
+      assertThatRegister(0x00, 0x00, 0x00, 0x1001);
+      assertThatFlags();
     }
 
   }
+
 
 }

@@ -20,10 +20,15 @@ package com.soebes.emulators.cpu8085;
  */
 
 /**
+ * immediate, register, direct, indirect, and implied addressing modes.
+ *
  * @author Karl Heinz Marbaise
  */
 public enum AddressingMode {
-  absolute("absolute");
+  absolute("absolute"),
+  implied("implied"),
+  immediate("immediate"),
+  indirect("indirect");
 
   private String info;
 

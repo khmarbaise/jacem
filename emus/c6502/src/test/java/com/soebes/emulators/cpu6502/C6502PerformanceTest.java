@@ -23,6 +23,7 @@ import com.soebes.emulators.cpu6502.memory.AddressBus;
 import com.soebes.emulators.cpu6502.memory.Ram;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,7 +49,7 @@ class C6502PerformanceTest {
     this.zeroPage = new Ram(0x0100);
     // Page 1: stack memory
     this.stack = new Ram(0x0100);
-    // 16 Byte of RAM which is needed for the tests.
+    // 0xF000 bytes of RAM which is needed for the tests.
     this.ram = new Ram(0xF000);
 
     //Page 0 zero page
@@ -65,8 +66,8 @@ class C6502PerformanceTest {
     }
   }
 
-  @Test
   @DisplayName("NOP")
+  @RepeatedTest(2000)
   void running() {
     for (int i = 0; i < this.ram.Size() - 1; i++) {
       cpu.step();
