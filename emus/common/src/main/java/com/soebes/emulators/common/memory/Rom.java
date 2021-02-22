@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.memory;
+package com.soebes.emulators.common.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,36 +19,27 @@ package com.soebes.emulators.cpu6502.memory;
  * under the License.
  */
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-
 /**
  * @author Karl Heinz Marbaise
  */
-public class Ram implements Memory {
+public class Rom implements Memory {
 
-  private byte[] memory;
+  private Byte[] memory;
 
-  public Ram(int sizeOfMemory) {
-    this.memory = new byte[sizeOfMemory];
-    for (int i = 0; i < memory.length; i++) {
-      this.memory[i] = (byte) 0;
-    }
+  public Rom(int sizeOfMemory) {
+    this.memory = new Byte[sizeOfMemory];
   }
 
   public byte[] readWord(int address) {
-    return new byte[]{this.memory[address], this.memory[address + 1]};
+    return new byte[] {this.memory[address], this.memory[address + 1]};
   }
-
 
   @Override
   public void writeByte(int address, Byte value) {
     this.memory[address] = value;
   }
 
-  public void writeWord(int address, byte value, byte value1) {
+  public void writeWord(int address, Byte value, Byte value1) {
     this.memory[address] = value;
     this.memory[address + 1] = value1;
   }
@@ -60,20 +51,13 @@ public class Ram implements Memory {
 
   @Override
   public Byte readByte(int address) {
-    return Byte.valueOf(this.memory[address]);
+    return this.memory[address];
   }
 
-  public void write(int address, int[] ints) {
+  // Only via constructor.
+  void write(int address, int[] ints) {
     for (int i = 0; i < ints.length; i++) {
-      this.memory[address + i] = (byte) ints[i];
+      this.memory[address] = (byte)ints[i];
     }
-  }
-
-  public void dump(Path memoryDump) throws IOException {
-    Files.write(memoryDump, this.memory, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-  }
-
-  public void load(Path memoryDump) throws IOException {
-    this.memory = Files.readAllBytes(memoryDump);
   }
 }

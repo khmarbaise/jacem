@@ -19,12 +19,11 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.AddressBus;
-import com.soebes.emulators.cpu6502.memory.Ram;
+import com.soebes.emulators.common.memory.AddressBus;
+import com.soebes.emulators.common.memory.Ram;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 /**
  * @author Karl Heinz Marbaise

@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.memory;
+package com.soebes.emulators.common.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,23 +22,27 @@ package com.soebes.emulators.cpu6502.memory;
 /**
  * @author Karl Heinz Marbaise
  */
-public interface Memory {
+public class Addressable {
 
-  /**
-   * @return The size of the memory.
-   */
-  int Size();
+  private final Memory memoryAccess;
+  private final int start;
+  private final int end;
 
-  /**
-   * @param address The address within the memory.
-   * @return a single byte read from the given memory location.
-   */
-  Byte readByte(int address);
+  public Addressable(Memory memoryAccess, int start) {
+    this.memoryAccess = memoryAccess;
+    this.start = start;
+    this.end = start + memoryAccess.Size() - 1;
+  }
 
-  /**
-   * @param address The address within the memory.
-   * @param value write a single byte at the given location in memory.
-   */
-  void writeByte(int address, Byte value);
+  public Memory getMemory() {
+    return memoryAccess;
+  }
 
+  public int getStart() {
+    return start;
+  }
+
+  public int getEnd() {
+    return end;
+  }
 }

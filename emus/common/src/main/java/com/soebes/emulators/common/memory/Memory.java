@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.register;
+package com.soebes.emulators.common.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,19 +22,23 @@ package com.soebes.emulators.cpu6502.register;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Register16Bit {
+public interface Memory {
 
-  private int value;
+  /**
+   * @return The size of the memory.
+   */
+  int Size();
 
-  public Register16Bit(int value) {
-    this.value = value;
-  }
+  /**
+   * @param address The address within the memory.
+   * @return a single byte read from the given memory location.
+   */
+  Byte readByte(int address);
 
-  public void incrementBy(int value) {
-    this.value += value;
-  }
+  /**
+   * @param address The address within the memory.
+   * @param value write a single byte at the given location in memory.
+   */
+  void writeByte(int address, Byte value);
 
-  public int value() {
-    return this.value;
-  }
 }

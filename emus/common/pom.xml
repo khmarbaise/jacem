@@ -32,14 +32,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>c8085</artifactId>
+  <artifactId>common</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>com.soebes.emulators</groupId>
-      <artifactId>common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>

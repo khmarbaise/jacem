@@ -1,7 +1,7 @@
 package com.soebes.emulators.cpu6502;
 
+import com.soebes.emulators.common.register.Register8Bit;
 import com.soebes.emulators.cpu6502.register.ArithmeticFlags;
-import com.soebes.emulators.cpu6502.register.Register8Bit;
 
 class Arthmethics {
 

@@ -19,8 +19,8 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.AddressBus;
-import com.soebes.emulators.cpu6502.memory.Ram;
+import com.soebes.emulators.common.memory.AddressBus;
+import com.soebes.emulators.common.memory.Ram;
 import com.soebes.emulators.cpu6502.register.StatusRegister;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

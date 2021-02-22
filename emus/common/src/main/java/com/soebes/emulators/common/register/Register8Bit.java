@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.memory;
+package com.soebes.emulators.common.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,42 +22,28 @@ package com.soebes.emulators.cpu6502.memory;
 /**
  * @author Karl Heinz Marbaise
  */
-public class Rom implements Memory {
+public class Register8Bit {
 
-  private Byte[] memory;
+  private Byte value;
 
-  public Rom(int sizeOfMemory) {
-    this.memory = new Byte[sizeOfMemory];
+  public Register8Bit(Byte value) {
+    this.value = value;
   }
 
-  public byte[] readWord(int address) {
-    return new byte[] {this.memory[address], this.memory[address + 1]};
+  public Byte value() {
+    return this.value;
   }
 
-  @Override
-  public void writeByte(int address, Byte value) {
-    this.memory[address] = value;
+  public void setValue(Byte value) {
+    this.value = value;
   }
 
-  public void writeWord(int address, Byte value, Byte value1) {
-    this.memory[address] = value;
-    this.memory[address + 1] = value1;
+  public void incr() {
+    Integer result = Integer.valueOf(this.value) + 1;
+    this.value = result.byteValue();
   }
-
-  @Override
-  public int Size() {
-    return this.memory.length;
-  }
-
-  @Override
-  public Byte readByte(int address) {
-    return this.memory[address];
-  }
-
-  // Only via constructor.
-  void write(int address, int[] ints) {
-    for (int i = 0; i < ints.length; i++) {
-      this.memory[address] = (byte)ints[i];
-    }
+  public void decr() {
+    Integer result = Integer.valueOf(this.value) - 1;
+    this.value = result.byteValue();
   }
 }

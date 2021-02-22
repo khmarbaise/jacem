@@ -38,6 +38,7 @@
   <modules>
     <module>c6502</module>
     <module>c8085</module>
+    <module>common</module>
   </modules>
 
 </project>

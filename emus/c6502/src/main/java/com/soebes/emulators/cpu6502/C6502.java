@@ -19,9 +19,9 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.memory.AddressBus;
-import com.soebes.emulators.cpu6502.register.Register16Bit;
-import com.soebes.emulators.cpu6502.register.Register8Bit;
+import com.soebes.emulators.common.memory.AddressBus;
+import com.soebes.emulators.common.register.Register16Bit;
+import com.soebes.emulators.common.register.Register8Bit;
 import com.soebes.emulators.cpu6502.register.StatusRegister;
 
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Carry;

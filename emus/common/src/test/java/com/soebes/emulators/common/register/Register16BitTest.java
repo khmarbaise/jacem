@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu8085.memory;
+package com.soebes.emulators.common.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,26 +19,27 @@ package com.soebes.emulators.cpu8085.memory;
  * under the License.
  */
 
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Karl Heinz Marbaise
  */
-public interface Memory {
+class Register16BitTest {
 
-  /**
-   * @return The size of the memory.
-   */
-  int Size();
+  @Test
+  void check_for_initial_value() {
+    Register16Bit register16Bit = new Register16Bit(0);
 
-  /**
-   * @param address The address within the memory.
-   * @return a single byte read from the given memory location.
-   */
-  Byte readByte(int address);
+    assertThat(register16Bit.value()).isZero();
+  }
 
-  /**
-   * @param address The address within the memory.
-   * @param value write a single byte at the given location in memory.
-   */
-  void writeByte(int address, Byte value);
+  @Test
+  void check_increment() {
+    Register16Bit register16Bit = new Register16Bit(0);
+    register16Bit.incrementBy(1);
 
+    assertThat(register16Bit.value()).isEqualTo(1);
+  }
 }

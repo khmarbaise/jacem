@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.memory;
+package com.soebes.emulators.common.memory;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,14 +19,12 @@ package com.soebes.emulators.cpu6502.memory;
  * under the License.
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Karl Heinz Marbaise
@@ -205,7 +203,7 @@ class AddressBusTest {
 
   @Nested
   @DisplayName("Creating 10000 segments each 2 byte size.")
-  class MassOfSegements10000 {
+  class MassOfSegments10000 {
 
     private AddressBus addressBus;
 

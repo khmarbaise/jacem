@@ -20,9 +20,9 @@ package com.soebes.emulators.cpu8085;
  */
 
 
-import com.soebes.emulators.cpu8085.register.AddressBus;
-import com.soebes.emulators.cpu8085.register.Register16Bit;
-import com.soebes.emulators.cpu8085.register.Register8Bit;
+import com.soebes.emulators.common.memory.AddressBus;
+import com.soebes.emulators.common.register.Register16Bit;
+import com.soebes.emulators.common.register.Register8Bit;
 import com.soebes.emulators.cpu8085.register.StatusRegister;
 
 /**

@@ -1,7 +1,7 @@
 package com.soebes.emulators.cpu8085;
 
-import com.soebes.emulators.cpu8085.memory.Ram;
-import com.soebes.emulators.cpu8085.register.AddressBus;
+import com.soebes.emulators.common.memory.AddressBus;
+import com.soebes.emulators.common.memory.Ram;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

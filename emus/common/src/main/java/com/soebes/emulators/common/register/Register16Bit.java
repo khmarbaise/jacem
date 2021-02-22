@@ -1,4 +1,4 @@
-package com.soebes.emulators.cpu6502.register;
+package com.soebes.emulators.common.register;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,27 +19,22 @@ package com.soebes.emulators.cpu6502.register;
  * under the License.
  */
 
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * @author Karl Heinz Marbaise
  */
-class Register16BitTest {
+public class Register16Bit {
 
-  @Test
-  void check_for_initial_value() {
-    Register16Bit register16Bit = new Register16Bit(0);
+  private int value;
 
-    assertThat(register16Bit.value()).isZero();
+  public Register16Bit(int value) {
+    this.value = value;
   }
 
-  @Test
-  void check_increment() {
-    Register16Bit register16Bit = new Register16Bit(0);
-    register16Bit.incrementBy(1);
+  public void incrementBy(int value) {
+    this.value += value;
+  }
 
-    assertThat(register16Bit.value()).isEqualTo(1);
+  public int value() {
+    return this.value;
   }
 }
