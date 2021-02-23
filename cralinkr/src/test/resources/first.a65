@@ -1,0 +1,22 @@
+; Starting..
+    .cpu   8085
+;
+ZP_START1   .equ    $0000
+STACK       .equ    ZP_START1+$100
+;
+memory_one: .ds 2 ; 2 Byte
+memory_two: .ds 2 ; 2 Byte
+    ; More comment
+        ; more comment.
+;
+    .org    $1000
+
+start: .cseg
+
+    MVI A,$10
+    STA MEMORY_ONE
+    LXI B,memory_two
+
+    .org $c000
+text:   .db "This is a text"
+

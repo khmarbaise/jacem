@@ -1,0 +1,84 @@
+= Cross Assembler Linker Relocator (CrALinkR)
+Karl Heinz Marbaise; {docdate}
+:author: Karl Heinz Marbaise
+:appendix-number:
+:sectnums:
+:sectlinks:
+:xrefstyle: full
+:toc:
+//:toc: left
+
+
+= Overview
+
+Idea of the project...
+
+
+== Example
+
+* `.db` define byte (8 bit)
+* `.dw` define word (16 bit)
+* `.dw` define quad word (32 bit)
+
+=== 6502
+The following shows the source code of a 6502 based assembly file.
+
+[source]
+.first.???
+----
+; Starting..
+    .cpu   C6502
+;
+ZP_START1   .equ    $00
+FOR_STACK2  .equ    ZP_START1+4
+STACK       .equ    $2000
+;
+memory_one: .ds 2 ; 2 Byte
+memory_two: .ds 2 ; 2 Byte
+;
+    .org    $1000
+
+start: .cseg
+
+    LDA #$10
+    STA memory_one
+    LDA memory_two
+
+    lda     STACK+1,x
+    cmp     #$81
+    lda     STACK+2,x
+
+    .org $c000
+text:   .db "This is a text"
+
+----
+
+=== 8085
+
+
+[source]
+.first.???
+----
+; Starting..
+    .cpu   8085
+;
+ZP_START1   .equ    $0000
+STACK       .equ    ZP_START1+$100
+;
+memory_one: .ds 2 ; 2 Byte
+memory_two: .ds 2 ; 2 Byte
+;
+    .org    $1000
+
+start: .cseg
+
+    MVI A,$10
+    STA MEMORY_ONE
+    LXI B,memory_two
+
+    .org $c000
+text:   .db "This is a text"
+
+----
+
+Encoding for source files is UTF-8.
