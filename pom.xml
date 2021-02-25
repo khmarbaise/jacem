@@ -76,6 +76,11 @@
         <artifactId>assertj-core</artifactId>
         <version>3.19.0</version>
       </dependency>
+      <dependency>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr4-runtime</artifactId>
+        <version>4.9.1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -83,4 +88,16 @@
     <module>emus</module>
     <module>cralinkr</module>
   </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.antlr</groupId>
+          <artifactId>antlr4-maven-plugin</artifactId>
+          <version>4.9.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
