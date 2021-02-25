@@ -1,7 +1,6 @@
-        .title  'This is The Title'
-;
-; Starting.. using 6502 CPU
-    .cpu   6502
+    .title  'This is The Title'
+; Starting.. using 8085 CPU
+    .cpu   8085
 ;
 ZP_START1   .equ    $0000
 STACK       .equ    ZP_START1+$100
@@ -13,9 +12,9 @@ memory_two: .ds 2 ; 2 Byte
 ;
     .org    $1000
 
-start:  LDA #$10
+start:  MVI A,$10
         STA MEMORY_ONE
-        LDX #$20
+        LXI B,memory_two
 
         .org $c000
 text:   .db "This is a text"

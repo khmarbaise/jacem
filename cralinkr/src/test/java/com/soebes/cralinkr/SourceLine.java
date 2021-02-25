@@ -1,4 +1,4 @@
-package com.soebes.cralir;
+package com.soebes.cralinkr;
 
 class SourceLine {
   private final Integer lineNumber;

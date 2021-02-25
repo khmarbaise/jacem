@@ -1,4 +1,4 @@
-package com.soebes.cralir;
+package com.soebes.cralinkr;
 
 import org.junit.jupiter.api.Test;
 
