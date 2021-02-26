@@ -39,6 +39,11 @@
       <groupId>org.antlr</groupId>
       <artifactId>antlr4-runtime</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -50,6 +55,10 @@
             <goals>
               <goal>antlr4</goal>
             </goals>
+            <configuration>
+              <listener>true</listener>
+              <visitor>true</visitor>
+            </configuration>
           </execution>
         </executions>
       </plugin>
