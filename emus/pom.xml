@@ -35,6 +35,7 @@
   <artifactId>emu-parent</artifactId>
   <packaging>pom</packaging>
 
+  <name>JaCeM : Emulators</name>
   <modules>
     <module>c6502</module>
     <module>c8085</module>

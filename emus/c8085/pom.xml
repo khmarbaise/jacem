@@ -34,6 +34,8 @@
 
   <artifactId>c8085</artifactId>
 
+  <name>JaCeM : Emulators : 8085</name>
+
   <dependencies>
     <dependency>
       <groupId>com.soebes.emulators</groupId>

@@ -13,7 +13,7 @@ memory_two: .ds 2 ; 2 Byte
 ;
     .org    $1000
 
-start:  LDA #$10
+start:  LDA #'A'
         STA MEMORY_ONE
         LDX #$20
 
