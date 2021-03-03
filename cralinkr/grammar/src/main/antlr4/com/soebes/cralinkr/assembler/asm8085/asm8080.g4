@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * http://fms.komkon.org/comp/CPUs/8080.txt
  */
 
-grammar asm8085;
+grammar asm8080;
 
 prog8080 : (line? EOL) + ;
 
