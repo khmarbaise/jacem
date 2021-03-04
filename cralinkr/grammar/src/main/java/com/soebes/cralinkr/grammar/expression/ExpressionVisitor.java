@@ -19,6 +19,7 @@ package com.soebes.cralinkr.grammar.expression;
  * under the License.
  */
 
+
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 import java.util.Map;
@@ -47,45 +48,33 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPNUM(ExprParser.GRPNUMContext ctx) {
-    System.out.println("MyVisitor.visitGRPNUM");
-    System.out.println("ctx.getText() = " + ctx.getText());
     return Long.valueOf(ctx.getText().replaceAll("_", ""));
   }
 
   @Override
   public Long visitGRPBINARY(ExprParser.GRPBINARYContext ctx) {
-    System.out.println("MyVisitor.visitGRPBINARY");
     String text = ctx.BINARY().getText();
     Long aLong = Long.valueOf(text.substring(2).replaceAll("_", ""), 2);
-    System.out.printf("aLong = %x\n", aLong.longValue());
     return aLong;
   }
 
   @Override
   public Long visitGRPADDITION(ExprParser.GRPADDITIONContext ctx) {
-    System.out.println("MyVisitor.visitGRPADDITION");
-    System.out.println("ctx.getText() = " + ctx.getText());
-    System.out.println("ctx.additionOp.getText() = " + ctx.additionOp().getText());
     return eval(ctx.additionOp().getText(), visit(ctx.expr(0)), visit(ctx.expr(1)));
   }
 
   @Override
   public Long visitGRPUNARY(ExprParser.GRPUNARYContext ctx) {
-    System.out.println("MyVisitor.visitGRPUNARY");
     return -visit(ctx.expr());
   }
 
   @Override
   public Long visitGRPMULTIPLICATION(ExprParser.GRPMULTIPLICATIONContext ctx) {
-    System.out.println("MyVisitor.visitGRPMULTIPLICATION");
-    System.out.println("ctx.getText() = " + ctx.getText());
-    System.out.println("ctx.multiplicationOp() = " + ctx.multiplicationOp().getText());
     return eval(ctx.multiplicationOp().getText(), visit(ctx.expr(0)), visit(ctx.expr(1)));
   }
 
   @Override
   public Long visitGRPPARENT(ExprParser.GRPPARENTContext ctx) {
-    System.out.println("MyVisitor.visitGRPPARENT");
     return visit(ctx.expr());
   }
 
@@ -98,19 +87,15 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPHEX(ExprParser.GRPHEXContext ctx) {
-    System.out.println("MyVisitor.visitGRPHEX");
     String text = ctx.HEX().getText();
     Long aLong = Long.valueOf(text.substring(1).replaceAll("_", ""), 16);
-    System.out.printf("aLong = %x\n", aLong.longValue());
     return aLong;
   }
 
   @Override
   public Long visitGRPOCTAL(ExprParser.GRPOCTALContext ctx) {
-    System.out.println("MyVisitor.visitGRPOCTAL");
     String text = ctx.OCTAL().getText();
     Long aLong = Long.valueOf(text.substring(2).replaceAll("_", ""), 8);
-    System.out.printf("aLong = '%s' = %x ***\n", text.substring(2).replaceAll("_", ""), aLong.longValue());
     return aLong;
   }
 
