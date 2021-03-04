@@ -62,7 +62,7 @@ class ExpressionVisitorTest {
   @ParameterizedTest(name = "{0}. expression: ''{1}'' expectedResult: ''{2}''")
   @MethodSource("createExpressionToParse")
   void name(String description, String expression, Long expectedResult) {
-    CodePointCharStream input = CharStreams.fromString(expression);
+    var input = CharStreams.fromString(expression);
     var parser = new ExprParser(new CommonTokenStream(new ExprLexer(input)));
     var tree = parser.start();
     var visitor = new ExpressionVisitor();
