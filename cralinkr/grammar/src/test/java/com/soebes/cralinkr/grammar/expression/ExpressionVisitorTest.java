@@ -22,15 +22,10 @@ package com.soebes.cralinkr.grammar.expression;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,56 +33,42 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class ExpressionVisitorTest {
 
-  private static final String FIRST_EXPRESSION = "1_024 + 35/7+3*$1000+0b1000_0000 % $10 + 0o1234_567";
-
-  static Stream<Arguments> createTestParameters() {
+  static Stream<Arguments> createExpressionToParse() {
     return Stream.of(
         arguments("Addition", "3+5", 8L),
         arguments("Multiplication", "3*5", 15L),
+        arguments("Subtraction", "1024-256", 768L),
+        arguments("Division", "1024/256", 4L),
+        arguments("Unary simple", "-1024+3072", 2048L),
+        arguments("Unary complex", "-1024-(-1024)", 0L),
         arguments("Hex value", "$1000", 4096L),
         arguments("Hex value", "$FFFF", 65535L),
         arguments("Hex value max", "$7FFFFFFFFFFFFFFF", Long.MAX_VALUE),
+        arguments("Hex value max (lower case)", "$7fffffffffffffff", Long.MAX_VALUE),
         arguments("Hex value with separator", "$1_000", 4096L),
         arguments("binary value", "0b10000000", 128L),
         arguments("binary value with separator", "0b1000_0000", 128L),
         arguments("binary value with separator max value", "0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111", Long.MAX_VALUE),
         arguments("octal value", "0o200", 128L),
         arguments("octal value with separator", "0o2_00", 128L),
-        arguments("octal value with separator max value", "0o777_777_777_777_777_777_777", Long.MAX_VALUE)
+        arguments("octal value with separator max value", "0o777_777_777_777_777_777_777", Long.MAX_VALUE),
+        arguments("Basic calculation expression with parenthese", "1_024/256+3*(5+3)", 28L),
+        arguments("Modulo Operation", "128%16", 0L),
+        arguments("Modulo Operation", "129%15", 9L),
+        arguments("Complex expression", "1_024 + 35/7+3*$1000+0b1000_0000 % $10 + 0o1234_567", 355708L)
     );
   }
 
   @ParameterizedTest(name = "{0}. expression: ''{1}'' expectedResult: ''{2}''")
-  @MethodSource("createTestParameters")
+  @MethodSource("createExpressionToParse")
   void name(String description, String expression, Long expectedResult) {
     CodePointCharStream input = CharStreams.fromString(expression);
     var parser = new ExprParser(new CommonTokenStream(new ExprLexer(input)));
-    ParseTree tree = parser.start();
-    ExpressionVisitor visitor = new ExpressionVisitor();
-    Long result = visitor.visit(tree);
+    var tree = parser.start();
+    var visitor = new ExpressionVisitor();
+    var result = visitor.visit(tree);
 
     assertThat(result).describedAs(description, expectedResult).isEqualTo(expectedResult);
-
-  }
-
-  @Test
-  void first_grammer_test_method() {
-
-    System.out.println("FirstGrammarTest.first_grammer_test_method");
-    Map<String, Long> symbolTable = new HashMap<>();
-    //TODO: Do we need to define a size of the symbol?
-    symbolTable.put("ANTON", Long.valueOf(0x10000));
-
-
-    CodePointCharStream input = CharStreams.fromString(FIRST_EXPRESSION);
-    var parser = new ExprParser(new CommonTokenStream(new ExprLexer(input)));
-
-    ParseTree tree = parser.start();
-    ExpressionVisitor visitor = new ExpressionVisitor();
-    Long result = visitor.visit(tree);
-
-    System.out.printf("result = %x\n", result);
-
   }
 
 }

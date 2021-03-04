@@ -22,6 +22,7 @@ package com.soebes.cralinkr.grammar.expression;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 
@@ -38,8 +39,22 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
           entry("%", (x, y) -> x % y)
       );
 
+  private final Map<String, Long> symbolTable;
+
+  /**
+   * Create an instance of the expression visitor with an empty symbol table.
+   */
   public ExpressionVisitor() {
-    //
+    this.symbolTable = new HashMap<>();
+  }
+
+  /**
+   * Create an instance of the expression visitor with the given symbol table.
+   *
+   * @param symbolTable The predefined symbol table.
+   */
+  public ExpressionVisitor(Map<String, Long> symbolTable) {
+    this.symbolTable = symbolTable;
   }
 
   private Long eval(String operator, Long left, Long right) {
@@ -53,12 +68,8 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPBINARY(ExprParser.GRPBINARYContext ctx) {
-    String text = ctx.BINARY().getText();
-
-    String s = text.substring(2).replaceAll("_", "");
-    System.out.println("l = " + s.length() + " s = '" + s + "'");
-    Long aLong = Long.valueOf(s, 2);
-    return aLong;
+    String s = ctx.BINARY().getText().substring(2).replaceAll("_", "");
+    return Long.valueOf(s, 2);
   }
 
   @Override
@@ -83,7 +94,7 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPIDENTIFIER(ExprParser.GRPIDENTIFIERContext ctx) {
-    //Access symbol table.
+    //Access symbol table. Not Yet implemented.
     System.out.println("MyVisitor.visitGRPIDENTIFIER");
     return null;
   }
