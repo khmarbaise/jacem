@@ -54,7 +54,10 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
   @Override
   public Long visitGRPBINARY(ExprParser.GRPBINARYContext ctx) {
     String text = ctx.BINARY().getText();
-    Long aLong = Long.valueOf(text.substring(2).replaceAll("_", ""), 2);
+
+    String s = text.substring(2).replaceAll("_", "");
+    System.out.println("l = " + s.length() + " s = '" + s + "'");
+    Long aLong = Long.valueOf(s, 2);
     return aLong;
   }
 

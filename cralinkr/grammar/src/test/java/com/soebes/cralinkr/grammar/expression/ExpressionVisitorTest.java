@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class ExpressionVisitorTest {
@@ -49,8 +50,10 @@ class ExpressionVisitorTest {
         arguments("Hex value with separator", "$1_000", 4096L),
         arguments("binary value", "0b10000000", 128L),
         arguments("binary value with separator", "0b1000_0000", 128L),
+        arguments("binary value with separator max value", "0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111", Long.MAX_VALUE),
         arguments("octal value", "0o200", 128L),
-        arguments("octal value with separator", "0o2_00", 128L)
+        arguments("octal value with separator", "0o2_00", 128L),
+        arguments("octal value with separator max value", "0o777_777_777_777_777_777_777", Long.MAX_VALUE)
     );
   }
 
@@ -63,7 +66,7 @@ class ExpressionVisitorTest {
     ExpressionVisitor visitor = new ExpressionVisitor();
     Long result = visitor.visit(tree);
 
-    Assertions.assertThat(result).isEqualTo(expectedResult);
+    assertThat(result).describedAs(description, expectedResult).isEqualTo(expectedResult);
 
   }
 
