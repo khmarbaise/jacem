@@ -14,6 +14,26 @@ Karl Heinz Marbaise; {docdate}
 Idea of the project...
 
 
+== Expressions
+
+You can define a lot of expressions apart from the usual mathematical
+operations like addition, subtraction, division and multiplication.
+
+You can the hexadecimal notation like `$1000` or `$1000_1000` where `_`
+is only for better reading.
+
+You can use the octal notation like `0o7123` or `0o712_333` where `_` is
+only for better reading.
+
+You can use the binary notation like `0b10000000` or `0b1000_0000`.
+
+You can use the modulo operation like `1024%16`.
+
+You can combine all operations for example like this:
+
+`1_024 + 35/7+3*$1000+0b1000_0000 % $10 + 0o1234_567`
+
+
 == Example
 
 * `.db` define byte (8 bit)
