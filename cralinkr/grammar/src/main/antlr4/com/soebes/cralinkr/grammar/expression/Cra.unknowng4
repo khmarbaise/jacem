@@ -1,4 +1,4 @@
-grammar Expr;
+grammar Cra;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,34 +19,17 @@ grammar Expr;
  * under the License.
  */
 
-start: expr*;
+import Expr;
 
-expr: '-' expr # GRPUNARY
-    | expr multiplicationOp expr # GRPMULTIPLICATION
-    | expr additionOp expr # GRPADDITION
-    | '(' expr ')' # GRPPARENT
-    | NUM # GRPNUM
-    | HEX # GRPHEX
-    | BINARY # GRPBINARY
-    | OCTAL # GRPOCTAL
-    | IDENTIFIER # GRPIDENTIFIER
-    ;
-
-multiplicationOp: MUL | DIV | MOD ;
-additionOp: ADD | SUB;
-
-OCTAL: ('0o'|'0O') [0-7][0-7_]*;// 0o1023_3333
-BINARY: ('0b'|'0B') [01][_01]*; // 0b1010_1010
-HEX : '$' [a-fA-F0-9][_a-fA-F0-9]*; // This allows $1000_0000_0000_0000
-NUM : [0-9][_0-9]*;
-IDENTIFIER: [a-zA-Z]+[a-zA-Z0-9]*;
-
-WS: [ \t]+ -> skip;
-
-LPARENT: '(';
-RPARENT: ')';
-MUL: '*';
-DIV: '/';
-MOD: '%';
-ADD: '+';
-SUB: '-';
+line: EOF;
+//line: labelDefinition* EOF;
+//
+//labelDefinition: NAME ':' assemblerDirective expr comment?;
+//
+//assemblerDirective: 'equ';
+//
+//comment: COMMENT;
+//
+//COMMENT: (';'|'//') .* '\r'? '\n' -> skip;
+//
+//NAME: [a-zA-Z][a-zA-Z0-9]+;

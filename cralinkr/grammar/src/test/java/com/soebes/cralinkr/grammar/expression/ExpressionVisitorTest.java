@@ -20,7 +20,6 @@ package com.soebes.cralinkr.grammar.expression;
  */
 
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -56,19 +55,21 @@ class ExpressionVisitorTest {
         arguments("Modulo Operation", "128%16", 0L),
         arguments("Modulo Operation", "129%15", 9L),
         arguments("Complex expression", "1_024 + 35/7+3*$1000+0b1000_0000 % $10 + 0o1234_567", 355708L)
+        //,arguments("Failure", "3++5", 0L)
     );
   }
 
-  @ParameterizedTest(name = "{0}. expression: ''{1}'' expectedResult: ''{2}''")
+  @ParameterizedTest(name = "{0}: expression: ''{1}'' expectedResult: ''{2}''")
   @MethodSource("createExpressionToParse")
   void name(String description, String expression, Long expectedResult) {
     var input = CharStreams.fromString(expression);
     var parser = new ExprParser(new CommonTokenStream(new ExprLexer(input)));
     var tree = parser.start();
     var visitor = new ExpressionVisitor();
-    var result = visitor.visit(tree);
+    Long result = null;
+    result = visitor.visit(tree);
 
-    assertThat(result).describedAs(description, expectedResult).isEqualTo(expectedResult);
+    assertThat(result).as("Expected: %s but got:%s", expectedResult, result).isEqualTo(expectedResult);
   }
 
 }

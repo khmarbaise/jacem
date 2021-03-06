@@ -115,7 +115,8 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitErrorNode(ErrorNode node) {
-    System.out.println("MyVisitor.visitErrorNode");
-    return null;
+    throw new IllegalStateException("can not parse");
+//    System.out.println("MyVisitor.visitErrorNode");
+//    return null;
   }
 }
