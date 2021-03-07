@@ -19,8 +19,12 @@ package com.soebes.cralinkr.grammar.expression;
  * under the License.
  */
 
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -55,7 +59,7 @@ class ExpressionVisitorTest {
         arguments("Modulo Operation", "128%16", 0L),
         arguments("Modulo Operation", "129%15", 9L),
         arguments("Complex expression", "1_024 + 35/7+3*$1000+0b1000_0000 % $10 + 0o1234_567", 355708L)
-        //,arguments("Failure", "3++5", 0L)
+//        arguments("Failure", "3++5", 0L)
     );
   }
 
@@ -63,7 +67,12 @@ class ExpressionVisitorTest {
   @MethodSource("createExpressionToParse")
   void name(String description, String expression, Long expectedResult) {
     var input = CharStreams.fromString(expression);
-    var parser = new ExprParser(new CommonTokenStream(new ExprLexer(input)));
+    ExprLexer exprLexer = new ExprLexer(input);
+//    exprLexer.removeErrorListeners();
+//    exprLexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+    var parser = new ExprParser(new CommonTokenStream(exprLexer));
+//    parser.removeErrorListeners();
+//    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
     var tree = parser.start();
     var visitor = new ExpressionVisitor();
     Long result = null;
@@ -72,4 +81,13 @@ class ExpressionVisitorTest {
     assertThat(result).as("Expected: %s but got:%s", expectedResult, result).isEqualTo(expectedResult);
   }
 
+  static class ThrowingErrorListener extends BaseErrorListener {
+
+    public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
+
+    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
+        throws ParseCancellationException {
+      throw new ParseCancellationException("**********************line " + line + ":" + charPositionInLine + " " + msg);
+    }
+  }
 }
