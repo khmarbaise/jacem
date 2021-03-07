@@ -1,4 +1,14 @@
-package com.soebes.cralinkr;
+package com.soebes.cralinkr.cli;
+
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,12 +29,19 @@ package com.soebes.cralinkr;
  * under the License.
  */
 
-import static com.soebes.cralinkr.Version.getVersion;
+class FirstTest {
 
+  private Path a65 = Path.of("target", "test-classes", "first.a65");
 
-public class CrALinkR {
+  @Test
+  void readalllines_with_supplemental() throws IOException {
+    List<String> lines = Files.readAllLines(a65);
 
-  public static void main(String[] args) {
-    System.out.println("(Cr)oss (A)ssembler (Link)er (R)elocator (CrALinkR) V" + getVersion());
+    List<SourceLine> collect = IntStream.range(1, lines.size())
+        .mapToObj(i -> new SourceLine(i, lines.get(i)))
+        .collect(toList());
+    collect.forEach(s -> System.out.printf("%6d %s\n", s.getLineNumber(), s.getLine()));
   }
+
+
 }

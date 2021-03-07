@@ -1,4 +1,4 @@
-package com.soebes.cralinkr;
+package com.soebes.cralinkr.cli;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

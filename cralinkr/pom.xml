@@ -38,6 +38,7 @@
   <name>JaCeM : CrALinkR Parent</name>
 
   <modules>
+    <module>cli</module>
     <module>asm</module>
     <module>parser</module>
     <module>grammar</module>

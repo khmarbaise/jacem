@@ -1,4 +1,5 @@
-package com.soebes.cralinkr;
+package com.soebes.cralinkr.cli;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,15 +19,14 @@ package com.soebes.cralinkr;
  * under the License.
  */
 
-public enum Reserved {
+public final class Version {
+  private static final String Version = "${project.version}";
 
-  TITLE,
-  CPU,
-  ORG,
-  EQU,
-  CSEG,
-  DS, // Define Space
-  DB, //Define Byte
-  DW, // Define Word
-  DQ // Define Quad Word
+  Version() {
+    // Intentionally empty
+  }
+
+  public static String getVersion() {
+    return Version;
+  }
 }

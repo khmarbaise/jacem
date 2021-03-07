@@ -33,7 +33,7 @@
 
   <artifactId>grammar</artifactId>
 
-  <name>JaCeM : CrALinkR Grammar</name>
+  <name>JaCeM : CrALinkR : Grammar</name>
 
   <dependencies>
     <dependency>
