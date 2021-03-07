@@ -19,20 +19,14 @@ package com.soebes.cralinkr;
  * under the License.
  */
 
-class SourceLine {
-  private final Integer lineNumber;
-  private final String line;
+public final class Version {
+  private static final String Version = "${project.version}";
 
-  public SourceLine(Integer lineNumber, String line) {
-    this.lineNumber = lineNumber;
-    this.line = line;
+  Version() {
+    // Intentionally empty
   }
 
-  public Integer getLineNumber() {
-    return lineNumber;
-  }
-
-  public String getLine() {
-    return line;
+  public static String getVersion() {
+    return Version;
   }
 }

@@ -39,21 +39,22 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
           entry("%", (x, y) -> x % y)
       );
 
-  private final Map<String, Long> symbolTable;
+  private final SymbolTable symbolTable;
 
   /**
    * Create an instance of the expression visitor with an empty symbol table.
    */
   public ExpressionVisitor() {
-    this.symbolTable = new HashMap<>();
+    this.symbolTable = new SymbolTable();
   }
 
   /**
    * Create an instance of the expression visitor with the given symbol table.
    *
    * @param symbolTable The predefined symbol table.
+   * @see SymbolTable
    */
-  public ExpressionVisitor(Map<String, Long> symbolTable) {
+  public ExpressionVisitor(SymbolTable symbolTable) {
     this.symbolTable = symbolTable;
   }
 

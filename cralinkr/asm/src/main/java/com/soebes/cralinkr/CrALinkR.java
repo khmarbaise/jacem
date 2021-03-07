@@ -19,20 +19,12 @@ package com.soebes.cralinkr;
  * under the License.
  */
 
-class SourceLine {
-  private final Integer lineNumber;
-  private final String line;
+import static com.soebes.cralinkr.Version.getVersion;
 
-  public SourceLine(Integer lineNumber, String line) {
-    this.lineNumber = lineNumber;
-    this.line = line;
-  }
 
-  public Integer getLineNumber() {
-    return lineNumber;
-  }
+public class CrALinkR {
 
-  public String getLine() {
-    return line;
+  public static void main(String[] args) {
+    System.out.println("(Cr)oss (A)ssembler (Link)er (R)elocator (CrALinkR) V" + getVersion());
   }
 }
