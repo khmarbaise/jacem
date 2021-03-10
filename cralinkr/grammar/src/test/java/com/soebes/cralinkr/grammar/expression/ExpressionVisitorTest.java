@@ -22,6 +22,7 @@ package com.soebes.cralinkr.grammar.expression;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -29,6 +30,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,9 +88,18 @@ class ExpressionVisitorTest {
 
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
 
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
-        throws ParseCancellationException {
+    public void syntaxError(Recognizer<?, ?> recognizer,
+                            Object offendingSymbol,
+                            int line,
+                            int charPositionInLine,
+                            String msg,
+                            RecognitionException e)
+    {
+      List<String> ruleInvocationStack = ((Parser) recognizer).getRuleInvocationStack();
+      Collections.reverse(ruleInvocationStack);
+      ruleInvocationStack.forEach(s-> System.out.println(s));
       throw new ParseCancellationException("**********************line " + line + ":" + charPositionInLine + " " + msg);
     }
+
   }
 }
