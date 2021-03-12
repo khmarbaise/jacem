@@ -102,3 +102,13 @@ text:   .db "This is a text"
 ----
 
 Encoding for source files is UTF-8.
+
+
+== TODO's
+
+We could implement things like:
+
+* `hi(expression)` (higher 8 bit's)
+* `lo(expression)` (lower 8 bit's)
+* `hiw(expression)` (higher 16 bit's)
+* `low(expression)` (lower 16 bit's)
