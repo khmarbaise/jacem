@@ -1,4 +1,4 @@
-package com.soebes.cralinkr.cli;
+package com.soebes.cralinkr.cli.commands;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,25 +19,13 @@ package com.soebes.cralinkr.cli;
  * under the License.
  */
 
-import com.soebes.cralinkr.cli.commands.Assembler;
-import com.soebes.cralinkr.cli.commands.Linker;
-import com.soebes.cralinkr.cli.commands.Relocator;
-import com.soebes.cralinkr.cli.commands.Version;
-import java.util.concurrent.Callable;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
-@Command(mixinStandardHelpOptions = true, subcommands = {Assembler.class, Version.class, Linker.class, Relocator.class})
-public class CrALinkR implements Callable<Integer> {
-
-  public static void main(String[] args) {
-    int exitCode = new CommandLine(new CrALinkR()).execute(args);
-    System.exit(exitCode);
-  }
+@Command(name = "version")
+public class Version implements Runnable {
 
   @Override
-  public Integer call() throws Exception {
-    System.out.println("Hello from CrALinkR");
-    return 0;
+  public void run() {
+    System.out.println("*** (Cr)oss (A)ssembler (Link)er (R)elocator (CrALinkR) V ***");
   }
 }
