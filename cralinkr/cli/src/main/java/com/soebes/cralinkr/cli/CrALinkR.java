@@ -19,11 +19,21 @@ package com.soebes.cralinkr.cli;
  * under the License.
  */
 
-import static com.soebes.cralinkr.cli.Version.getVersion;
+import java.util.concurrent.Callable;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
-public class CrALinkR {
+@Command(mixinStandardHelpOptions = true, subcommands = {Assembler.class, Version.class, Linker.class, Relocator.class})
+public class CrALinkR implements Callable<Integer> {
 
   public static void main(String[] args) {
-    System.out.println("(Cr)oss (A)ssembler (Link)er (R)elocator (CrALinkR) V" + getVersion());
+    int exitCode = new CommandLine(new CrALinkR()).execute(args);
+    System.exit(exitCode);
+  }
+
+  @Override
+  public Integer call() throws Exception {
+    System.out.println("Hello from CrALinkR");
+    return 0;
   }
 }
