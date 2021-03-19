@@ -11,7 +11,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: restore
+  - name: restore-cache
     image: meltwater/drone-cache:v1.1.0
     pull: always
     volumes:
@@ -39,7 +39,7 @@ steps:
     commands:
       - mvn -Dmaven.repo.local=/drone/src/.repo -V clean verify --fail-at-end --batch-mode
 
-  - name: rebuild
+  - name: rebuild-cache
     image: meltwater/drone-cache:v1.1.0
     pull: always
     volumes:
