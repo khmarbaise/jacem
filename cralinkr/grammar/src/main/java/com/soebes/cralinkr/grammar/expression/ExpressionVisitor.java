@@ -22,7 +22,6 @@ package com.soebes.cralinkr.grammar.expression;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 
@@ -102,16 +101,14 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPHEX(ExprParser.GRPHEXContext ctx) {
-    String text = ctx.HEX().getText();
-    Long aLong = Long.valueOf(text.substring(1).replaceAll("_", ""), 16);
-    return aLong;
+    String s = ctx.HEX().getText().substring(1).replaceAll("_", "");
+    return Long.valueOf(s, 16);
   }
 
   @Override
   public Long visitGRPOCTAL(ExprParser.GRPOCTALContext ctx) {
-    String text = ctx.OCTAL().getText();
-    Long aLong = Long.valueOf(text.substring(2).replaceAll("_", ""), 8);
-    return aLong;
+    String s = ctx.OCTAL().getText().substring(2).replaceAll("_", "");
+    return Long.valueOf(s, 8);
   }
 
   @Override
