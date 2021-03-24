@@ -19,7 +19,7 @@ class Arthmethics {
     if (carryFlag) {
 
     }
-    byte carryIn = (byte) (carryFlag == true ? 1:0);
+    byte carryIn = (byte) (carryFlag == true ? 1 : 0);
 
     byte low = (byte) ((this.input.value() & 0x0F) - (operand & 0x0F) - carryIn);
 //    if (low & 0x10) != 0 {

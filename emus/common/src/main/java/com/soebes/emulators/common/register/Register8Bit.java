@@ -42,6 +42,7 @@ public class Register8Bit {
     Integer result = Integer.valueOf(this.value) + 1;
     this.value = result.byteValue();
   }
+
   public void decr() {
     Integer result = Integer.valueOf(this.value) - 1;
     this.value = result.byteValue();

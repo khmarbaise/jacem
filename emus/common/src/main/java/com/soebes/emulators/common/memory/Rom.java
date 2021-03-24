@@ -31,7 +31,7 @@ public class Rom implements Memory {
   }
 
   public byte[] readWord(int address) {
-    return new byte[] {this.memory[address], this.memory[address + 1]};
+    return new byte[]{this.memory[address], this.memory[address + 1]};
   }
 
   @Override
@@ -57,7 +57,7 @@ public class Rom implements Memory {
   // Only via constructor.
   void write(int address, int[] ints) {
     for (int i = 0; i < ints.length; i++) {
-      this.memory[address] = (byte)ints[i];
+      this.memory[address] = (byte) ints[i];
     }
   }
 }

@@ -21,7 +21,6 @@ package com.soebes.emulators.cpu6502.register;
 
 
 /**
- *
  * <pre>
  * NV-BDIZC
  * 00110000
@@ -38,6 +37,7 @@ package com.soebes.emulators.cpu6502.register;
  * Z	....	Zero
  * C	....	Carry
  * </pre>
+ *
  * @author Karl Heinz Marbaise
  */
 public class ArithmeticFlags {

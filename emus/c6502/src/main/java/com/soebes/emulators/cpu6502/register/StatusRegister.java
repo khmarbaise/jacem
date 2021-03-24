@@ -24,7 +24,6 @@ import java.util.EnumSet;
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Decimal;
 
 /**
- *
  * <pre>
  * NV-BDIZC
  * 00110000
@@ -41,6 +40,7 @@ import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Decima
  * Z	....	Zero
  * C	....	Carry
  * </pre>
+ *
  * @author Karl Heinz Marbaise
  */
 public class StatusRegister {
@@ -58,6 +58,7 @@ public class StatusRegister {
   public boolean isDecimal() {
     return isSet(Decimal);
   }
+
   public boolean isSet(Status status) {
     return this.statuses.contains(status);
   }

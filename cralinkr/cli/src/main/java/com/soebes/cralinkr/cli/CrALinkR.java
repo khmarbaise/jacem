@@ -23,9 +23,10 @@ import com.soebes.cralinkr.cli.commands.Assembler;
 import com.soebes.cralinkr.cli.commands.Linker;
 import com.soebes.cralinkr.cli.commands.Relocator;
 import com.soebes.cralinkr.cli.commands.Version;
-import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+
+import java.util.concurrent.Callable;
 
 @Command(mixinStandardHelpOptions = true, subcommands = {Assembler.class, Version.class, Linker.class, Relocator.class})
 public class CrALinkR implements Callable<Integer> {

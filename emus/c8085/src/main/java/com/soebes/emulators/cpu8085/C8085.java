@@ -78,8 +78,9 @@ public class C8085 {
 
   /**
    * TODO: What do we need to do here?
-   *
+   * <p>
    * Current assumption is to start at 0x0000 address.
+   *
    * @return Current instance.
    */
   public C8085 reset() {
@@ -102,7 +103,6 @@ public class C8085 {
         throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
     }
   }
-
 
 
   private int memoryAddress(Instruction instruction) {

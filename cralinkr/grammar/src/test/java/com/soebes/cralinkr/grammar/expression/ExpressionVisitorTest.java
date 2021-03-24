@@ -95,11 +95,10 @@ class ExpressionVisitorTest {
                             int line,
                             int charPositionInLine,
                             String msg,
-                            RecognitionException e)
-    {
+                            RecognitionException e) {
       List<String> ruleInvocationStack = ((Parser) recognizer).getRuleInvocationStack();
       Collections.reverse(ruleInvocationStack);
-      ruleInvocationStack.forEach(s-> System.out.println(s));
+      ruleInvocationStack.forEach(s -> System.out.println(s));
       throw new ParseCancellationException("**********************line " + line + ":" + charPositionInLine + " " + msg);
     }
 

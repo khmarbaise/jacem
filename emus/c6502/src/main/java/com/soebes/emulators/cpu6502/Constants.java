@@ -40,7 +40,6 @@ public final class Constants {
    *   <li>0xFFFE</li>
    *   <li>0xFFFF</li>
    * </ul>
-   *
    */
   public static final int IRQ_VECTOR = 0xFFFE;
 

@@ -19,9 +19,6 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
-import com.soebes.emulators.cpu6502.InstructionSet;
-import com.soebes.emulators.cpu6502.OpCode;
-import com.soebes.emulators.cpu6502.OperationCode;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

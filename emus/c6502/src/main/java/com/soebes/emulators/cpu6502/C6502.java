@@ -181,10 +181,12 @@ public class C6502 {
     registerA.setValue(value);
     setCarryAndNegativeFlag(value);
   }
+
   private void ldx(Instruction instruction) {
     byte value = resolveOperand(instruction);
     regX.setValue(value);
   }
+
   private void ldy(Instruction instruction) {
     byte value = resolveOperand(instruction);
     regY.setValue(value);
@@ -200,7 +202,7 @@ public class C6502 {
   }
 
   private void setCarryAndNegativeFlag(byte value) {
-    if ((value & 0x80) >0) {
+    if ((value & 0x80) > 0) {
       psr.set(Negative);
     } else {
       psr.unset(Negative);
@@ -213,14 +215,17 @@ public class C6502 {
     }
 
   }
+
   private void inx() {
     regX.incr();
     setCarryAndNegativeFlag(regX.value());
   }
+
   private void dex() {
     regX.decr();
     setCarryAndNegativeFlag(regX.value());
   }
+
   private void dey() {
     regY.decr();
     setCarryAndNegativeFlag(regY.value());
@@ -237,6 +242,7 @@ public class C6502 {
     bus.write(address, value);
     setCarryAndNegativeFlag(Integer.valueOf(value).byteValue());
   }
+
   private void dec(Instruction in) {
     int address = memoryAddress(in);
     int value = bus.read(address) - 1;
@@ -257,6 +263,7 @@ public class C6502 {
   private void sbcDecimal(byte operand) {
 
   }
+
   private void adcDecimal(byte operand) {
     this.psr.isSet(Carry);
 

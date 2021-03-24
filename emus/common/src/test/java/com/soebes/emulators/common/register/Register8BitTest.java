@@ -40,6 +40,6 @@ class Register8BitTest {
     Register8Bit register16Bit = new Register8Bit((byte) 0);
     register16Bit.incr();
 
-    assertThat(register16Bit.value()).isEqualTo((byte)1);
+    assertThat(register16Bit.value()).isEqualTo((byte) 1);
   }
 }
