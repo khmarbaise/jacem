@@ -61,68 +61,48 @@
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.graalvm.sdk</groupId>
+      <artifactId>graal-sdk</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-compiler-plugin</artifactId>-->
-<!--        <configuration>-->
-<!--          <annotationProcessorPaths>-->
-<!--            <path>-->
-<!--              <groupId>info.picocli</groupId>-->
-<!--              <artifactId>picocli-codegen</artifactId>-->
-<!--              <version>${picoli.version}</version>-->
-<!--            </path>-->
-<!--          </annotationProcessorPaths>-->
-<!--          <compilerArgs>-->
-<!--            <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>-->
-<!--          </compilerArgs>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
+        <groupId>org.graalvm.nativeimage</groupId>
+        <artifactId>native-image-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>build-cli</id>
             <goals>
-              <goal>shade</goal>
+              <goal>native-image</goal>
             </goals>
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Main-Class>com.soebes.cralinkr.cli.CrALinkR</Main-Class>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/MANIFEST.MF</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-            </configuration>
+            <phase>package</phase>
           </execution>
         </executions>
+        <configuration>
+          <mainClass>com.soebes.cralinkr.cli.CrALinkR</mainClass>
+          <imageName>cralink</imageName>
+          <buildArgs>
+            --no-fallback
+          </buildArgs>
+        </configuration>
       </plugin>
 
-<!--      <plugin>-->
-<!--        <groupId>org.codehaus.mojo</groupId>-->
-<!--        <artifactId>templating-maven-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>generate-template</id>-->
-<!--            <goals>-->
-<!--              <goal>filter-sources</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>info.picocli</groupId>
+              <artifactId>picocli-codegen</artifactId>
+              <version>${picoli.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>

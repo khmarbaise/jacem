@@ -59,6 +59,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <antlr4-maven-plugin.version>4.9.2</antlr4-maven-plugin.version>
     <picoli.version>4.6.1</picoli.version>
+    <graalvm.version>21.0.0.2</graalvm.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -94,6 +95,12 @@
         <artifactId>picocli-codegen</artifactId>
         <version>${picoli.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.graalvm.sdk</groupId>
+        <artifactId>graal-sdk</artifactId>
+        <version>${graalvm.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -114,6 +121,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>templating-maven-plugin</artifactId>
           <version>1.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.graalvm.nativeimage</groupId>
+          <artifactId>native-image-maven-plugin</artifactId>
+          <version>${graalvm.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
