@@ -80,7 +80,9 @@ public class StatusRegister {
   }
 
   public StatusRegister set(Status status) {
-    this.statuses.add(status);
+    if (!this.statuses.contains(status)) {
+      this.statuses.add(status);
+    }
     return this;
   }
 

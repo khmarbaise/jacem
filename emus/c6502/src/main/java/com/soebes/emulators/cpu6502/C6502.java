@@ -193,11 +193,34 @@ public class C6502 {
   }
 
   private void sbc(Instruction in) {
-    byte operand = resolveOperand(in);
+    Byte operand = resolveOperand(in);
     if (psr.isSet(Decimal)) {
       sbcDecimal(operand);
     } else {
-      adcNormal((byte) (operand ^ operand));
+      int carryValue = getPsr().isSet(Carry) ? 0 : 1;
+      Integer regA = Byte.toUnsignedInt(registerA.value());
+      Integer result = regA - Byte.toUnsignedInt(operand) - carryValue;
+
+      registerA.setValue(result.byteValue());
+
+      int overflow = ((regA ^ result) & 0x80) & ((regA ^ operand) & 0x80);
+      if (overflow > 0) {
+        getPsr().set(Overflow);
+      }
+
+      if (Integer.signum(result.byteValue()) < 0) {
+        getPsr().set(Negative);
+      }
+
+      if (result >= 0) {
+        getPsr().set(Carry);
+      } else {
+        getPsr().unset(Carry);
+      }
+
+      if (result == 0) {
+        getPsr().set(Zero);
+      }
     }
   }
 
@@ -261,7 +284,7 @@ public class C6502 {
   }
 
   private void sbcDecimal(byte operand) {
-
+    throw new NotImplementedYetException("The sbc with decimal mode is not implemented yet.");
   }
 
   private void adcDecimal(byte operand) {
@@ -282,9 +305,11 @@ public class C6502 {
       case absoluteY:
         return instruction.getOp16() + regY.value();
       case zeropage:
-        return instruction.getOp8();
+      case indirectIndexedY:
+        return Byte.toUnsignedInt(instruction.getOp8());
       case zeropageX:
-        return instruction.getOp8() + regX.value();
+      case indexedIndirectX:
+        return Byte.toUnsignedInt(instruction.getOp8()) + regX.value();
       default:
         throw new IllegalStateException("Unknown addressing mode.");
     }
@@ -294,8 +319,15 @@ public class C6502 {
     switch (instruction.getOpc().getAddressingMode()) {
       case immediate:
         return instruction.getOp8();
+      case indexedIndirectX:
+        int indirectX = bus.read16(memoryAddress(instruction));
+        return bus.read(indirectX);
+      case indirectIndexedY:
+        int indirectY = bus.read16(memoryAddress(instruction)) + regY.value();
+        return bus.read(indirectY);
       default:
-        return bus.read(memoryAddress(instruction));
+        int address = memoryAddress(instruction);
+        return bus.read(address);
     }
   }
 

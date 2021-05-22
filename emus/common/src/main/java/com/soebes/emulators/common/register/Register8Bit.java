@@ -38,6 +38,10 @@ public class Register8Bit {
     this.value = value;
   }
 
+  public void setValue(Integer value) {
+    this.value = value.byteValue();
+  }
+
   public void incr() {
     Integer result = Integer.valueOf(this.value) + 1;
     this.value = result.byteValue();

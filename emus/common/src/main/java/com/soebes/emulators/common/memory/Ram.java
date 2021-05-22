@@ -31,6 +31,10 @@ public class Ram implements Memory {
 
   private byte[] memory;
 
+  /**
+   * @param sizeOfMemory The size in bytes.
+   * @implNote Currently we fill the whole memory with {@code 0}.
+   */
   public Ram(int sizeOfMemory) {
     this.memory = new byte[sizeOfMemory];
     for (int i = 0; i < memory.length; i++) {

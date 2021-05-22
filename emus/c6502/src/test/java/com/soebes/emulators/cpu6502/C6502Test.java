@@ -23,7 +23,6 @@ import com.soebes.emulators.common.memory.AddressBus;
 import com.soebes.emulators.common.memory.Ram;
 import com.soebes.emulators.cpu6502.register.StatusRegister;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,9 +35,23 @@ import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Decima
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Interrupt;
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Negative;
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Overflow;
+import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Zero;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * <pre>
+ * Flags:NV-BDIZC
+ *       !!!!!!!!
+ *       !!!!!!!+-- Carry
+ *       !!!!!!+--- Zero
+ *       !!!!!+---- Interruppt
+ *       !!!!+----- Decimal
+ *       !!!+------ Break?
+ *       !!+------- Undefined
+ *       !+-------- Overflow
+ *       +--------- Negative
+ * </pre>
+ *
  * @author Karl Heinz Marbaise
  */
 class C6502Test {
@@ -106,7 +119,7 @@ class C6502Test {
   }
 
   @Nested
-  class LoadAccumulator {
+  class LDA {
 
     @Test
     @DisplayName("LDA #$33")
@@ -121,6 +134,18 @@ class C6502Test {
     }
 
     @Test
+    @DisplayName("LDA #$00")
+    void lda_immediate_zero() {
+      // LDA #$33
+      ram.write(0x0000, new int[]{0xa9, 0x00});
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags(Zero);
+    }
+
+    @Test
     @DisplayName("LDA #$80")
     void lda_immediate_negative() {
       // LDA #$33
@@ -130,6 +155,106 @@ class C6502Test {
 
       assertThatRegister(0x80, 0x00, 0x00, 0x1002);
       assertThatFlags(Negative);
+    }
+
+    @Test
+    @DisplayName("LDA $80")
+    void lda_zero_page() {
+      // LDA $80
+      ram.write(0x0000, new int[]{0xA5, 0x80});
+      zeroPage.write(0x80, new int[]{0x10});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("LDA $10,X")
+    void lda_zero_page_x() {
+      // LDA $10,X
+      ram.write(0x0000, new int[]{0xB5, 0x10});
+      cpu.regX().setValue((byte) 0x01);
+      zeroPage.write(0x10, new int[]{0x80, 0x10});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x01, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("LDA $1008")
+    void lda_absolute() {
+      ram.write(0x0000, new int[]{0xAD, 0x08, 0x10});
+      ram.write(0x0008, new int[]{0x10});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x00, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("LDA $1007,X")
+    void lda_absolute_x() {
+      ram.write(0x0000, new int[]{0xBD, 0x07, 0x10});
+      ram.write(0x0008, new int[]{0x37});
+      cpu.regX().setValue((byte) 0x01);
+
+      cpu.step();
+
+      assertThatRegister(0x37, 0x01, 0x00, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("LDA $1007,Y")
+    void lda_absolute_y() {
+      ram.write(0x0000, new int[]{0xB9, 0x07, 0x10}); // LDA $1007,Y
+      ram.write(0x0008, new int[]{0x42});
+      cpu.regY().setValue((byte) 0x01);
+
+      cpu.step();
+
+      assertThatRegister(0x42, 0x00, 0x01, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("LDA ($10,X)")
+    void lda_indexed_indirect_x() {
+      cpu.regX().setValue((byte) 0x01);
+      ram.write(0x0000, new int[]{0xA1, 0x10});
+      // Fill  LSB  MSB
+      // 0x01 0x08 0x10
+      //        !    !
+      //        +----+--- $1008 => Read value from $1008 from RAM
+      zeroPage.write(0x10, new int[]{0x01, 0x08, 0x10});
+      ram.write(0x0008, new int[]{0x42});
+      cpu.step();
+
+      assertThatRegister(0x42, 0x01, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("LDA ($10),Y")
+    void lda_indirect_indexed_y() {
+      cpu.regY().setValue((byte) 0x01);
+      ram.write(0x0000, new int[]{0xB1, 0x10});
+      //  LSB  MSB
+      // 0x05 0x10 ..
+      //   !   !
+      //   +---+--- $1005
+      zeroPage.write(0x10, new int[]{0x05, 0x10});
+      // Added $1005+y => $1006
+      ram.write(0x0006, new int[]{0x36});
+      cpu.step();
+
+      assertThatRegister(0x36, 0x00, 0x01, 0x1002);
+      assertThatFlags();
     }
 
   }
@@ -267,72 +392,130 @@ class C6502Test {
 
   @Nested
   class SBC {
-    /*
-            func TestSBCImmediate(t *testing.T) {
-          cpu, _, _ := NewRamMachine()
-          cpu.LoadProgram([]byte{0xE9, 0x01}, 0x0300)
-          cpu.A = 0x42
-          cpu.setCarry(true)
 
-          cpu.Step()
-
-          assert.EqualValues(t, 0x0302, cpu.pc)
-          assert.EqualValues(t, 0x41, cpu.A)
-          assert.True(t, cpu.getCarry())
-        }
-     */
     @Test
-    @Disabled
-    @DisplayName("SBC #$01 (immediate)")
+    @DisplayName("SBC #$01 Flags:xx-xxxxC")
     void sbc_immediate() {
       ram.write(0x0000, new int[]{0xE9, 0x01});
-
-      cpu.regA().setValue((byte) 0x42);
       cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x42);
 
       cpu.step();
 
-      assertThat(cpu.regA()).isEqualTo(Integer.valueOf(41).byteValue());
-      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatRegister(0x41, 0x00, 0x00, 0x1002);
       assertThatFlags(Carry);
     }
 
     @Test
-    @DisplayName("SBC $20,X (zero page,X)")
-    void sbc_zero_page_x() {
-      ram.write(0x0000, new int[]{0xF6, 0x21});
-
-      zeroPage.write(0x0021, new int[]{0x34});
-      Byte read = addressBus.read(0x0021);
-      assertThat(read).isEqualTo(Integer.valueOf(52).byteValue());
+    @DisplayName("SBC #$01 Flags:Nx-xxxxC")
+    void sbc_immediate_1() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x81);
 
       cpu.step();
 
-      read = addressBus.read(0x0021);
-      assertThat(read).isEqualTo(Integer.valueOf(53).byteValue());
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Negative);
+    }
+
+    @Test
+    @DisplayName("SBC #$01 Flags:xx-xxxxC")
+    void sbc_immediate_2() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x7F);
+
+      cpu.step();
+
+      assertThatRegister(0x7E, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @DisplayName("SBC #$01 Flags:xx-xxxZC")
+    void sbc_immediate_3() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x01);
+
+      cpu.step();
+
       assertThatRegister(0x00, 0x00, 0x00, 0x1002);
-      assertThatFlags();
+      assertThatFlags(Carry, Zero);
     }
 
     @Test
-    @DisplayName("SBC $1005")
-    void sbc_absolute() {
-      ram.write(0x0000, new int[]{0xEE, 0x05, 0x10});
-
-      addressBus.write(0x1005, 0x54);
-      Byte read = addressBus.read(0x1005);
-      assertThat(read).isEqualTo(Integer.valueOf(0x54).byteValue());
+    @DisplayName("SBC #$01 Flags:Nx-xxxxC")
+    void sbc_immediate_4() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x00);
 
       cpu.step();
 
-      read = addressBus.read(0x1005);
-      assertThat(read).isEqualTo(Integer.valueOf(0x55).byteValue());
-      assertThatRegister(0x00, 0x00, 0x00, 0x1003);
-      assertThatFlags();
+      assertThatRegister(0xFF, 0x00, 0x00, 0x1002);
+      assertThatFlags(Negative);
     }
 
     @Test
-    @DisplayName("SBC $1005,X")
+    @DisplayName("SBC #$01 Flags:xV-xxxxC")
+    void sbc_immediate_5() {
+      cpu.regA().setValue((byte) 0x80);
+      cpu.getPsr().set(Carry);
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x7F, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Overflow);
+    }
+
+    @Test
+    @DisplayName("SBC $50 Flags:xx-xxxxC")
+    void sbc_zero_page() {
+      cpu.regA().setValue((byte) 0x70);
+      cpu.getPsr().set(Carry);
+      ram.write(0x0000, new int[]{0xE5, 0x50});
+      zeroPage.write(0x0050, new int[]{0x60});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @DisplayName("SBC $20,X Flags:xx-xxxxC")
+    void sbc_zero_page_x() {
+      cpu.regX().setValue((byte) 0x01);
+      cpu.regA().setValue((byte) 0x70);
+      cpu.getPsr().set(Carry);
+      ram.write(0x0000, new int[]{0xF5, 0x20});
+      zeroPage.write(0x0021, new int[]{0x60});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x01, 0x00, 0x1002);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @DisplayName("SBC $1008 Flags:xx-xxxxC")
+    void sbc_absolute() {
+      cpu.regA().setValue((byte) 0x70);
+      cpu.getPsr().set(Carry);
+      ram.write(0x0000, new int[]{0xED, 0x08, 0x10});
+      ram.write(0x0008, new int[]{0x60});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x00, 0x1003);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @DisplayName("SBC $1005,X Flags:xx-xxxxC")
     void sbc_absolute_x() {
       ram.write(0x0000, new int[]{0xFE, 0x05, 0x10});
 
@@ -348,13 +531,64 @@ class C6502Test {
       assertThatRegister(0x00, 0x03, 0x00, 0x1003);
       assertThatFlags();
     }
+
+    @Test
+    @DisplayName("SBC $1005,Y Flags:xx-xxxxC")
+    void sbc_absolute_y() {
+      cpu.regA().setValue((byte) 0x70);
+      cpu.regY().setValue((byte) 0x03);
+      cpu.getPsr().set(Carry);
+
+      ram.write(0x0000, new int[]{0xF9, 0x05, 0x10});
+      ram.write(0x0008, new int[]{0x60});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x03, 0x1003);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @DisplayName("SBC ($10,X) Flags:xx-xxxxC")
+    void sbc_indexed_indirect_x() {
+      cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x70);
+      cpu.regX().setValue((byte) 0x01);
+      ram.write(0x0000, new int[]{0xE1, 0x10});
+      // Fill  LSB  MSB
+      // 0x01 0x08 0x10
+      //        !    !
+      //        +----+--- $1008 => Read value from $1008 from RAM
+      zeroPage.write(0x10, new int[]{0x01, 0x08, 0x10});
+      ram.write(0x0008, new int[]{0x60});
+      cpu.step();
+
+      assertThatRegister(0x10, 0x01, 0x00, 0x1002);
+      assertThatFlags(Carry);
+    }
+
+    @Test
+    @DisplayName("SBC ($10),Y Flags:xx-xxxxC")
+    void sbc_indirect_indexed_Y() {
+      cpu.getPsr().set(Carry);
+      cpu.regA().setValue((byte) 0x70);
+      cpu.regY().setValue((byte) 0x01);
+      ram.write(0x0000, new int[]{0xF1, 0x10});
+      ram.write(0x0008, new int[]{0x60});
+      zeroPage.write(0x0010, new int[]{0x07, 0x10});
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x01, 0x1002);
+      assertThatFlags(Carry);
+    }
   }
 
   @Nested
   class SetFlag {
 
     @Test
-    @DisplayName("SEC set carry.")
+    @DisplayName("SEC set carry.  Flags:xx-xxxxC")
     void sec() {
       ram.write(0x0000, new int[]{0x38});
 
@@ -367,7 +601,7 @@ class C6502Test {
     }
 
     @Test
-    @DisplayName("SED set decimal.")
+    @DisplayName("SED set decimal. Flags:xx-xDxxx")
     void sed() {
       ram.write(0x0000, new int[]{0xF8});
 
@@ -380,7 +614,7 @@ class C6502Test {
     }
 
     @Test
-    @DisplayName("SEI set interrupt disable.")
+    @DisplayName("SEI set interrupt disable. Flags:xx-xxIxx")
     void sei() {
       ram.write(0x0000, new int[]{0x78});
 
@@ -398,7 +632,7 @@ class C6502Test {
   class ClearFlag {
 
     @Test
-    @DisplayName("CLC clear carry.")
+    @DisplayName("CLC clear carry. Flags:xx-xxxx0")
     void clc() {
       ram.write(0x0000, new int[]{0x18});
 
@@ -411,7 +645,7 @@ class C6502Test {
     }
 
     @Test
-    @DisplayName("CLD clear decimal.")
+    @DisplayName("CLD clear decimal. Flags:xx-x0xxx")
     void cld() {
       ram.write(0x0000, new int[]{0xD8});
 
@@ -424,7 +658,7 @@ class C6502Test {
     }
 
     @Test
-    @DisplayName("CLI clear interuppt disable.")
+    @DisplayName("CLI clear interuppt disable. Flags:xx-xx0xx")
     void cli() {
       ram.write(0x0000, new int[]{0x58});
 
@@ -437,7 +671,7 @@ class C6502Test {
     }
 
     @Test
-    @DisplayName("CLV clear overflow")
+    @DisplayName("CLV clear overflow Flags:x0-xxxxx")
     void clv() {
       ram.write(0x0000, new int[]{0xB8});
 

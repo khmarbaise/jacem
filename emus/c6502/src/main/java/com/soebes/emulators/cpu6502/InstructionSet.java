@@ -27,9 +27,9 @@ import static com.soebes.emulators.cpu6502.AddressingMode.absoluteY;
 import static com.soebes.emulators.cpu6502.AddressingMode.accumulator;
 import static com.soebes.emulators.cpu6502.AddressingMode.immediate;
 import static com.soebes.emulators.cpu6502.AddressingMode.implied;
+import static com.soebes.emulators.cpu6502.AddressingMode.indexedIndirectX;
 import static com.soebes.emulators.cpu6502.AddressingMode.indirect;
-import static com.soebes.emulators.cpu6502.AddressingMode.indirectX;
-import static com.soebes.emulators.cpu6502.AddressingMode.indirectY;
+import static com.soebes.emulators.cpu6502.AddressingMode.indirectIndexedY;
 import static com.soebes.emulators.cpu6502.AddressingMode.relative;
 import static com.soebes.emulators.cpu6502.AddressingMode.zeropage;
 import static com.soebes.emulators.cpu6502.AddressingMode.zeropageX;
@@ -121,8 +121,8 @@ public class InstructionSet {
       entry(0x6D, of(ADC, absolute, 3, 4)),
       entry(0x7D, of(ADC, absoluteX, 3, 4)),
       entry(0x79, of(ADC, absoluteY, 3, 4)),
-      entry(0x61, of(ADC, indirectX, 2, 6)),
-      entry(0x71, of(ADC, indirectY, 2, 5)),
+      entry(0x61, of(ADC, indexedIndirectX, 2, 6)),
+      entry(0x71, of(ADC, indirectIndexedY, 2, 5)),
 
       // SBC
       entry(0xE9, of(SBC, immediate, 2, 2)),
@@ -131,8 +131,8 @@ public class InstructionSet {
       entry(0xED, of(SBC, absolute, 3, 4)),
       entry(0xFD, of(SBC, absoluteX, 3, 4)),
       entry(0xF9, of(SBC, absoluteY, 3, 4)),
-      entry(0xE1, of(SBC, indirectX, 2, 6)),
-      entry(0xF1, of(SBC, indirectY, 2, 5)),
+      entry(0xE1, of(SBC, indexedIndirectX, 2, 6)),
+      entry(0xF1, of(SBC, indirectIndexedY, 2, 5)),
 
       // Increments
       entry(0xE8, of(INX, implied, 1, 2)),
@@ -158,8 +158,8 @@ public class InstructionSet {
       entry(0xAD, of(LDA, absolute, 3, 4)),
       entry(0xBD, of(LDA, absoluteX, 3, 4)),
       entry(0xB9, of(LDA, absoluteY, 3, 4)),
-      entry(0xA1, of(LDA, indirectX, 2, 6)),
-      entry(0xB1, of(LDA, indirectY, 2, 5)),
+      entry(0xA1, of(LDA, indexedIndirectX, 2, 6)),
+      entry(0xB1, of(LDA, indirectIndexedY, 2, 5)),
 
       // LDX
       entry(0xA2, of(LDX, immediate, 2, 2)),
@@ -182,8 +182,8 @@ public class InstructionSet {
       entry(0x0D, of(ORA, absolute, 3, 4)),
       entry(0x1D, of(ORA, absoluteX, 3, 4)),
       entry(0x19, of(ORA, absoluteY, 3, 4)),
-      entry(0x01, of(ORA, indirectX, 2, 6)),
-      entry(0x11, of(ORA, indirectY, 2, 5)),
+      entry(0x01, of(ORA, indexedIndirectX, 2, 6)),
+      entry(0x11, of(ORA, indirectIndexedY, 2, 5)),
 
       // AND
       entry(0x29, of(AND, immediate, 2, 2)),
@@ -192,8 +192,8 @@ public class InstructionSet {
       entry(0x2D, of(AND, absolute, 3, 4)),
       entry(0x3D, of(AND, absoluteX, 3, 4)),
       entry(0x39, of(AND, absoluteY, 3, 4)),
-      entry(0x21, of(AND, indirectX, 2, 6)),
-      entry(0x31, of(AND, indirectY, 2, 5)),
+      entry(0x21, of(AND, indexedIndirectX, 2, 6)),
+      entry(0x31, of(AND, indirectIndexedY, 2, 5)),
 
       // EOR
       entry(0x49, of(EOR, immediate, 2, 2)),
@@ -202,8 +202,8 @@ public class InstructionSet {
       entry(0x4D, of(EOR, absolute, 3, 4)),
       entry(0x5D, of(EOR, absoluteX, 3, 4)),
       entry(0x59, of(EOR, absoluteY, 3, 4)),
-      entry(0x41, of(EOR, indirectX, 2, 6)),
-      entry(0x51, of(EOR, indirectY, 2, 5)),
+      entry(0x41, of(EOR, indexedIndirectX, 2, 6)),
+      entry(0x51, of(EOR, indirectIndexedY, 2, 5)),
 
       // STA
       entry(0x85, of(STA, zeropage, 2, 3)),
@@ -211,8 +211,8 @@ public class InstructionSet {
       entry(0x8D, of(STA, absolute, 3, 4)),
       entry(0x9D, of(STA, absoluteX, 3, 5)),
       entry(0x99, of(STA, absoluteY, 3, 5)),
-      entry(0x81, of(STA, indirectX, 2, 6)),
-      entry(0x91, of(STA, indirectY, 2, 6)),
+      entry(0x81, of(STA, indexedIndirectX, 2, 6)),
+      entry(0x91, of(STA, indirectIndexedY, 2, 6)),
 
       // STX
       entry(0x86, of(STX, zeropage, 2, 3)),
@@ -277,8 +277,8 @@ public class InstructionSet {
       entry(0xCD, of(CMP, absolute, 3, 4)),
       entry(0xDD, of(CMP, absoluteX, 3, 4)),
       entry(0xD9, of(CMP, absoluteY, 3, 4)),
-      entry(0xC1, of(CMP, indirectX, 2, 6)),
-      entry(0xD1, of(CMP, indirectY, 2, 5)),
+      entry(0xC1, of(CMP, indexedIndirectX, 2, 6)),
+      entry(0xD1, of(CMP, indirectIndexedY, 2, 5)),
 
       // CPX
       entry(0xE0, of(CPX, immediate, 2, 2)),
