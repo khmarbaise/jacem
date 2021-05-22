@@ -23,7 +23,6 @@ import com.soebes.emulators.common.memory.AddressBus;
 import com.soebes.emulators.common.memory.Ram;
 import com.soebes.emulators.cpu6502.register.StatusRegister;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -282,7 +281,6 @@ class C6502Test {
         }
      */
     @Test
-    @Disabled
     @DisplayName("SBC #$01 (immediate)")
     void sbc_immediate() {
       ram.write(0x0000, new int[]{0xE9, 0x01});
@@ -298,9 +296,8 @@ class C6502Test {
     }
 
     @Test
-    @Disabled
     @DisplayName("SBC $20,X (zero page,X)")
-    void inc_zero_page_x() {
+    void sbc_zero_page_x() {
       ram.write(0x0000, new int[]{0xF6, 0x21});
 
       zeroPage.write(0x0021, new int[]{0x34});
@@ -316,9 +313,8 @@ class C6502Test {
     }
 
     @Test
-    @Disabled
     @DisplayName("SBC $1005")
-    void inc_absolute() {
+    void sbc_absolute() {
       ram.write(0x0000, new int[]{0xEE, 0x05, 0x10});
 
       addressBus.write(0x1005, 0x54);
@@ -334,9 +330,8 @@ class C6502Test {
     }
 
     @Test
-    @Disabled
     @DisplayName("SBC $1005,X")
-    void inc_absolute_x() {
+    void sbc_absolute_x() {
       ram.write(0x0000, new int[]{0xFE, 0x05, 0x10});
 
       cpu.regX().setValue(Integer.valueOf(0x03).byteValue());
