@@ -24,24 +24,24 @@ package com.soebes.emulators.cpu6502;
  */
 public class OperationCode {
 
-  private final OpCode opCode;
+  private final OpCodeMnemonic opCodeMnemonic;
   private final AddressingMode addressingMode;
   private final int instructionSize;
   private final int cycles;
 
-  private OperationCode(OpCode opCode, AddressingMode addressingMode, int instructionSize, int cycles) {
-    this.opCode = opCode;
+  private OperationCode(OpCodeMnemonic opCodeMnemonic, AddressingMode addressingMode, int instructionSize, int cycles) {
+    this.opCodeMnemonic = opCodeMnemonic;
     this.addressingMode = addressingMode;
     this.instructionSize = instructionSize;
     this.cycles = cycles;
   }
 
-  public static final OperationCode of(OpCode opCode, AddressingMode addressingMode, int instructionSize, int cycles) {
-    return new OperationCode(opCode, addressingMode, instructionSize, cycles);
+  public static final OperationCode of(OpCodeMnemonic opCodeMnemonic, AddressingMode addressingMode, int instructionSize, int cycles) {
+    return new OperationCode(opCodeMnemonic, addressingMode, instructionSize, cycles);
   }
 
-  public OpCode getOpCode() {
-    return opCode;
+  public OpCodeMnemonic getOpCode() {
+    return opCodeMnemonic;
   }
 
   public AddressingMode getAddressingMode() {

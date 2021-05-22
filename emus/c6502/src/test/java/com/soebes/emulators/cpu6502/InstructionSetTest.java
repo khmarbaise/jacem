@@ -52,7 +52,7 @@ class InstructionSetTest {
   @Test
   void second_test() {
     OperationCode opc = InstructionSet.getOpc(0xA9);
-    assertThat(opc.getOpCode()).isEqualTo(OpCode.LDA);
+    assertThat(opc.getOpCode()).isEqualTo(OpCodeMnemonic.LDA);
   }
 
 }

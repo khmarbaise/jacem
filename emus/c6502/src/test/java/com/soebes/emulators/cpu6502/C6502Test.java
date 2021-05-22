@@ -23,6 +23,7 @@ import com.soebes.emulators.common.memory.AddressBus;
 import com.soebes.emulators.common.memory.Ram;
 import com.soebes.emulators.cpu6502.register.StatusRegister;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -281,6 +282,7 @@ class C6502Test {
         }
      */
     @Test
+    @Disabled
     @DisplayName("SBC #$01 (immediate)")
     void sbc_immediate() {
       ram.write(0x0000, new int[]{0xE9, 0x01});

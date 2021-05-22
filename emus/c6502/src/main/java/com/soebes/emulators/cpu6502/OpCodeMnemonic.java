@@ -22,7 +22,7 @@ package com.soebes.emulators.cpu6502;
 /**
  * @author Karl Heinz Marbaise
  */
-public enum OpCode {
+public enum OpCodeMnemonic {
   ADC,
   AND,
   ASL,
