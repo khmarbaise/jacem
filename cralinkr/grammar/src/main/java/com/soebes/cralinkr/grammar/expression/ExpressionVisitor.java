@@ -19,24 +19,17 @@ package com.soebes.cralinkr.grammar.expression;
  * under the License.
  */
 
-
-import org.antlr.v4.runtime.tree.ErrorNode;
+import static java.util.Map.entry;
 
 import java.util.Map;
 import java.util.function.BinaryOperator;
-
-import static java.util.Map.entry;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
-  private static final Map<String, BinaryOperator<Long>> operators =
-      Map.ofEntries(
-          entry("+", Long::sum),
-          entry("-", (x, y) -> x - y),
-          entry("*", (x, y) -> x * y),
-          entry("/", (x, y) -> x / y),
-          entry("%", (x, y) -> x % y)
-      );
+  private static final Map<String, BinaryOperator<Long>> operators = Map.ofEntries(entry("+", Long::sum),
+      entry("-", (x, y) -> x - y), entry("*", (x, y) -> x * y), entry("/", (x, y) -> x / y),
+      entry("%", (x, y) -> x % y));
 
   private final SymbolTable symbolTable;
 
@@ -114,7 +107,7 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
   @Override
   public Long visitErrorNode(ErrorNode node) {
     throw new IllegalStateException("can not parse");
-//    System.out.println("MyVisitor.visitErrorNode");
-//    return null;
+    //    System.out.println("MyVisitor.visitErrorNode");
+    //    return null;
   }
 }
