@@ -39,7 +39,7 @@ public class C6502 {
   /**
    * The Program Counter.
    */
-  private final Register16Bit PC;
+  private final Register16Bit pc;
 
 
   /**
@@ -71,13 +71,13 @@ public class C6502 {
     //TODO: This might be wrong. Currently for the tests it works.
     // It would be better to make a Reset() method which
     // loads the correct address from reset vector.
-    this.PC = new Register16Bit(0x1000);
+    this.pc = new Register16Bit(0x1000);
     this.psr = new StatusRegister();
   }
 
   public C6502 step() {
     Instruction instruction = readNextInstruction();
-    PC.incrementBy(instruction.getOpc().getInstructionSize());
+    pc.incrementBy(instruction.getOpc().getInstructionSize());
     execute(instruction);
     return this;
   }
@@ -300,10 +300,10 @@ public class C6502 {
   }
 
   private Instruction readNextInstruction() {
-    Byte opcode = bus.read(PC.value());
+    Byte opcode = bus.read(pc.value());
 
     if (!InstructionSet.opcExists(Byte.toUnsignedInt(opcode))) {
-      throw new IllegalStateException(String.format("Unknown operation code %04x: %02x ", PC.value(), opcode));
+      throw new IllegalStateException(String.format("Unknown operation code %04x: %02x ", pc.value(), opcode));
     }
 
     OperationCode opc = InstructionSet.getOpc(Byte.toUnsignedInt(opcode));
@@ -311,11 +311,11 @@ public class C6502 {
     switch (opc.getInstructionSize()) {
       case 1:
       case 2:
-        byte read8 = bus.read(this.PC.value() + 1);
-        return new Instruction(opc, read8, (byte) 0, PC.value() + 1);
+        byte read8 = bus.read(this.pc.value() + 1);
+        return new Instruction(opc, read8, (byte) 0, pc.value() + 1);
       case 3:
-        int read16 = bus.read16(this.PC.value() + 1);
-        return new Instruction(opc, (byte) 0, read16, PC.value() + 1);
+        int read16 = bus.read16(this.pc.value() + 1);
+        return new Instruction(opc, (byte) 0, read16, pc.value() + 1);
       default:
         throw new IllegalStateException("Unknown instruction size");
     }
@@ -329,8 +329,8 @@ public class C6502 {
     return regY;
   }
 
-  public Register16Bit PC() {
-    return PC;
+  public Register16Bit pc() {
+    return pc;
   }
 
   public Register8Bit regA() {

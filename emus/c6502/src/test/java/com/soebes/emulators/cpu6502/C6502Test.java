@@ -88,7 +88,7 @@ class C6502Test {
     assertThat(cpu.regA().value()).as("The register A has not the expected value: '%s' instead of '%s'", regA, cpu.regA().value()).isEqualTo(Integer.valueOf(regA).byteValue());
     assertThat(cpu.regX().value()).as("The register X has not the expected value: '%s' instead of '%s'", regX, cpu.regX().value()).isEqualTo(Integer.valueOf(regX).byteValue());
     assertThat(cpu.regY().value()).as("The register Y has not the expected value: '%s' instead of '%s'", regY, cpu.regY().value()).isEqualTo(Integer.valueOf(regY).byteValue());
-    assertThat(cpu.PC().value()).as("The registry PC has not the expected value: '%s' instead of '%s'", pc, cpu.PC()).isEqualTo(pc);
+    assertThat(cpu.pc().value()).as("The registry pc has not the expected value: '%s' instead of '%s'", pc, cpu.pc()).isEqualTo(pc);
   }
 
   private void assertThatFlags(StatusRegister.Status... states) {
@@ -275,7 +275,7 @@ class C6502Test {
 
           cpu.Step()
 
-          assert.EqualValues(t, 0x0302, cpu.PC)
+          assert.EqualValues(t, 0x0302, cpu.pc)
           assert.EqualValues(t, 0x41, cpu.A)
           assert.True(t, cpu.getCarry())
         }

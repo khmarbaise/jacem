@@ -63,7 +63,7 @@ class ArthmethicsTest {
 
     assertThat(result.intput().value()).isEqualTo((byte) 0x41);
     assertThat(result.flags().isCarryFlag()).isTrue();
-//    assert.EqualValues(t, 0x0302, cpu.PC)
+//    assert.EqualValues(t, 0x0302, cpu.pc)
 //    assert.EqualValues(t, 0x41, cpu.A)
 //    assert.True(t, cpu.getCarry())
 
