@@ -391,6 +391,49 @@ class C6502Test {
   }
 
   @Nested
+  class SBCDecimal {
+    @Test
+    @DisplayName("SBC #$01 Flags:xx-xDxxC")
+    void sbc_decimal_immediate_1() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry).set(Decimal);
+      cpu.regA().setValue((byte) 0x10);
+
+      cpu.step();
+
+      assertThatRegister(0x09, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Decimal);
+    }
+
+    @Test
+    @DisplayName("SBC #$01 Flags:xx-xDxxC")
+    void sbc_decimal_immediate_2() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry).set(Decimal);
+      cpu.regA().setValue((byte) 0x20);
+
+      cpu.step();
+
+      assertThatRegister(0x19, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Decimal);
+    }
+
+    @Test
+    @DisplayName("SBC #$01 Flags:xx-xDxxC")
+    void sbc_decimal_immediate_3() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Carry).set(Decimal);
+      cpu.regA().setValue((byte) 0x00);
+
+      cpu.step();
+
+      assertThatRegister(0x99, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal, Negative);
+    }
+
+  }
+
+  @Nested
   class SBC {
 
     @Test

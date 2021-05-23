@@ -194,35 +194,46 @@ public class C6502 {
 
   private void sbc(Instruction in) {
     Byte operand = resolveOperand(in);
+    int carryValue = getPsr().isSet(Carry) ? 0 : 1;
+
+    Integer regA = Byte.toUnsignedInt(registerA.value());
+    Integer result = regA - Byte.toUnsignedInt(operand) - carryValue;
+
     if (psr.isSet(Decimal)) {
-      sbcDecimal(operand);
+      Integer rl = (regA & 0x0f) - (operand & 0x0f) - carryValue;
+      Integer rh = (regA >> 4) - (operand >> 4);
+      if ((rl & 0x10) > 0) {
+        rl -= 6;
+        rh--;
+      }
+      if ((rh & 0x10) > 0) {
+        rh -= 6;
+      }
+      registerA.setValue((rh << 4) | (rl & 0x0f));
     } else {
-      int carryValue = getPsr().isSet(Carry) ? 0 : 1;
-      Integer regA = Byte.toUnsignedInt(registerA.value());
-      Integer result = regA - Byte.toUnsignedInt(operand) - carryValue;
+      registerA.setValue(result.intValue() & 0xff);
+    }
 
-      registerA.setValue(result.byteValue());
+    int overflow = ((regA ^ result) & 0x80) & ((regA ^ operand) & 0x80);
+    if (overflow > 0) {
+      getPsr().set(Overflow);
+    }
 
-      int overflow = ((regA ^ result) & 0x80) & ((regA ^ operand) & 0x80);
-      if (overflow > 0) {
-        getPsr().set(Overflow);
-      }
+    if (Integer.signum(result.byteValue()) < 0) {
+      getPsr().set(Negative);
+    }
 
-      if (Integer.signum(result.byteValue()) < 0) {
-        getPsr().set(Negative);
-      }
+    if (result >= 0) {
+      getPsr().set(Carry);
+    } else {
+      getPsr().unset(Carry);
+    }
 
-      if (result >= 0) {
-        getPsr().set(Carry);
-      } else {
-        getPsr().unset(Carry);
-      }
-
-      if (result == 0) {
-        getPsr().set(Zero);
-      }
+    if (result == 0) {
+      getPsr().set(Zero);
     }
   }
+
 
   private void setCarryAndNegativeFlag(byte value) {
     if ((value & 0x80) > 0) {
