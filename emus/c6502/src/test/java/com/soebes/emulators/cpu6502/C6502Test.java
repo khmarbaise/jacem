@@ -29,6 +29,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Carry;
 import static com.soebes.emulators.cpu6502.register.StatusRegister.Status.Decimal;
@@ -107,11 +109,12 @@ class C6502Test {
 
   private void assertThatFlags(StatusRegister.Status... states) {
     EnumSet<StatusRegister.Status> all = EnumSet.allOf(StatusRegister.Status.class);
-    Arrays.stream(states).forEach(state -> {
+    List<StatusRegister.Status> statusList = Arrays.stream(states).collect(Collectors.toList());
+    statusList.forEach(state -> {
           assertThat(cpu.getPsr().isSet(state)).as("The " + state.name() + " flag expected to be set.").isEqualTo(true);
         }
     );
-    all.removeAll(Arrays.asList(states));
+    all.removeAll(statusList);
     all.forEach(state -> {
           assertThat(cpu.getPsr().isNotSet(state)).as("The " + state.name() + " flag expected not being set.").isTrue();
         }
@@ -393,6 +396,19 @@ class C6502Test {
   @Nested
   class SBCDecimal {
     @Test
+    @DisplayName("SBC #$01 Flags:xx-xDxxx")
+    void sbc_decimal_immediate_0() {
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+      cpu.getPsr().set(Decimal);
+      cpu.regA().setValue((byte) 0x10);
+
+      cpu.step();
+
+      assertThatRegister(0x08, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Decimal);
+    }
+
+    @Test
     @DisplayName("SBC #$01 Flags:xx-xDxxC")
     void sbc_decimal_immediate_1() {
       ram.write(0x0000, new int[]{0xE9, 0x01});
@@ -421,6 +437,19 @@ class C6502Test {
     @Test
     @DisplayName("SBC #$01 Flags:xx-xDxxC")
     void sbc_decimal_immediate_3() {
+      ram.write(0x0000, new int[]{0xE9, 0x21});
+      cpu.getPsr().set(Carry).set(Decimal);
+      cpu.regA().setValue((byte) 0x61);
+
+      cpu.step();
+
+      assertThatRegister(0x40, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Decimal);
+    }
+
+    @Test
+    @DisplayName("SBC #$01 Flags:xx-xDxxC")
+    void sbc_decimal_immediate_4() {
       ram.write(0x0000, new int[]{0xE9, 0x01});
       cpu.getPsr().set(Carry).set(Decimal);
       cpu.regA().setValue((byte) 0x00);
@@ -506,6 +535,18 @@ class C6502Test {
     void sbc_immediate_5() {
       cpu.regA().setValue((byte) 0x80);
       cpu.getPsr().set(Carry);
+      ram.write(0x0000, new int[]{0xE9, 0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x7F, 0x00, 0x00, 0x1002);
+      assertThatFlags(Carry, Overflow);
+    }
+
+    @Test
+    @DisplayName("SBC #$01 Flags:xV-xxxxC")
+    void sbc_immediate_6() {
+      cpu.regA().setValue((byte) 0x81);
       ram.write(0x0000, new int[]{0xE9, 0x01});
 
       cpu.step();

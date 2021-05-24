@@ -57,11 +57,11 @@ public class C6502 {
   /**
    * The accumulator.
    */
-  private Register8Bit registerA;
+  private final Register8Bit registerA;
   /**
    * Process Status Flags
    */
-  private StatusRegister psr;
+  private final StatusRegister psr;
 
   public C6502(AddressBus bus) {
     this.bus = bus;

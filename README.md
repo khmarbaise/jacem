@@ -14,15 +14,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
+
 # Java CPU Emulator (JaCEm)
 
 [![Build Status](https://cloud.drone.io/api/badges/khmarbaise/jacem/status.svg)](https://cloud.drone.io/khmarbaise/jacem)
 
-This is the 3nd incarnation of the [Java CPU Emulator](https://github.com/khmarbaise/CPUEmu). 
+This is the 3nd incarnation of the [Java CPU Emulator](https://github.com/khmarbaise/CPUEmu).
 
-I had started that because I had long time ago an idea to make an 
-emulator for 8085/6502 cpu working just as a learning experiment.
-In the meantime I have other design idea how to handle that.
+I had started that because I had long time ago an idea to make an emulator for 8085/6502 cpu working just as a learning
+experiment. In the meantime I have other design idea how to handle that.
 
 This project is now the state of the design ideas.
 
@@ -36,6 +36,13 @@ This project is now the state of the design ideas.
 * Maven 3.6.3+
 
 Code coverage via:
+
 ```bash
 mvn clean verify org.jacoco:jacoco-maven-plugin:report
+```
+
+Create Mutation coverage via:
+
+```bash
+mvn clean verify org.pitest:pitest-maven:mutationCoverage
 ```
