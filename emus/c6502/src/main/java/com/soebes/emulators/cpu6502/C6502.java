@@ -294,10 +294,6 @@ public class C6502 {
     }
   }
 
-  private void sbcDecimal(byte operand) {
-    throw new NotImplementedYetException("The sbc with decimal mode is not implemented yet.");
-  }
-
   private void adcDecimal(byte operand) {
     this.psr.isSet(Carry);
 
