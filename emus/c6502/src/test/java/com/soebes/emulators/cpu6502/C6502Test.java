@@ -463,6 +463,289 @@ class C6502Test {
   }
 
   @Nested
+  class ADCDecimal {
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_0() {
+      cpu.getPsr().set(Decimal);
+      ram.write(0x0000, new int[]{0x69, 0x05});
+      cpu.regA().setValue((byte) 0x05);
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_1() {
+      cpu.getPsr().set(Decimal);
+      ram.write(0x0000, new int[]{0x69, 0x01});
+      cpu.regA().setValue((byte) 0x09);
+
+      cpu.step();
+
+      assertThatRegister(0x10, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_2() {
+      cpu.getPsr().set(Decimal);
+      ram.write(0x0000, new int[]{0x69, 0x01});
+      cpu.regA().setValue((byte) 0x08);
+
+      cpu.step();
+
+      assertThatRegister(0x09, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_3() {
+      cpu.getPsr().set(Decimal);
+      ram.write(0x0000, new int[]{0x69, 0x11});
+      cpu.regA().setValue(0x88);
+
+      cpu.step();
+
+      assertThatRegister(0x99, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal, Negative);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_4() {
+      cpu.getPsr().set(Decimal);
+      ram.write(0x0000, new int[]{0x69, 0x07});
+      cpu.regA().setValue((byte) 0x07);
+
+      cpu.step();
+
+      assertThatRegister(0x14, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_5() {
+      cpu.getPsr().set(Decimal).set(Carry);
+      ram.write(0x0000, new int[]{0x69, 0x09});
+      cpu.regA().setValue((byte) 0x07);
+
+      cpu.step();
+
+      assertThatRegister(0x17, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_6() {
+      cpu.getPsr().set(Decimal).set(Carry);
+      ram.write(0x0000, new int[]{0x69, 0x19});
+      cpu.regA().setValue((byte) 0x07);
+
+      cpu.step();
+
+      assertThatRegister(0x27, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_7() {
+      cpu.getPsr().set(Decimal);
+      ram.write(0x0000, new int[]{0x69, 0x01});
+      cpu.regA().setValue((byte) 0x99);
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags(Decimal, Carry, Zero);
+    }
+
+  }
+
+  @Nested
+  class ADC {
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxxx")
+    void adc_immediate_0() {
+      ram.write(0x0000, new int[]{0x69, 0x01});
+      cpu.regA().setValue((byte) 0x41);
+
+      cpu.step();
+
+      assertThatRegister(0x42, 0x00, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:NV-xxxxx")
+    void adc_immediate_1() {
+      ram.write(0x0000, new int[]{0x69, 0x02});
+      cpu.regA().setValue((byte) 0x7f);
+
+      cpu.step();
+
+      assertThatRegister(0x81, 0x00, 0x00, 0x1002);
+      assertThatFlags(Overflow, Negative);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:NV-xxxxx")
+    void adc_immediate_2() {
+      ram.write(0x0000, new int[]{0x69, 0x01});
+      cpu.regA().setValue((byte) 0x7f);
+
+      cpu.step();
+
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002);
+      assertThatFlags(Overflow, Negative);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:xx-xxxZC")
+    void adc_immediate_3() {
+      ram.write(0x0000, new int[]{0x69, 0x01});
+      cpu.regA().setValue((byte) 0xff);
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags(Zero, Carry);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:Nx-xxxxC")
+    void adc_immediate_4() {
+      ram.write(0x0000, new int[]{0x69, 0x00});
+      cpu.regA().setValue((byte) 0xff);
+
+      cpu.step();
+
+      assertThatRegister(0xff, 0x00, 0x00, 0x1002);
+      assertThatFlags(Negative);
+    }
+
+    @Test
+    @DisplayName("ADC #$01 Flags:Nx-xxxxC")
+    void adc_immediate_5() {
+      ram.write(0x0000, new int[]{0x69, 0x81});
+      cpu.regA().setValue((byte) 0xff);
+
+      cpu.step();
+
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002);
+      assertThatFlags(Negative, Carry);
+    }
+
+    @Test
+    @DisplayName("ADC $50 Flags:NV-xxxxx")
+    void adc_zeropage() {
+      cpu.regA().setValue((byte) 0x7f);
+      ram.write(0x0000, new int[]{0x65, 0x50});
+      zeroPage.write(0x0050, new int[]{0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002);
+      assertThatFlags(Negative, Overflow);
+    }
+
+    @Test
+    @DisplayName("ADC $50,X Flags:NV-xxxxx")
+    void adc_zeropage_x() {
+      cpu.regX().setValue((byte) 0x01);
+      cpu.regA().setValue((byte) 0x7f);
+      ram.write(0x0000, new int[]{0x75, 0x20});
+      zeroPage.write(0x0021, new int[]{0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x80, 0x01, 0x00, 0x1002);
+      assertThatFlags(Negative, Overflow);
+    }
+
+    @Test
+    @DisplayName("ADC $1008 Flags:NV-xxxxx")
+    void adc_absolute() {
+      cpu.regA().setValue((byte) 0x70);
+      ram.write(0x0000, new int[]{0x6D, 0x08, 0x10});
+      ram.write(0x0008, new int[]{0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x71, 0x00, 0x00, 0x1003);
+    }
+
+    @Test
+    @DisplayName("ADC $1005,X Flags:xx-xxxxx")
+    void adc_absolute_x() {
+      cpu.regA().setValue(0x70);
+      cpu.regX().setValue(0x03);
+      ram.write(0x0000, new int[]{0x7D, 0x05, 0x10});
+      ram.write(0x0008, new int[]{0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x71, 0x03, 0x00, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("ADC $1005,Y Flags:xx-xxxxx")
+    void adc_absolute_y() {
+      cpu.regA().setValue(0x70);
+      cpu.regY().setValue(0x03);
+      ram.write(0x0000, new int[]{0x79, 0x05, 0x10});
+      ram.write(0x0008, new int[]{0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x71, 0x00, 0x03, 0x1003);
+      assertThatFlags();
+    }
+
+
+    @Test
+    @DisplayName("ADC ($07,X) Flags:xx-xxxxx")
+    void adc_indexed_indiziert_x() {
+      cpu.regA().setValue(0x70);
+      cpu.regX().setValue(0x03);
+      ram.write(0x0000, new int[]{0x61, 0x07});
+      zeroPage.write(0x000A, new int[]{0x08, 0x10});
+      ram.write(0x0008, new int[]{0x03});
+
+      cpu.step();
+
+      assertThatRegister(0x73, 0x03, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("ADC ($07),Y Flags:xx-xxxxx")
+    void adc_indiziert_indexed_y() {
+      cpu.regA().setValue(0x70);
+      cpu.regY().setValue(0x03);
+      ram.write(0x0000, new int[]{0x71, 0x07});
+      zeroPage.write(0x0007, new int[]{0x05, 0x10});
+      ram.write(0x0008, new int[]{0x04});
+
+      cpu.step();
+
+      assertThatRegister(0x74, 0x00, 0x03, 0x1002);
+      assertThatFlags();
+    }
+
+  }
+
+  @Nested
   class SBC {
 
     @Test

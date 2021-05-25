@@ -192,6 +192,46 @@ public class C6502 {
     regY.setValue(value);
   }
 
+  void adc(Instruction in) {
+    Byte operand = resolveOperand(in);
+    int carryValue = getPsr().isSet(Carry) ? 1 : 0;
+    Integer regA = Byte.toUnsignedInt(registerA.value());
+    Integer result = regA + Byte.toUnsignedInt(operand) + carryValue;
+
+    if (psr.isDecimal()) {
+      BCD bcdRegA = new BCD(Byte.toUnsignedInt(registerA.value()));
+      BCD bcdOperand = new BCD(Byte.toUnsignedInt(operand));
+      BCD bcdCarry = new BCD(carryValue);
+      BCD bcdResult = bcdRegA.add(bcdOperand).add(bcdCarry);
+      result = bcdResult.toInt();
+      registerA.setValue(result & 0xff);
+    } else {
+      registerA.setValue(result.intValue() & 0xff);
+    }
+
+    boolean partI = ((regA ^ operand) & 0x80) == 0;
+    boolean partII = ((regA ^ result) & 0x80) != 0;
+    boolean xov = partI && partII;
+    if (xov) {
+      getPsr().set(Overflow);
+    }
+
+    if (Integer.signum(result.byteValue()) < 0) {
+      getPsr().set(Negative);
+    }
+
+    if (result > 0xff) {
+      getPsr().set(Carry);
+    } else {
+      getPsr().unset(Carry);
+    }
+
+    if (registerA.value() == 0) {
+      getPsr().set(Zero);
+    }
+
+  }
+
   private void sbc(Instruction in) {
     Byte operand = resolveOperand(in);
     int carryValue = getPsr().isSet(Carry) ? 0 : 1;
@@ -282,25 +322,6 @@ public class C6502 {
     int value = bus.read(address) - 1;
     bus.write(address, value);
     setCarryAndNegativeFlag(Integer.valueOf(value).byteValue());
-  }
-
-  void adc(Instruction in) {
-    byte operand = resolveOperand(in);
-
-    if (psr.isDecimal()) {
-      adcDecimal(operand);
-    } else {
-      adcNormal(operand);
-    }
-  }
-
-  private void adcDecimal(byte operand) {
-    this.psr.isSet(Carry);
-
-  }
-
-  private void adcNormal(byte operand) {
-    registerA.value();
   }
 
   private int memoryAddress(Instruction instruction) {

@@ -116,6 +116,7 @@ public class InstructionSet {
       entry(0xB8, of(CLV, implied, 1, 2)),
 
       // ADC
+      entry(0x69, of(ADC, immediate, 2, 2)),
       entry(0x65, of(ADC, zeropage, 2, 3)),
       entry(0x75, of(ADC, zeropageX, 2, 4)),
       entry(0x6D, of(ADC, absolute, 3, 4)),
