@@ -601,19 +601,16 @@ class C6502Test {
     @Test
     @DisplayName("SBC $1005,X Flags:xx-xxxxC")
     void sbc_absolute_x() {
-      ram.write(0x0000, new int[]{0xFE, 0x05, 0x10});
-
-      cpu.regX().setValue(Integer.valueOf(0x03).byteValue());
-      addressBus.write(0x1008, 0x60);
-      Byte read = addressBus.read(0x1008);
-      assertThat(read).isEqualTo(Integer.valueOf(0x60).byteValue());
+      cpu.regA().setValue(0x10);
+      cpu.regX().setValue(0x03);
+      cpu.getPsr().set(Carry);
+      ram.write(0x0000, new int[]{0xFD, 0x05, 0x10});
+      ram.write(0x0008, new int[]{0x01});
 
       cpu.step();
 
-      read = addressBus.read(0x1008);
-      assertThat(read).isEqualTo(Integer.valueOf(0x61).byteValue());
-      assertThatRegister(0x00, 0x03, 0x00, 0x1003);
-      assertThatFlags();
+      assertThatRegister(0x0F, 0x03, 0x00, 0x1003);
+      assertThatFlags(Carry);
     }
 
     @Test
