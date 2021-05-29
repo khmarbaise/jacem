@@ -192,22 +192,21 @@ public class C6502 {
     regY.setValue(value);
   }
 
-  void adc(Instruction in) {
-    Byte operand = resolveOperand(in);
+  private void adc(Instruction in) {
+    int operand = Byte.toUnsignedInt(resolveOperand(in));
     int carryValue = getPsr().isSet(Carry) ? 1 : 0;
     Integer regA = Byte.toUnsignedInt(registerA.value());
-    Integer result = regA + Byte.toUnsignedInt(operand) + carryValue;
 
+    Integer result;
     if (psr.isDecimal()) {
-      BCD bcdRegA = new BCD(Byte.toUnsignedInt(registerA.value()));
-      BCD bcdOperand = new BCD(Byte.toUnsignedInt(operand));
+      BCD bcdRegA = new BCD(regA);
+      BCD bcdOperand = new BCD(operand);
       BCD bcdCarry = new BCD(carryValue);
-      BCD bcdResult = bcdRegA.add(bcdOperand).add(bcdCarry);
-      result = bcdResult.toInt();
-      registerA.setValue(result & 0xff);
+      result = bcdRegA.add(bcdOperand).add(bcdCarry).toInt();
     } else {
-      registerA.setValue(result.intValue() & 0xff);
+      result = regA + operand + carryValue;
     }
+    registerA.setValue(result.intValue() & 0xff);
 
     boolean partI = ((regA ^ operand) & 0x80) == 0;
     boolean partII = ((regA ^ result) & 0x80) != 0;
