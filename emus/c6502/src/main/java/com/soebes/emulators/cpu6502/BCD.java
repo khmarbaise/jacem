@@ -19,6 +19,9 @@ package com.soebes.emulators.cpu6502;
  * under the License.
  */
 
+import java.util.Arrays;
+import java.util.StringJoiner;
+
 /**
  * @author Karl Heinz Marbaise
  */
@@ -82,6 +85,32 @@ class BCD {
     return new BCD(result);
   }
 
+  /**
+   * {@code difference = this(minuend).subtrahend}.
+   *
+   * @param sum subtrahend
+   * @return difference
+   */
+  BCD sub(BCD sum) {
+
+    int[] result = new int[8];
+    int carry = 0;
+    for (int i = 0; i < result.length; i++) {
+      int r = this.digits[i] - sum.digits[i] - carry;
+      carry = 0;
+      if (r < 0) {
+        r -= 6;
+        carry++;
+      }
+      result[i] = r & 0x0f;
+    }
+
+    //If we have carry == 1 at that point it means we have
+    //an overflow.
+    //TODO: Need to reconsider if we should throw an exception?
+    return new BCD(result);
+  }
+
   int toInt() {
     int result = 0;
     for (int i = 7; i >= 0; i--) {
@@ -89,5 +118,12 @@ class BCD {
       result += digits[i];
     }
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", BCD.class.getSimpleName() + "[", "]")
+        .add("digits=" + Arrays.toString(digits))
+        .toString();
   }
 }
