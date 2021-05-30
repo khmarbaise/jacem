@@ -263,7 +263,7 @@ class C6502Test {
   }
 
   @Nested
-  class IncrementX {
+  class INX {
     @Test
     @DisplayName("INX with positive value")
     void inx_positive() {
@@ -293,7 +293,7 @@ class C6502Test {
   }
 
   @Nested
-  class IncrementY {
+  class INY {
     @Test
     @DisplayName("INY with positive value")
     void iny_positive() {
