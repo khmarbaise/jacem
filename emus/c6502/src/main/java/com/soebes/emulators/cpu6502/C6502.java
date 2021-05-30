@@ -91,6 +91,9 @@ public class C6502 {
       case ADC:
         adc(instruction);
         break;
+      case AND:
+        and(instruction);
+        break;
       case SBC:
         sbc(instruction);
         break;
@@ -190,6 +193,24 @@ public class C6502 {
   private void ldy(Instruction instruction) {
     byte value = resolveOperand(instruction);
     regY.setValue(value);
+  }
+
+  private void and(Instruction in) {
+    int operand = Byte.toUnsignedInt(resolveOperand(in));
+    Integer regA = Byte.toUnsignedInt(registerA.value());
+
+    Integer result = regA & operand;
+
+    registerA.setValue(result & 0xff);
+
+    if (Integer.signum(result.byteValue()) < 0) {
+      getPsr().set(Negative);
+    }
+
+    if (registerA.value() == 0) {
+      getPsr().set(Zero);
+    }
+
   }
 
   private void adc(Instruction in) {

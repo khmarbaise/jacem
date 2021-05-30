@@ -571,6 +571,144 @@ class C6502Test {
   }
 
   @Nested
+  class AND {
+
+    @Test
+    @DisplayName("AND #$00 Flags:xx-xxxxx")
+    void and_immediate_0() {
+      ram.write(0x0000, new int[]{0x29, 0x00});
+      cpu.regA().setValue((byte) 0x41);
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags(Zero);
+    }
+
+    @Test
+    @DisplayName("AND #$FF Flags:Nx-xxxxx")
+    void and_immediate_1() {
+      ram.write(0x0000, new int[]{0x29, 0x80});
+      cpu.regA().setValue((byte) 0xff);
+
+      cpu.step();
+
+      assertThatRegister(0x80, 0x00, 0x00, 0x1002);
+      assertThatFlags(Negative);
+    }
+
+    @Test
+    @DisplayName("AND #$10 Flags:xx-xxxZx")
+    void and_immediate_2() {
+      ram.write(0x0000, new int[]{0x29, 0x10});
+      cpu.regA().setValue((byte) 0x20);
+
+      cpu.step();
+
+      assertThatRegister(0x00, 0x00, 0x00, 0x1002);
+      assertThatFlags(Zero);
+    }
+
+    @Test
+    @DisplayName("AND $50 Flags:xx-xxxxx")
+    void and_zeropage() {
+      cpu.regA().setValue((byte) 0x01);
+      ram.write(0x0000, new int[]{0x25, 0x50});
+      zeroPage.write(0x0050, new int[]{0x01});
+
+      cpu.step();
+
+      assertThatRegister(0x01, 0x00, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("AND $50,X Flags:xx-xxxxx")
+    void and_zeropage_x() {
+      cpu.regX().setValue((byte) 0x01);
+      cpu.regA().setValue((byte) 0x02);
+      ram.write(0x0000, new int[]{0x35, 0x20});
+      zeroPage.write(0x0021, new int[]{0x02});
+
+      cpu.step();
+
+      assertThatRegister(0x02, 0x01, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("AND $1008 Flags:xx-xxxxx")
+    void and_absolute() {
+      cpu.regA().setValue((byte) 0x02);
+      ram.write(0x0000, new int[]{0x2D, 0x08, 0x10});
+      ram.write(0x0008, new int[]{0x02});
+
+      cpu.step();
+
+      assertThatRegister(0x02, 0x00, 0x00, 0x1003);
+    }
+
+    @Test
+    @DisplayName("AND $1005,X Flags:xx-xxxxx")
+    void and_absolute_x() {
+      cpu.regA().setValue(0x02);
+      cpu.regX().setValue(0x03);
+      ram.write(0x0000, new int[]{0x3D, 0x05, 0x10});
+      ram.write(0x0008, new int[]{0x02});
+
+      cpu.step();
+
+      assertThatRegister(0x02, 0x03, 0x00, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("AND $1005,Y Flags:xx-xxxxx")
+    void and_absolute_y() {
+      cpu.regA().setValue(0x7f);
+      cpu.regY().setValue(0x03);
+      ram.write(0x0000, new int[]{0x39, 0x05, 0x10});
+      ram.write(0x0008, new int[]{0x7f});
+
+      cpu.step();
+
+      assertThatRegister(0x7f, 0x00, 0x03, 0x1003);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("AND ($07,X) Flags:xx-xxxxx")
+    void and_indexed_indiziert_x() {
+      cpu.regA().setValue(0x7f);
+      cpu.regX().setValue(0x03);
+      ram.write(0x0000, new int[]{0x21, 0x07});
+      zeroPage.write(0x000A, new int[]{0x08, 0x10});
+      ram.write(0x0008, new int[]{0x7f});
+
+      cpu.step();
+
+      assertThatRegister(0x7f, 0x03, 0x00, 0x1002);
+      assertThatFlags();
+    }
+
+    @Test
+    @DisplayName("AND ($07),Y Flags:xx-xxxxx")
+    void and_indiziert_indexed_y() {
+      cpu.regA().setValue(0x7f);
+      cpu.regY().setValue(0x03);
+      ram.write(0x0000, new int[]{0x31, 0x07});
+      zeroPage.write(0x0007, new int[]{0x05, 0x10});
+      ram.write(0x0008, new int[]{0x7f});
+
+      cpu.step();
+
+      assertThatRegister(0x7f, 0x00, 0x03, 0x1002);
+      assertThatFlags();
+    }
+
+  }
+
+  @Nested
   class ADC {
 
     @Test
