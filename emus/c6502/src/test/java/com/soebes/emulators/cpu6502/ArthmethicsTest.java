@@ -34,7 +34,7 @@ class ArthmethicsTest {
 
   @BeforeEach
   void beforeEach() {
-    Register8Bit r = new Register8Bit((byte) 0x00);
+    Register8Bit r = new Register8Bit(0x00);
     flags = new ArithmeticFlags();
     arthmethics = new Arthmethics(r, flags);
   }
@@ -55,7 +55,7 @@ class ArthmethicsTest {
   @Disabled
   void subtract_without_carry() {
 
-    Register8Bit r = new Register8Bit((byte) 0x42);
+    Register8Bit r = new Register8Bit(0x42);
     flags = new ArithmeticFlags();
     arthmethics = new Arthmethics(r, flags);
     Arthmethics result = arthmethics.sbcDecimal((byte) 0x00, true);

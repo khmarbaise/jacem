@@ -63,7 +63,7 @@ public class C8085 {
    */
   public C8085(AddressBus bus) {
     this.bus = bus;
-    this.registerA = new Register8Bit((byte) 0);
+    this.registerA = new Register8Bit(0);
     this.regBC = new Register16Bit(0x0000);
     this.regDE = new Register16Bit(0x0000);
     this.regHL = new Register16Bit(0x0000);

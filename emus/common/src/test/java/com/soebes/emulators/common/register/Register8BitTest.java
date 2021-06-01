@@ -30,14 +30,14 @@ class Register8BitTest {
 
   @Test
   void check_for_initial_value() {
-    Register8Bit register8Bit = new Register8Bit((byte) 0);
+    Register8Bit register8Bit = new Register8Bit(0);
 
     assertThat(register8Bit.value()).isZero();
   }
 
   @Test
   void check_increment() {
-    Register8Bit register16Bit = new Register8Bit((byte) 0);
+    Register8Bit register16Bit = new Register8Bit(0);
     register16Bit.incr();
 
     assertThat(register16Bit.value()).isEqualTo((byte) 1);

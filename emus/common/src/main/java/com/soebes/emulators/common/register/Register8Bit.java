@@ -26,8 +26,8 @@ public class Register8Bit {
 
   private Byte value;
 
-  public Register8Bit(Byte value) {
-    this.value = value;
+  public Register8Bit(Integer value) {
+    this.value = value.byteValue();
   }
 
   public Byte value() {

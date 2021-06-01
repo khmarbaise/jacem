@@ -65,9 +65,9 @@ public class C6502 {
 
   public C6502(AddressBus bus) {
     this.bus = bus;
-    this.registerA = new Register8Bit((byte) 0);
-    this.regX = new Register8Bit((byte) 0);
-    this.regY = new Register8Bit((byte) 0);
+    this.registerA = new Register8Bit(0);
+    this.regX = new Register8Bit(0);
+    this.regY = new Register8Bit(0);
     //TODO: This might be wrong. Currently for the tests it works.
     // It would be better to make a Reset() method which
     // loads the correct address from reset vector.
