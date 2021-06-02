@@ -34,6 +34,10 @@ public class Register8Bit {
     return this.value;
   }
 
+  public Integer asInt() {
+    return Integer.valueOf(this.value);
+  }
+
   public void setValue(Byte value) {
     this.value = value;
   }

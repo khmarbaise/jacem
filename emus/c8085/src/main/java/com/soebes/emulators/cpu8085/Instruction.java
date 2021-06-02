@@ -24,20 +24,27 @@ package com.soebes.emulators.cpu8085;
  */
 public class Instruction {
 
-  private OperationCode opc;
+  private int opCode;
+
+  private Operation opc;
 
   private byte Op8;
   private int Op16;
   private int Address;
 
-  public Instruction(OperationCode opc, byte op8, int op16, int address) {
+  public Instruction(int opCode, Operation opc, byte op8, int op16, int address) {
+    this.opCode = opCode;
     this.opc = opc;
     Op8 = op8;
     Op16 = op16;
     Address = address;
   }
 
-  public OperationCode getOpc() {
+  public int opCode() {
+    return opCode;
+  }
+
+  public Operation getOpc() {
     return opc;
   }
 

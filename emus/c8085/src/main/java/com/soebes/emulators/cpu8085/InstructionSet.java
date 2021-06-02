@@ -22,6 +22,7 @@ package com.soebes.emulators.cpu8085;
 import java.util.Map;
 
 import static com.soebes.emulators.cpu8085.AddressingMode.immediate;
+import static com.soebes.emulators.cpu8085.AddressingMode.immediate16;
 import static com.soebes.emulators.cpu8085.AddressingMode.implied;
 import static com.soebes.emulators.cpu8085.AddressingMode.indirect;
 import static com.soebes.emulators.cpu8085.OpCode.LDAX;
@@ -32,7 +33,7 @@ import static com.soebes.emulators.cpu8085.OpCode.NOP;
 import static com.soebes.emulators.cpu8085.OpCode.RIM;
 import static com.soebes.emulators.cpu8085.OpCode.SIM;
 import static com.soebes.emulators.cpu8085.OpCode.STAX;
-import static com.soebes.emulators.cpu8085.OperationCode.of;
+import static com.soebes.emulators.cpu8085.Operation.of;
 import static java.util.Map.entry;
 
 /**
@@ -42,7 +43,7 @@ public class InstructionSet {
 
 
   //@formatter:off
-  private static final Map<Integer, OperationCode> opcodes = Map.ofEntries(
+  private static final Map<Integer, Operation> opcodes = Map.ofEntries(
       // NOP
       entry(0x00, of(NOP, implied, 1, 4)),
 
@@ -132,10 +133,10 @@ public class InstructionSet {
 
       // LXI R, #value
       //FIXME: immediate? => load 16 bit value from memory.
-      entry(0x01, of(LXI, immediate, 3, 10)), //LXI B,
-      entry(0x11, of(LXI, immediate, 3, 10)), //LXI D,
-      entry(0x21, of(LXI, immediate, 3, 10)), //LXI H,
-      entry(0x31, of(LXI, immediate, 3, 10)), //LXI SP,
+      entry(0x01, of(LXI, immediate16, 3, 10)), //LXI B,
+      entry(0x11, of(LXI, immediate16, 3, 10)), //LXI D,
+      entry(0x21, of(LXI, immediate16, 3, 10)), //LXI H,
+      entry(0x31, of(LXI, immediate16, 3, 10)), //LXI SP,
 
       // LDAX R
       // Load value into A from memory address defined by given register.
@@ -153,7 +154,7 @@ public class InstructionSet {
   );
   //@formatter:on
 
-  public static OperationCode getOpc(int opcode) {
+  public static Operation getOpc(int opcode) {
     return opcodes.get(opcode);
   }
 

@@ -28,6 +28,7 @@ public enum AddressingMode {
   absolute("absolute"),
   implied("implied"),
   immediate("immediate"),
+  immediate16("immediate16"),
   indirect("indirect");
 
   private String info;

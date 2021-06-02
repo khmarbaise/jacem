@@ -41,7 +41,7 @@ public class C8085 {
   /**
    * Stackpointer
    */
-  private final Register16Bit SP;
+  private final Register16Bit sp;
 
   private final Register16Bit regBC;
   private final Register16Bit regDE;
@@ -72,8 +72,36 @@ public class C8085 {
     // loads the correct address from reset vector.
     this.PC = new Register16Bit(0x1000);
     // Initial value?
-    this.SP = new Register16Bit(0x1000);
+    this.sp = new Register16Bit(0x1000);
     this.psw = new StatusRegister();
+  }
+
+  public StatusRegister getPsw() {
+    return psw;
+  }
+
+  public void setPsw(StatusRegister psw) {
+    this.psw = psw;
+  }
+
+  public Register8Bit a() {
+    return registerA;
+  }
+
+  public Register16Bit sp() {
+    return sp;
+  }
+
+  public Register16Bit bc() {
+    return regBC;
+  }
+
+  public Register16Bit de() {
+    return regDE;
+  }
+
+  public Register16Bit hl() {
+    return regHL;
   }
 
   /**
@@ -99,17 +127,42 @@ public class C8085 {
     switch (instruction.getOpc().getOpCode()) {
       case NOP:
         break;
+      case LXI:
+        lxi(instruction);
+        break;
       default:
         throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
     }
   }
 
 
+  private void lxi(Instruction instruction) {
+    int value = resolveOperand(instruction);
+    RegLxi register = RegLxi.values()[(instruction.opCode() & 0b00110000) >> 4];
+    switch (register) {
+      case B:
+        regBC.setValue(value);
+        break;
+      case D:
+        regDE.setValue(value);
+        break;
+      case H:
+        regHL.setValue(value);
+        break;
+      case SP:
+        sp.setValue(value);
+        break;
+    }
+
+  }
+
   private int memoryAddress(Instruction instruction) {
     switch (instruction.getOpc().getAddressingMode()) {
       case implied:
         return 0;
 
+      case immediate16:
+        return instruction.getOp16();
       case absolute:
         return instruction.getOp16();
 //      case absoluteX:
@@ -125,10 +178,12 @@ public class C8085 {
     }
   }
 
-  private byte resolveOperand(Instruction instruction) {
+  private int resolveOperand(Instruction instruction) {
     switch (instruction.getOpc().getAddressingMode()) {
       case immediate:
         return instruction.getOp8();
+      case immediate16:
+        return instruction.getOp16();
       default:
         return bus.read(memoryAddress(instruction));
     }
@@ -141,16 +196,16 @@ public class C8085 {
       throw new IllegalStateException(String.format("Unknown operation code %04x: %02x ", PC.value(), opcode));
     }
 
-    OperationCode opc = InstructionSet.getOpc(Byte.toUnsignedInt(opcode));
+    Operation opc = InstructionSet.getOpc(Byte.toUnsignedInt(opcode));
 
     switch (opc.getInstructionSize()) {
       case 1:
       case 2:
         byte read8 = bus.read(this.PC.value() + 1);
-        return new Instruction(opc, read8, (byte) 0, PC.value() + 1);
+        return new Instruction(opcode, opc, read8, (byte) 0, PC.value() + 1);
       case 3:
         int read16 = bus.read16(this.PC.value() + 1);
-        return new Instruction(opc, (byte) 0, read16, PC.value() + 1);
+        return new Instruction(opcode, opc, (byte) 0, read16, PC.value() + 1);
       default:
         throw new IllegalStateException("Unknown instruction size");
     }

@@ -77,6 +77,6 @@ public class AddressBus {
     Byte lo = read(address);
     Byte hi = read(address + 1);
 
-    return (hi << 8) | lo;
+    return (hi << 8) | (lo & 0xff);
   }
 }

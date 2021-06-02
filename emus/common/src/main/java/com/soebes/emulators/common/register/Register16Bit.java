@@ -37,4 +37,8 @@ public class Register16Bit {
   public int value() {
     return this.value;
   }
+
+  public void setValue(int value) {
+    this.value = value;
+  }
 }
