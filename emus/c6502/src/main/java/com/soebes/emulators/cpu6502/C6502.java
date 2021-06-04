@@ -257,22 +257,18 @@ public class C6502 {
     int carryValue = getPsr().isSet(Carry) ? 0 : 1;
 
     Integer regA = Byte.toUnsignedInt(registerA.value());
-    Integer result = regA - Byte.toUnsignedInt(operand) - carryValue;
 
+    Integer result;
     if (psr.isSet(Decimal)) {
-      Integer rl = (regA & 0x0f) - (operand & 0x0f) - carryValue;
-      Integer rh = (regA >> 4) - (operand >> 4);
-      if ((rl & 0x10) > 0) {
-        rl -= 6;
-        rh--;
-      }
-      if ((rh & 0x10) > 0) {
-        rh -= 6;
-      }
-      registerA.setValue((rh << 4) | (rl & 0x0f));
+      BCD bcdRegA = new BCD(regA);
+      BCD bcdOperand = new BCD(operand);
+      BCD bcdCarry = new BCD(carryValue);
+      result = bcdRegA.sub(bcdOperand).sub(bcdCarry).toInt();
     } else {
-      registerA.setValue(result.intValue() & 0xff);
+      result = regA - Byte.toUnsignedInt(operand) - carryValue;
     }
+
+    registerA.setValue(result.intValue() & 0xff);
 
     int overflow = ((regA ^ result) & 0x80) & ((regA ^ operand) & 0x80);
     if (overflow > 0) {
