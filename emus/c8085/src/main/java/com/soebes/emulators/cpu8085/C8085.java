@@ -131,6 +131,9 @@ public class C8085 {
     switch (instruction.getOpc().getOpCode()) {
       case NOP:
         break;
+      case MVI:
+        mvi(instruction);
+        break;
       case LXI:
         lxi(instruction);
         break;
@@ -155,6 +158,38 @@ public class C8085 {
         break;
       case SP:
         sp.setValue(value);
+        break;
+    }
+
+  }
+
+  private void mvi(Instruction instruction) {
+    int value = resolveOperand(instruction);
+    RegMVI register = RegMVI.values()[(instruction.opCode() & 0b00111000) >> 3];
+    switch (register) {
+      case B:
+        regBC.setHv(value);
+        break;
+      case C:
+        regBC.setLv(value);
+        break;
+      case D:
+        regDE.setHv(value);
+        break;
+      case E:
+        regDE.setLv(value);
+        break;
+      case H:
+        regHL.setHv(value);
+        break;
+      case L:
+        regHL.setLv(value);
+        break;
+      case M:
+        bus.write(regHL.value(), value);
+        break;
+      case A:
+        registerA.setValue(value);
         break;
     }
 

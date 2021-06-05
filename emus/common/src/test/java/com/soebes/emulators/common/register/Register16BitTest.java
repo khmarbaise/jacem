@@ -42,4 +42,30 @@ class Register16BitTest {
 
     assertThat(register16Bit.value()).isEqualTo(1);
   }
+
+  @Test
+  void setLow8Bit() {
+    Register16Bit register16Bit = new Register16Bit(0x2c3c);
+    register16Bit.setLv(127);
+    assertThat(register16Bit.value()).isEqualTo(0x2c7f);
+  }
+
+  @Test
+  void getLow8Bit() {
+    Register16Bit register16Bit = new Register16Bit(0x2c3c);
+    assertThat(register16Bit.getLv()).isEqualTo(0x3c);
+  }
+
+  @Test
+  void setHigh8Bit() {
+    Register16Bit register16Bit = new Register16Bit(0x2c3c);
+    register16Bit.setHv(255);
+    assertThat(register16Bit.value()).isEqualTo(0xff3c);
+  }
+
+  @Test
+  void getHigh8Bit() {
+    Register16Bit register16Bit = new Register16Bit(0xff3c);
+    assertThat(register16Bit.getHv()).isEqualTo(0xff);
+  }
 }

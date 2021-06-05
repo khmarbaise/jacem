@@ -41,4 +41,20 @@ public class Register16Bit {
   public void setValue(int value) {
     this.value = value;
   }
+
+  public void setLv(int low) {
+    this.value = (this.value & 0xff00) | (low & 0xff);
+  }
+
+  public void setHv(int high) {
+    this.value = (this.value & 0x00ff) | ((high & 0xff) << 8);
+  }
+
+  public int getLv() {
+    return this.value & 0xff;
+  }
+
+  public int getHv() {
+    return (this.value & 0xff00) >> 8;
+  }
 }
