@@ -63,6 +63,72 @@ class C8085Test {
     );
   }
 
+  static Stream<Arguments> mov() {
+    return Stream.of(
+        //                                               A    B C     D E     H L
+        arguments("MOV A,B", new int[]{0b01_111_000}, 0x22, 0x2233, 0x4455, 0x6677),
+        arguments("MOV A,C", new int[]{0b01_111_001}, 0x33, 0x2233, 0x4455, 0x6677),
+        arguments("MOV A,D", new int[]{0b01_111_010}, 0x44, 0x2233, 0x4455, 0x6677),
+        arguments("MOV A,E", new int[]{0b01_111_011}, 0x55, 0x2233, 0x4455, 0x6677),
+        arguments("MOV A,H", new int[]{0b01_111_100}, 0x66, 0x2233, 0x4455, 0x6677),
+        arguments("MOV A,L", new int[]{0b01_111_101}, 0x77, 0x2233, 0x4455, 0x6677),
+        //                                               A    B C     D E     H L
+        arguments("MOV B,A", new int[]{0b01_000_111}, 0x11, 0x1133, 0x4455, 0x6677),
+        arguments("MOV B,C", new int[]{0b01_000_001}, 0x11, 0x3333, 0x4455, 0x6677),
+        arguments("MOV B,D", new int[]{0b01_000_010}, 0x11, 0x4433, 0x4455, 0x6677),
+        arguments("MOV B,E", new int[]{0b01_000_011}, 0x11, 0x5533, 0x4455, 0x6677),
+        arguments("MOV B,H", new int[]{0b01_000_100}, 0x11, 0x6633, 0x4455, 0x6677),
+        arguments("MOV B,L", new int[]{0b01_000_101}, 0x11, 0x7733, 0x4455, 0x6677),
+        //                                               A    B C     D E     H L
+        arguments("MOV C,A", new int[]{0b01_001_111}, 0x11, 0x2211, 0x4455, 0x6677),
+        arguments("MOV C,B", new int[]{0b01_001_000}, 0x11, 0x2222, 0x4455, 0x6677),
+        arguments("MOV C,D", new int[]{0b01_001_010}, 0x11, 0x2244, 0x4455, 0x6677),
+        arguments("MOV C,E", new int[]{0b01_001_011}, 0x11, 0x2255, 0x4455, 0x6677),
+        arguments("MOV C,H", new int[]{0b01_001_100}, 0x11, 0x2266, 0x4455, 0x6677),
+        arguments("MOV C,L", new int[]{0b01_001_101}, 0x11, 0x2277, 0x4455, 0x6677),
+        //                                               A    B C     D E     H L
+        arguments("MOV D,A", new int[]{0b01_010_111}, 0x11, 0x2233, 0x1155, 0x6677),
+        arguments("MOV D,B", new int[]{0b01_010_000}, 0x11, 0x2233, 0x2255, 0x6677),
+        arguments("MOV D,C", new int[]{0b01_010_001}, 0x11, 0x2233, 0x3355, 0x6677),
+        arguments("MOV D,E", new int[]{0b01_010_011}, 0x11, 0x2233, 0x5555, 0x6677),
+        arguments("MOV D,H", new int[]{0b01_010_100}, 0x11, 0x2233, 0x6655, 0x6677),
+        arguments("MOV D,L", new int[]{0b01_010_101}, 0x11, 0x2233, 0x7755, 0x6677),
+        //                                               A    B C     D E     H L
+        arguments("MOV E,A", new int[]{0b01_011_111}, 0x11, 0x2233, 0x4411, 0x6677),
+        arguments("MOV E,B", new int[]{0b01_011_000}, 0x11, 0x2233, 0x4422, 0x6677),
+        arguments("MOV E,C", new int[]{0b01_011_001}, 0x11, 0x2233, 0x4433, 0x6677),
+        arguments("MOV E,D", new int[]{0b01_011_010}, 0x11, 0x2233, 0x4444, 0x6677),
+        arguments("MOV E,H", new int[]{0b01_011_100}, 0x11, 0x2233, 0x4466, 0x6677),
+        arguments("MOV E,L", new int[]{0b01_011_101}, 0x11, 0x2233, 0x4477, 0x6677),
+        //                                               A    B C     D E     H L
+        arguments("MOV H,A", new int[]{0b01_100_111}, 0x11, 0x2233, 0x4455, 0x1177),
+        arguments("MOV H,B", new int[]{0b01_100_000}, 0x11, 0x2233, 0x4455, 0x2277),
+        arguments("MOV H,C", new int[]{0b01_100_001}, 0x11, 0x2233, 0x4455, 0x3377),
+        arguments("MOV H,D", new int[]{0b01_100_010}, 0x11, 0x2233, 0x4455, 0x4477),
+        arguments("MOV H,E", new int[]{0b01_100_011}, 0x11, 0x2233, 0x4455, 0x5577),
+        arguments("MOV H,L", new int[]{0b01_100_101}, 0x11, 0x2233, 0x4455, 0x7777),
+        //                                               A    B C     D E     H L
+        arguments("MOV L,A", new int[]{0b01_101_111}, 0x11, 0x2233, 0x4455, 0x6611),
+        arguments("MOV L,B", new int[]{0b01_101_000}, 0x11, 0x2233, 0x4455, 0x6622),
+        arguments("MOV L,C", new int[]{0b01_101_001}, 0x11, 0x2233, 0x4455, 0x6633),
+        arguments("MOV L,D", new int[]{0b01_101_010}, 0x11, 0x2233, 0x4455, 0x6644),
+        arguments("MOV L,E", new int[]{0b01_101_011}, 0x11, 0x2233, 0x4455, 0x6655),
+        arguments("MOV L,H", new int[]{0b01_101_100}, 0x11, 0x2233, 0x4455, 0x6666)
+    );
+  }
+
+  static Stream<Arguments> mov_r_m() {
+    return Stream.of(
+        arguments("MOV A,M", new int[]{0b01_111_110}, 0x33, 0x33, 0x0000, 0x0000, 0x1008),
+        arguments("MOV B,M", new int[]{0b01_000_110}, 0x44, 0x00, 0x4400, 0x0000, 0x1008),
+        arguments("MOV C,M", new int[]{0b01_001_110}, 0x55, 0x00, 0x0055, 0x0000, 0x1008),
+        arguments("MOV D,M", new int[]{0b01_010_110}, 0x66, 0x00, 0x0000, 0x6600, 0x1008),
+        arguments("MOV E,M", new int[]{0b01_011_110}, 0x77, 0x00, 0x0000, 0x0077, 0x1008),
+        arguments("MOV H,M", new int[]{0b01_100_110}, 0x88, 0x00, 0x0000, 0x0000, 0x8808),
+        arguments("MOV L,M", new int[]{0b01_101_110}, 0x99, 0x00, 0x0000, 0x0000, 0x1099)
+    );
+  }
+
   @BeforeEach
   void beforeEach() {
     // stack memory (256 byte)
@@ -107,15 +173,125 @@ class C8085Test {
     assertThatRegister(regA, regBC, regDE, regHL, regSP, regPC);
   }
 
+  @ParameterizedTest
+  @MethodSource
+  void mov(String operation, int[] opCodes, int expRegA, int expRegBC, int expRegDE, int expRegHL) {
+    ram.write(0x0000, opCodes);
+    cpu.a().setValue(0x11);
+    cpu.bc().setValue(0x2233);
+    cpu.de().setValue(0x4455);
+    cpu.hl().setValue(0x6677);
+
+    cpu.step();
+
+    assertThatRegister(expRegA, expRegBC, expRegDE, expRegHL, 0x1000, 0x1001);
+  }
+
+  @ParameterizedTest
+  @MethodSource
+  void mov_r_m(String operation, int[] opCodes, Integer memValue, int expRegA, int expRegBC, int expRegDE, int expRegHL) {
+    ram.write(0x0000, opCodes);
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+    ram.writeByte(0x0008, memValue.byteValue());
+
+    cpu.step();
+
+    assertThatRegister(expRegA, expRegBC, expRegDE, expRegHL, 0x1000, 0x1001);
+  }
+
+  @Test
+  void mov_m_a() {
+    ram.write(0x0000, new int[]{0b01_110_111});
+    cpu.a().setValue(0x21); // MVI A,$21
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x21, 0x0000, 0x0000, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x21).byteValue());
+  }
+
+  @Test
+  void mov_m_b() {
+    ram.write(0x0000, new int[]{0b01_110_000});
+    cpu.bc().setHv(0x22); // MVI B,$22
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x00, 0x2200, 0x0000, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x22).byteValue());
+  }
+
+  @Test
+  void mov_m_c() {
+    ram.write(0x0000, new int[]{0b01_110_001});
+    cpu.bc().setLv(0x23); // MVI C,$23
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x00, 0x0023, 0x0000, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x23).byteValue());
+  }
+
+  @Test
+  void mov_m_d() {
+    ram.write(0x0000, new int[]{0b01_110_010});
+    cpu.de().setHv(0x24); // MVI D,$24
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x00, 0x0000, 0x2400, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x24).byteValue());
+  }
+
+  @Test
+  void mov_m_e() {
+    ram.write(0x0000, new int[]{0b01_110_011});
+    cpu.de().setLv(0x25); // MVI E,$25
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x00, 0x0000, 0x0025, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x25).byteValue());
+  }
+
+  @Test
+  void mov_m_h() {
+    ram.write(0x0000, new int[]{0b01_110_100});
+
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x00, 0x0000, 0x0000, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x10).byteValue());
+  }
+
+  @Test
+  void mov_m_l() {
+    ram.write(0x0000, new int[]{0b01_110_101});
+
+    cpu.hl().setValue(0x1008); // LXI H,1008H
+
+    cpu.step();
+
+    assertThatRegister(0x00, 0x0000, 0x0000, 0x1008, 0x1000, 0x1001);
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x08).byteValue());
+  }
+
   @Test
   void mvi_m() {
-    ram.write(0x0000, new int[]{0b00_110_110, 0x7F});
+    ram.write(0x0000, new int[]{0b00_110_110, 0x9f});
     cpu.hl().setValue(0x1008); // LXI H,1008H
 
     cpu.step();
 
     assertThatRegister(0x00, 0x0000, 0x0000, 0x1008, 0x1000, 0x1002);
-    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x7f).byteValue());
+    assertThat(ram.readByte(0x0008)).isEqualTo(Integer.valueOf(0x9f).byteValue());
   }
 
 }

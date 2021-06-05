@@ -131,6 +131,9 @@ public class C8085 {
     switch (instruction.getOpc().getOpCode()) {
       case NOP:
         break;
+      case MOV:
+        mov(instruction);
+        break;
       case MVI:
         mvi(instruction);
         break;
@@ -190,6 +193,78 @@ public class C8085 {
         break;
       case A:
         registerA.setValue(value);
+        break;
+    }
+
+  }
+
+  private void mov(Instruction instruction) {
+    RegMVI dst = RegMVI.values()[(instruction.opCode() & 0b00111000) >> 3];
+    RegMVI src = RegMVI.values()[instruction.opCode() & 0b00000111];
+
+    // MOV A,A
+    // MOV B,B
+    // MOV C,C
+    // MOV D,D
+    // MOV E,E
+    // MOV H,H
+    // MOV L,L
+    // MOV M,M
+    // Results in NOP
+    if (dst.equals(src)) {
+      return;
+    }
+    int source = 0;
+    switch (src) {
+      case B:
+        source = regBC.getHv();
+        break;
+      case C:
+        source = regBC.getLv();
+        break;
+      case D:
+        source = regDE.getHv();
+        break;
+      case E:
+        source = regDE.getLv();
+        break;
+      case H:
+        source = regHL.getHv();
+        break;
+      case L:
+        source = regHL.getLv();
+        break;
+      case M:
+        source = bus.read(regHL.value());
+        break;
+      case A:
+        source = registerA.asInt();
+        break;
+    }
+    switch (dst) {
+      case B:
+        regBC.setHv(source);
+        break;
+      case C:
+        regBC.setLv(source);
+        break;
+      case D:
+        regDE.setHv(source);
+        break;
+      case E:
+        regDE.setLv(source);
+        break;
+      case H:
+        regHL.setHv(source);
+        break;
+      case L:
+        regHL.setLv(source);
+        break;
+      case M:
+        bus.write(regHL.value(), source);
+        break;
+      case A:
+        registerA.setValue(source);
         break;
     }
 
