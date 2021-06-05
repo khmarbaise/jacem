@@ -104,6 +104,10 @@ public class C8085 {
     return regHL;
   }
 
+  public Register16Bit pc() {
+    return PC;
+  }
+
   /**
    * TODO: What do we need to do here?
    * <p>
