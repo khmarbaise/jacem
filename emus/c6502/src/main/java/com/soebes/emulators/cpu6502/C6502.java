@@ -236,20 +236,7 @@ public class C6502 {
       getPsr().set(Overflow);
     }
 
-    if (Integer.signum(result.byteValue()) < 0) {
-      getPsr().set(Negative);
-    }
-
-    if (result > 0xff) {
-      getPsr().set(Carry);
-    } else {
-      getPsr().unset(Carry);
-    }
-
-    if (registerA.value() == 0) {
-      getPsr().set(Zero);
-    }
-
+    setNegativeCarryZero(result);
   }
 
   private void sbc(Instruction in) {
@@ -275,8 +262,15 @@ public class C6502 {
       getPsr().set(Overflow);
     }
 
+    setNegativeCarryZero(result);
+  }
+
+
+  private void setNegativeCarryZero(Integer result) {
     if (Integer.signum(result.byteValue()) < 0) {
       getPsr().set(Negative);
+    } else {
+      getPsr().unset(Negative);
     }
 
     if (result >= 0) {
@@ -285,11 +279,13 @@ public class C6502 {
       getPsr().unset(Carry);
     }
 
-    if (result == 0) {
+    if ((result.intValue() & 0xff) == 0) {
       getPsr().set(Zero);
+    } else {
+      getPsr().unset(Zero);
     }
-  }
 
+  }
 
   private void setCarryAndNegativeFlag(byte value) {
     if ((value & 0x80) > 0) {
