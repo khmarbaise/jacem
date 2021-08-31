@@ -32,8 +32,8 @@ import java.util.concurrent.Callable;
 public class CrALinkR implements Callable<Integer> {
 
   public static void main(String[] args) {
-    int exitCode = new CommandLine(new CrALinkR()).execute(args);
-    System.exit(exitCode);
+    int execute = new CommandLine(new CrALinkR()).execute(args);
+    //System.exit(execute);
   }
 
   @Override
