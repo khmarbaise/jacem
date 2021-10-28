@@ -19,16 +19,20 @@ package com.soebes.cralinkr.grammar.expression;
  * under the License.
  */
 
-import static java.util.Map.entry;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 import java.util.Map;
 import java.util.function.BinaryOperator;
-import org.antlr.v4.runtime.tree.ErrorNode;
+
+import static java.util.Map.entry;
 
 class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
-  private static final Map<String, BinaryOperator<Long>> operators = Map.ofEntries(entry("+", Long::sum),
-      entry("-", (x, y) -> x - y), entry("*", (x, y) -> x * y), entry("/", (x, y) -> x / y),
+  private static final Map<String, BinaryOperator<Long>> operators = Map.ofEntries(
+      entry("+", Long::sum),
+      entry("-", (x, y) -> x - y),
+      entry("*", (x, y) -> x * y),
+      entry("/", (x, y) -> x / y),
       entry("%", (x, y) -> x % y));
 
   private final SymbolTable symbolTable;
