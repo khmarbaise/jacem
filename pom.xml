@@ -55,7 +55,7 @@
     <smpp.component>jacem</smpp.component>
 
     <maven.compiler.release>17</maven.compiler.release>
-    <antlr4-maven-plugin.version>4.9.2</antlr4-maven-plugin.version>
+    <antlr4-maven-plugin.version>4.9.3</antlr4-maven-plugin.version>
     <picoli.version>4.6.1</picoli.version>
     <graalvm.version>21.0.0.2</graalvm.version>
   </properties>
