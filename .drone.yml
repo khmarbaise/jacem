@@ -37,7 +37,7 @@ steps:
       - name: jdk17m2cache
         path: /drone/src/.repo
     commands:
-      - mvn -Dmaven.repo.local=/drone/src/.repo -V clean verify --fail-at-end --batch-mode
+      - mvn --no-transfer-progress -Dmaven.repo.local=/drone/src/.repo -V clean verify --fail-at-end --batch-mode
 
   - name: rebuild-cache
     image: meltwater/drone-cache:v1.1.0
