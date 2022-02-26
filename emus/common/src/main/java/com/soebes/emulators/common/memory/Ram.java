@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 
 /**
  * @author Karl Heinz Marbaise
@@ -64,7 +65,7 @@ public class Ram implements Memory {
 
   @Override
   public Byte readByte(int address) {
-    return Byte.valueOf(this.memory[address]);
+    return this.memory[address];
   }
 
   public void write(int address, int[] ints) {

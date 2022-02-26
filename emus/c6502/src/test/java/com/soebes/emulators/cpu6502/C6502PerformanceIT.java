@@ -28,7 +28,7 @@ import org.junit.jupiter.api.RepeatedTest;
 /**
  * @author Karl Heinz Marbaise
  */
-class C6502PerformanceTest {
+class C6502PerformanceIT {
 
   private Ram ram;
 
