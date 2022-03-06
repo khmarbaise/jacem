@@ -19,6 +19,12 @@ package com.soebes.cralinkr.grammar.expression;
  * under the License.
  */
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -29,13 +35,6 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class ExpressionVisitorTest {
 
@@ -80,8 +79,7 @@ class ExpressionVisitorTest {
     //    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
     var tree = parser.start();
     var visitor = new ExpressionVisitor();
-    Long result = null;
-    result = visitor.visit(tree);
+    Long result = visitor.visit(tree);
 
     assertThat(result).as("Expected: %s but got:%s", expectedResult, result).isEqualTo(expectedResult);
   }
