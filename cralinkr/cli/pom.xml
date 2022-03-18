@@ -39,6 +39,11 @@
       <artifactId>parser</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.soebes.emulators</groupId>
+      <artifactId>c6502</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>info.picocli</groupId>
