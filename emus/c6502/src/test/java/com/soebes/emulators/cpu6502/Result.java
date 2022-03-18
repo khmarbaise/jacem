@@ -24,21 +24,5 @@ import java.util.StringJoiner;
 /**
  * @author Karl Heinz Marbaise
  */
-class Result {
-  private int value;
-
-  Result(int value) {
-    this.value = value;
-  }
-
-  int value() {
-    return value;
-  }
-
-  @Override
-  public String toString() {
-    return new StringJoiner(", ", Result.class.getSimpleName() + "[", "]")
-        .add("value=" + Integer.toHexString(value))
-        .toString();
-  }
+record Result(int value) {
 }
