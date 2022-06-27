@@ -125,6 +125,14 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.pitest</groupId>
+          <artifactId>pitest-maven</artifactId>
+          <configuration>
+            <failWhenNoMutations>false</failWhenNoMutations>
+          </configuration>
+        </plugin>
+
+        <plugin>
           <groupId>org.antlr</groupId>
           <artifactId>antlr4-maven-plugin</artifactId>
           <version>${antlr4-maven-plugin.version}</version>
