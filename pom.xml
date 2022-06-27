@@ -29,7 +29,7 @@
   <parent>
     <groupId>com.soebes.smpp</groupId>
     <artifactId>smpp</artifactId>
-    <version>5.3.8</version>
+    <version>5.3.9</version>
   </parent>
 
   <groupId>com.soebes.emulators</groupId>
@@ -125,31 +125,9 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.pitest</groupId>
-          <artifactId>pitest-maven</artifactId>
-          <version>1.7.5</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.pitest</groupId>
-              <artifactId>pitest-junit5-plugin</artifactId>
-              <version>0.14</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>3.3.0</version>
-        </plugin>
-        <plugin>
           <groupId>org.antlr</groupId>
           <artifactId>antlr4-maven-plugin</artifactId>
           <version>${antlr4-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>templating-maven-plugin</artifactId>
-          <version>1.0.0</version>
         </plugin>
         <plugin>
           <groupId>org.graalvm.nativeimage</groupId>
