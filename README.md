@@ -26,7 +26,7 @@ experiment. In the meantime I have other design idea how to handle that.
 
 This project is now the state of the design ideas.
 
-* Instruction codes http://www.obelisk.me.uk/6502/reference.html
+* Instruction codes https://www.masswerk.at/6502/6502_instruction_set.html
 * More details http://wilsonminesco.com/6502primer/index.html
 * https://www.masswerk.at/6502/
 
