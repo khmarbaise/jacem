@@ -60,12 +60,12 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPNUM(ExprParser.GRPNUMContext ctx) {
-    return Long.valueOf(ctx.getText().replaceAll("_", ""));
+    return Long.valueOf(ctx.getText().replace("_", ""));
   }
 
   @Override
   public Long visitGRPBINARY(ExprParser.GRPBINARYContext ctx) {
-    String s = ctx.BINARY().getText().substring(2).replaceAll("_", "");
+    String s = ctx.BINARY().getText().substring(2).replace("_", "");
     return Long.valueOf(s, 2);
   }
 
@@ -98,13 +98,13 @@ class ExpressionVisitor extends ExprBaseVisitor<Long> {
 
   @Override
   public Long visitGRPHEX(ExprParser.GRPHEXContext ctx) {
-    String s = ctx.HEX().getText().substring(1).replaceAll("_", "");
+    String s = ctx.HEX().getText().substring(1).replace("_", "");
     return Long.valueOf(s, 16);
   }
 
   @Override
   public Long visitGRPOCTAL(ExprParser.GRPOCTALContext ctx) {
-    String s = ctx.OCTAL().getText().substring(2).replaceAll("_", "");
+    String s = ctx.OCTAL().getText().substring(2).replace("_", "");
     return Long.valueOf(s, 8);
   }
 
