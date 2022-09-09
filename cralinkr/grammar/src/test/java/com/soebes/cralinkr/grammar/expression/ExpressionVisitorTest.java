@@ -45,6 +45,7 @@ class ExpressionVisitorTest {
         arguments("Division", "1024/256", 4L),
         arguments("Check for precedence", "2*(3+4)", 14L),
         arguments("Check for precedence", "2+3*2", 8L),
+        arguments("Check for precedence no change", "2+(3*2)", 8L),
         arguments("Unary simple", "-1024+3072", 2048L),
         arguments("Unary complex", "-1024-(-1024)", 0L),
         arguments("Hex value", "$1000", 4096L),
