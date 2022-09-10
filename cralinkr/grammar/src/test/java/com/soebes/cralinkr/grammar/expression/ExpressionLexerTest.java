@@ -65,7 +65,7 @@ class ExpressionLexerTest {
     }
 
     assertThat(tokenList).as("Expected: %s but got: %s", expectedTokens, tokenList)
-        .containsExactly(expectedTokens.toArray(new String[]{}));
+        .containsExactlyInAnyOrderElementsOf(expectedTokens);
   }
 
 }
