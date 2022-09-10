@@ -341,38 +341,23 @@ public class C6502 {
   }
 
   private int memoryAddress(Instruction instruction) {
-    switch (instruction.getOpc().getAddressingMode()) {
-      case absolute:
-        return instruction.getOp16();
-      case absoluteX:
-        return instruction.getOp16() + regX.value();
-      case absoluteY:
-        return instruction.getOp16() + regY.value();
-      case zeropage:
-      case indirectIndexedY:
-        return Byte.toUnsignedInt(instruction.getOp8());
-      case zeropageX:
-      case indexedIndirectX:
-        return Byte.toUnsignedInt(instruction.getOp8()) + regX.value();
-      default:
-        throw new IllegalStateException("Unknown addressing mode.");
-    }
+    return switch (instruction.getOpc().getAddressingMode()) {
+      case absolute -> instruction.getOp16();
+      case absoluteX -> instruction.getOp16() + regX.value();
+      case absoluteY -> instruction.getOp16() + regY.value();
+      case zeropage, indirectIndexedY -> Byte.toUnsignedInt(instruction.getOp8());
+      case zeropageX, indexedIndirectX -> Byte.toUnsignedInt(instruction.getOp8()) + regX.value();
+      default -> throw new IllegalStateException("Unknown addressing mode.");
+    };
   }
 
   private byte resolveOperand(Instruction instruction) {
-    switch (instruction.getOpc().getAddressingMode()) {
-      case immediate:
-        return instruction.getOp8();
-      case indexedIndirectX:
-        int indirectX = bus.read16(memoryAddress(instruction));
-        return bus.read(indirectX);
-      case indirectIndexedY:
-        int indirectY = bus.read16(memoryAddress(instruction)) + regY.value();
-        return bus.read(indirectY);
-      default:
-        int address = memoryAddress(instruction);
-        return bus.read(address);
-    }
+    return switch (instruction.getOpc().getAddressingMode()) {
+      case immediate -> instruction.getOp8();
+      case indexedIndirectX -> bus.read(bus.read16(memoryAddress(instruction)));
+      case indirectIndexedY -> bus.read(bus.read16(memoryAddress(instruction)) + regY.value());
+      default -> bus.read(memoryAddress(instruction));
+    };
   }
 
   private Instruction readNextInstruction() {
@@ -384,17 +369,11 @@ public class C6502 {
 
     OperationCode opc = InstructionSet.getOpc(Byte.toUnsignedInt(opcode));
 
-    switch (opc.getInstructionSize()) {
-      case 1:
-      case 2:
-        byte read8 = bus.read(this.pc.value() + 1);
-        return new Instruction(opc, read8, (byte) 0, pc.value() + 1);
-      case 3:
-        int read16 = bus.read16(this.pc.value() + 1);
-        return new Instruction(opc, (byte) 0, read16, pc.value() + 1);
-      default:
-        throw new IllegalStateException("Unknown instruction size");
-    }
+    return switch (opc.getInstructionSize()) {
+      case 1, 2 -> new Instruction(opc, bus.read(this.pc.value() + 1), (byte) 0, pc.value() + 1);
+      case 3 -> new Instruction(opc, (byte) 0, bus.read16(this.pc.value() + 1), pc.value() + 1);
+      default -> throw new IllegalStateException("Unknown instruction size");
+    };
   }
 
   public Register8Bit regX() {
