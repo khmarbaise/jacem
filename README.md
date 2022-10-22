@@ -32,8 +32,8 @@ This project is now the state of the design ideas.
 
 # Build
 
-* JDK11+
-* Maven 3.6.3+
+* JDK17+
+* Maven 3.8.6+
 
 Code coverage via:
 
