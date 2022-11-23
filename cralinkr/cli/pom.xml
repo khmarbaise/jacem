@@ -59,11 +59,6 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.graalvm.sdk</groupId>
-      <artifactId>graal-sdk</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -115,32 +110,4 @@
 
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>graal</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.graalvm.nativeimage</groupId>
-            <artifactId>native-image-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>native-image</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-            <configuration>
-              <mainClass>com.soebes.cralinkr.cli.CrALinkR</mainClass>
-              <imageName>cralink</imageName>
-              <buildArgs>
-                --no-fallback
-              </buildArgs>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
