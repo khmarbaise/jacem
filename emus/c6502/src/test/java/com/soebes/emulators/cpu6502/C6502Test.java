@@ -109,12 +109,12 @@ class C6502Test {
 
   private void assertThatFlags(StatusRegister.Status... states) {
     EnumSet<StatusRegister.Status> all = EnumSet.allOf(StatusRegister.Status.class);
-    List<StatusRegister.Status> statusList = Arrays.stream(states).collect(Collectors.toList());
+    List<StatusRegister.Status> statusList = Arrays.stream(states).toList();
     statusList.forEach(state -> {
           assertThat(cpu.getPsr().isSet(state)).as("The " + state.name() + " flag expected to be set.").isEqualTo(true);
         }
     );
-    all.removeAll(statusList);
+    statusList.forEach(all::remove);
     all.forEach(state -> {
           assertThat(cpu.getPsr().isNotSet(state)).as("The " + state.name() + " flag expected not being set.").isTrue();
         }
