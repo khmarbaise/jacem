@@ -16,7 +16,7 @@
 -->
 
 # Java CPU Emulator (JaCEm)
-[![JDKBuilds](https://github.com/khmarbaise/jacem/actions/workflows/main.yml/badge.svg)](https://github.com/khmarbaise/jacem/actions/workflows/main.yml)
+[![main](https://github.com/khmarbaise/jacem/actions/workflows/main.yml/badge.svg)](https://github.com/khmarbaise/jacem/actions/workflows/main.yml)
 [![Issues](https://img.shields.io/github/issues/khmarbaise/jacem)](https://github.com/khmarbaise/jacem/issues)
 [![Issues Closed](https://img.shields.io/github/issues-closed/khmarbaise/jacem)](https://github.com/khmarbaise/jacem/issues?q=is%3Aissue+is%3Aclosed)
 
