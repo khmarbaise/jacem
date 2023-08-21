@@ -16,10 +16,13 @@
 -->
 
 # Java CPU Emulator (JaCEm)
+[![JDKBuilds](https://github.com/khmarbaise/jacem/actions/workflows/main.yml/badge.svg)](https://github.com/khmarbaise/jacem/actions/workflows/main.yml)
+[![Issues](https://img.shields.io/github/issues/khmarbaise/jacem)](https://github.com/khmarbaise/jacem/issues)
+[![Issues Closed](https://img.shields.io/github/issues-closed/khmarbaise/jacem)](https://github.com/khmarbaise/jacem/issues?q=is%3Aissue+is%3Aclosed)
 
-[![Build Status](https://cloud.drone.io/api/badges/khmarbaise/jacem/status.svg)](https://cloud.drone.io/khmarbaise/jacem)
 
-This is the 3nd incarnation of the [Java CPU Emulator](https://github.com/khmarbaise/CPUEmu).
+
+This is the 3rd incarnation of the [Java CPU Emulator](https://github.com/khmarbaise/CPUEmu).
 
 I had started that because I had long time ago an idea to make an emulator for 8085/6502 cpu working just as a learning
 experiment. In the meantime I have other design idea how to handle that.
