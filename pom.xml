@@ -55,7 +55,7 @@
     <smpp.component>jacem</smpp.component>
 
     <maven.compiler.release>17</maven.compiler.release>
-    <antlr4-maven-plugin.version>4.11.1</antlr4-maven-plugin.version>
+    <antlr4-maven-plugin.version>4.13.0</antlr4-maven-plugin.version>
     <picoli.version>4.6.1</picoli.version>
   </properties>
   <dependencyManagement>
@@ -120,7 +120,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.4.1</version>
         </plugin>
         <plugin>
           <groupId>org.pitest</groupId>
