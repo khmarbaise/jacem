@@ -36,7 +36,7 @@ public class OperationCode {
     this.cycles = cycles;
   }
 
-  public static final OperationCode of(OpCodeMnemonic opCodeMnemonic, AddressingMode addressingMode, int instructionSize, int cycles) {
+  public static OperationCode of(OpCodeMnemonic opCodeMnemonic, AddressingMode addressingMode, int instructionSize, int cycles) {
     return new OperationCode(opCodeMnemonic, addressingMode, instructionSize, cycles);
   }
 
