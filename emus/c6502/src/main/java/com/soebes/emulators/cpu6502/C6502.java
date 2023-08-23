@@ -86,68 +86,27 @@ public class C6502 {
     // BiConsumer<C6502, Instruction> adc = C6502::adc;
 
     switch (instruction.getOpc().getOpCode()) {
-      case NOP:
-        break;
-      case ADC:
-        adc(instruction);
-        break;
-      case AND:
-        and(instruction);
-        break;
-      case SBC:
-        sbc(instruction);
-        break;
-      case SEC:
-        sec();
-        break;
-      case SED:
-        sed();
-        break;
-      case SEI:
-        sei();
-        break;
-      case CLC:
-        clc();
-        break;
-      case CLD:
-        cld();
-        break;
-      case CLI:
-        cli();
-        break;
-      case CLV:
-        clv();
-        break;
-
-      case INX:
-        inx();
-        break;
-      case INY:
-        iny();
-        break;
-      case INC:
-        inc(instruction);
-        break;
-      case DEX:
-        dex();
-        break;
-      case DEY:
-        dey();
-        break;
-      case DEC:
-        dec(instruction);
-        break;
-      case LDA:
-        lda(instruction);
-        break;
-      case LDX:
-        ldx(instruction);
-        break;
-      case LDY:
-        ldy(instruction);
-        break;
-      default:
-        throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
+      case NOP -> {}
+      case ADC -> adc(instruction);
+      case AND -> and(instruction);
+      case SBC -> sbc(instruction);
+      case SEC -> sec();
+      case SED -> sed();
+      case SEI -> sei();
+      case CLC -> clc();
+      case CLD -> cld();
+      case CLI -> cli();
+      case CLV -> clv();
+      case INX -> inx();
+      case INY -> iny();
+      case INC -> inc(instruction);
+      case DEX -> dex();
+      case DEY -> dey();
+      case DEC -> dec(instruction);
+      case LDA -> lda(instruction);
+      case LDX -> ldx(instruction);
+      case LDY -> ldy(instruction);
+      default -> throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
     }
   }
 
