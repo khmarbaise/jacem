@@ -106,7 +106,6 @@ public class C6502 {
       case LDA -> lda(instruction);
       case LDX -> ldx(instruction);
       case LDY -> ldy(instruction);
-      default -> throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
     }
   }
 
