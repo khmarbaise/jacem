@@ -33,6 +33,8 @@ This project is now the state of the design ideas.
 * More details http://wilsonminesco.com/6502primer/index.html
 * https://www.masswerk.at/6502/
 
+* fake6502.c is copied from http://rubbermallet.org/fake6502.c
+ 
 # Build
 
 * JDK17+
