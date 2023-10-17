@@ -149,7 +149,7 @@ class C8085Test {
   void lxi(String operation, int[] opCodes, int regA, int regBC, int regDE, int regHL, int regSP, int regPC) {
     ram.write(0x0000, opCodes);
 
-    cpu.step();
+    cpu.  step();
 
     assertThatRegister(regA, regBC, regDE, regHL, regSP, regPC);
   }

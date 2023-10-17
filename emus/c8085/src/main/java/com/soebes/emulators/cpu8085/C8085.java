@@ -122,13 +122,13 @@ public class C8085 {
 
   public C8085 step() {
     Instruction instruction = readNextInstruction();
-    PC.incrementBy(instruction.getOpc().getInstructionSize());
+    PC.incrementBy(instruction.opc().getInstructionSize());
     execute(instruction);
     return this;
   }
 
   private void execute(Instruction instruction) {
-    switch (instruction.getOpc().getOpCode()) {
+    switch (instruction.opc().getOpCode()) {
       case NOP:
         break;
       case MOV:
@@ -141,7 +141,7 @@ public class C8085 {
         lxi(instruction);
         break;
       default:
-        throw new IllegalStateException("Unknown opcode: '%s'" + instruction.getOpc());
+        throw new IllegalStateException("Unknown opcode: '%s'" + instruction.opc());
     }
   }
 
@@ -271,14 +271,14 @@ public class C8085 {
   }
 
   private int memoryAddress(Instruction instruction) {
-    switch (instruction.getOpc().getAddressingMode()) {
+    switch (instruction.opc().getAddressingMode()) {
       case implied:
         return 0;
 
       case immediate16:
-        return instruction.getOp16();
+        return instruction.op16();
       case absolute:
-        return instruction.getOp16();
+        return instruction.op16();
 //      case absoluteX:
 //        return instruction.getOp16() + regX.value();
 //      case absoluteY:
@@ -293,11 +293,11 @@ public class C8085 {
   }
 
   private int resolveOperand(Instruction instruction) {
-    switch (instruction.getOpc().getAddressingMode()) {
+    switch (instruction.opc().getAddressingMode()) {
       case immediate:
-        return instruction.getOp8();
+        return instruction.op8();
       case immediate16:
-        return instruction.getOp16();
+        return instruction.op16();
       default:
         return bus.read(memoryAddress(instruction));
     }
