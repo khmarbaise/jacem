@@ -57,7 +57,7 @@
 
     <maven.compiler.release>22</maven.compiler.release>
     <antlr4-maven-plugin.version>4.13.1</antlr4-maven-plugin.version>
-    <picoli.version>4.7.4</picoli.version>
+    <picoli.version>4.7.5</picoli.version>
   </properties>
   <dependencyManagement>
     <dependencies>
