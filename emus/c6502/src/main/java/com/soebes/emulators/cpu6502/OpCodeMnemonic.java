@@ -23,19 +23,61 @@ package com.soebes.emulators.cpu6502;
  * @author Karl Heinz Marbaise
  */
 public enum OpCodeMnemonic {
+  /**
+   * Add with carry
+   */
   ADC,
+  /**
+   * And with Accumulator
+   */
   AND,
+  /**
+   * Arithmetic shift left (shifts in a zero bit on the right)
+   */
   ASL,
+  /**
+   * Branch on carry clear
+   */
   BCC,
+  /**
+   * Branch on carry set.
+   */
   BCS,
+  /**
+   * branch on equal (zero set).
+   */
   BEQ,
+  /**
+   * bit test (accumulator & memory).
+   */
   BIT,
+  /**
+   * Branch on minus (negative set)
+   */
   BMI,
+  /**
+   * Branch not equal (zero clear)
+   */
   BNE,
+  /**
+   * Branch on plus (negative clear)
+   */
   BPL,
+  /**
+   * Break
+   */
   BRK,
+  /**
+   * Branch on overflow clear
+   */
   BVC,
+  /**
+   * Branch on overflow set.
+   */
   BVS,
+  /**
+   * Clear Carry.
+   */
   CLC,
   CLD,
   CLI,

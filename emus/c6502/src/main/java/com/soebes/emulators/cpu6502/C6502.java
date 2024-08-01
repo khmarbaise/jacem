@@ -174,7 +174,7 @@ public class C6502 {
   private void adc(Instruction in) {
     int operand = Byte.toUnsignedInt(resolveOperand(in));
     int carryValue = getPsr().isSet(Carry) ? 1 : 0;
-    Integer regA = Byte.toUnsignedInt(registerA.value());
+    int regA = Byte.toUnsignedInt(registerA.value());
 
     Integer result;
     if (psr.isDecimal()) {
