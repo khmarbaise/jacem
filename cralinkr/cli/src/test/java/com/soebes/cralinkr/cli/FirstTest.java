@@ -39,7 +39,7 @@ class FirstTest {
 
     List<SourceLine> collect = IntStream.range(1, lines.size())
         .mapToObj(i -> new SourceLine(i, lines.get(i)))
-        .collect(toList());
+        .toList();
     collect.forEach(s -> System.out.printf("%6d %s\n", s.getLineNumber(), s.getLine()));
   }
 
