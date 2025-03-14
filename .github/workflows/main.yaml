@@ -44,4 +44,4 @@ jobs:
           maven-version: 3.9.8
       - name: 'Build'
         shell: bash
-        run: mvn -V --no-transfer-progress clean verify --fail-at-end
+        run: mvn --color always -V --no-transfer-progress clean verify --fail-at-end
