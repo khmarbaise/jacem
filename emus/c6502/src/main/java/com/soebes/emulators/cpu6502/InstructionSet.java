@@ -96,8 +96,10 @@ import static java.util.Map.entry;
 /**
  * @author Karl Heinz Marbaise
  */
-public class InstructionSet {
-
+public final class InstructionSet {
+  private InstructionSet() {
+    // intentional empty.
+  }
 
   //@formatter:off
   private static final Map<Integer, OperationCode> opcodes = Map.ofEntries(

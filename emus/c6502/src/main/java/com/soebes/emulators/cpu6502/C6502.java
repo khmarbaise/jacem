@@ -185,7 +185,7 @@ public class C6502 {
     } else {
       result = regA + operand + carryValue;
     }
-    registerA.setValue(result.intValue() & 0xff);
+    registerA.setValue(result & 0xff);
 
     boolean partI = ((regA ^ operand) & 0x80) == 0;
     boolean partII = ((regA ^ result) & 0x80) != 0;
