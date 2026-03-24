@@ -31,17 +31,17 @@ jobs:
     name: "JDK 22"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: 'Set up JDK 22'
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - name: 'Set up JDK 25'
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
-          java-version: 22
+          java-version: 25
           cache: 'maven'
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
         with:
-          maven-version: 3.9.8
+          maven-version: 3.9.14
       - name: 'Build'
         shell: bash
         run: mvn --color always -V --no-transfer-progress clean verify --fail-at-end
