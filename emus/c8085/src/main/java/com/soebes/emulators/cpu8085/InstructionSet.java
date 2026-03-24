@@ -162,4 +162,6 @@ public class InstructionSet {
     return opcodes.containsKey(opcode);
   }
 
+  private InstructionSet() {
+  }
 }
