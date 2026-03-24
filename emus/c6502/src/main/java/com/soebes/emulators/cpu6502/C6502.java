@@ -155,13 +155,13 @@ public class C6502 {
 
   private void and(Instruction in) {
     int operand = Byte.toUnsignedInt(resolveOperand(in));
-    Integer regA = Byte.toUnsignedInt(registerA.value());
+    int regA = Byte.toUnsignedInt(registerA.value());
 
-    Integer result = regA & operand;
+    int result = regA & operand;
 
     registerA.setValue(result & 0xff);
 
-    if (Integer.signum(result.byteValue()) < 0) {
+    if (Integer.signum((byte) result) < 0) {
       getPsr().set(Negative);
     }
 
@@ -211,12 +211,12 @@ public class C6502 {
   }
 
   private void sbc(Instruction in) {
-    Byte operand = resolveOperand(in);
+    byte operand = resolveOperand(in);
     int carryValue = getPsr().isSet(Carry) ? 0 : 1;
 
-    Integer regA = Byte.toUnsignedInt(registerA.value());
+    int regA = Byte.toUnsignedInt(registerA.value());
 
-    Integer result;
+    int result;
     if (psr.isSet(Decimal)) {
       BCD bcdRegA = new BCD(regA);
       BCD bcdOperand = new BCD(operand);
@@ -226,14 +226,14 @@ public class C6502 {
       result = regA - Byte.toUnsignedInt(operand) - carryValue;
     }
 
-    registerA.setValue(result.intValue() & 0xff);
+    registerA.setValue(result & 0xff);
 
     int overflow = ((regA ^ result) & 0x80) & ((regA ^ operand) & 0x80);
     if (overflow > 0) {
       getPsr().set(Overflow);
     }
 
-    if (Integer.signum(result.byteValue()) < 0) {
+    if (Integer.signum((byte) result) < 0) {
       getPsr().set(Negative);
     }
 
@@ -288,7 +288,7 @@ public class C6502 {
     int address = memoryAddress(in);
     int value = bus.read(address) + 1;
     bus.write(address, value);
-    setCarryAndNegativeFlag(Integer.valueOf(value).byteValue());
+    setCarryAndNegativeFlag((byte)value);
   }
 
   private void dec(Instruction in) {
